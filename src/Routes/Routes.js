@@ -4,14 +4,18 @@ import Welcome from "../Pages/Welcome/Welcome";
 
 const router = createBrowserRouter([
     {
-        path: '/',
+        path: '/main',
         element: <Main></Main>,
         children:[
             {
-                path: '/',
+                path: '/main',
                 element: <Welcome></Welcome>
             }
         ]
+    },
+    {
+        path: '/',
+        element: <Welcome></Welcome>
     }
 ])
 
