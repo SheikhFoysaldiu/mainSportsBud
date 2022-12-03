@@ -8,7 +8,7 @@ const Welcome = () => {
     return (
 
         <section className='main-container w-full h-screen '>
-            <div className='image-overlay flex flex-col justify-center items-center'>
+            <div className='image-overlay flex flex-col justify-center items-center text-center'>
                 <div className="avatar">
                     <div className="w-24 rounded-full">
                         <img src={person} alt='' />
