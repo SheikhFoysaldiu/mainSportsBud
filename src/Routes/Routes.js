@@ -2,59 +2,95 @@ import { createBrowserRouter } from "react-router-dom";
 import Main from "../Layout/Main";
 import Login from "../Pages/Auth/Login/Login";
 import SignUp from "../Pages/Auth/Signup/Signup";
-import WelcomeLayout from "../Layout/Welcome";
-import Welcome from "../Pages/Welcome/Welcome";
-import Home from "../Pages/Home/Home";
 import ForgotPassword from "../Pages/Auth/Forgot-Password/ForgotPassword";
 import ResetPassword from "../Pages/Auth/Reset-Password/ResetPassword";
 import ProgressBar from "../Components/ProgressBar/ProgressBar";
+import WelcomeLayout from "../Layout/WelcomeLayout";
+import Welcome from "../Pages/Welcome/Welcome";
+import Home from "../Pages/Home/Home/Home";
+import SportChoice from "../Pages/SportChoice/SportChoice";
+import FilterChoice from "../Pages/SportChoice/FilterChoice";
+import Message from "../Pages/Message/Message";
+import ProfileUser from "../Pages/Profile/ProfileUser";
+import ProfileFilter from "../Pages/Profile/ProfileFilter";
+import Users from "../Pages/Users/Users";
+import Community from "../Pages/Community/Community";
+import Feedback from "../Pages/Community/Feedback";
+
+
+
+
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/main",
     element: <Main></Main>,
     children: [
       {
-        path: "/",
+        path: "/main",
         element: <Home></Home>,
       },
+      {
+        path: '/main/sportchoice',
+        element: <SportChoice></SportChoice>
+      },
+      {
+        path: '/main/filterchoice',
+        element: <FilterChoice></FilterChoice>
+      },
+      {
+        path: '/main/message',
+        element: <Message></Message>
+      },
+      {
+        path: '/main/profileuser',
+        element: <ProfileUser></ProfileUser>
+      },
+      {
+        path: '/main/profilefilter',
+        element: <ProfileFilter></ProfileFilter>
+      },
+      {
+        path: '/main/users',
+        element: <Users></Users>
+      },
+      {
+        path: '/main/community',
+        element: <Community></Community>
+      },
+      {
+        path: '/main/feedback',
+        element: <Feedback></Feedback>
+      }
     ],
   },
   {
-    path: "/welcome",
+    path: "/",
     element: <WelcomeLayout></WelcomeLayout>,
     children: [
       {
-        path: "/welcome",
-        element: <Welcome></Welcome>,
-      },
-    ],
-  },
-  {
-    path: "/auth",
-    element: <WelcomeLayout></WelcomeLayout>,
-    children: [
-      {
-        path: "/auth",
+        path: "/",
         element: <Welcome></Welcome>,
       },
       {
-        path: "/auth/login",
+        path: "/login",
         element: <Login></Login>,
       },
       {
-        path: "/auth/sign-up",
+        path: "/sign-up",
         element: <SignUp></SignUp>,
       },
       {
-        path: "/auth/forgot-password",
+        path: "/forgot-password",
         element: <ForgotPassword></ForgotPassword>,
       },
       {
-        path: "/auth/reset-password",
+        path: "/reset-password",
         element: <ResetPassword></ResetPassword>,
       },
+
     ],
   },
+  
 ]);
 
 export default router;

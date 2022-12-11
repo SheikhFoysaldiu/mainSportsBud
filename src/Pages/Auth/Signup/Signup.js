@@ -2,20 +2,23 @@ import React, {useContext, useState} from "react";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../../Context/AuthProvider";
 import toast, { Toaster } from 'react-hot-toast';
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { createUser } = useContext(AuthContext);
   const [signUpError, setSignUPError] = useState('');
+  const navigate = useNavigate();
 
   const handleSignUp = (data) => {
     setSignUPError('');
+    console.log(data)
     createUser(data.email, data.password)
         .then(result => {
             const user = result.user;
             console.log(user);
             toast('User Created Successfully.');
-            
+            navigate('/main')
                     // saveUser(data.name, data.email);
 
         })
@@ -34,7 +37,7 @@ const Signup = () => {
               type="text" {...register("fname", {
                 required: "First name is Required"
             })}
-              className="form-control
+              className="
           block
           w-full
           px-3
@@ -60,7 +63,7 @@ const Signup = () => {
               type="text" {...register("lname", {
                 required: "Last name is Required"
             })}
-              className="form-control
+              className="
           block
           w-full
           px-3
@@ -87,7 +90,7 @@ const Signup = () => {
             type="email" {...register("email", {
               required: "Email is Required"
           })}
-            className="form-control block
+            className="block
         w-full
         px-3
         py-1.5
@@ -111,7 +114,7 @@ const Signup = () => {
             type="password"  {...register("password", {
               required: "Password is Required"
           })}
-            className="form-control block
+            className="block
         w-full
         px-3
         py-1.5
@@ -136,7 +139,7 @@ const Signup = () => {
             type="password" {...register("confirmpassword", {
               required: "Confirm password is Required"
           })}
-            className="form-control block
+            className="block
         w-full
         px-3
         py-1.5
@@ -165,13 +168,23 @@ const Signup = () => {
               type="date" {...register("date", {
                 required: "Select a date"
             })}
-              class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-              placeholder="Select a date"
+              placeholder='dd/mm/yy'
+               className="block w-full px-3
+               py-1.5
+               text-base
+               font-normal
+               text-gray-700
+               bg-white bg-clip-padding
+               border border-solid border-gray-300
+               rounded
+               transition
+               ease-in-out
+               m-0
+               focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" 
+              
             />
             {errors.date && <p className='text-red-500'>{errors.date.message}</p>}
-            <label for="floatingInput" class="text-gray-700">
-              Select a date
-            </label>
+           
             
           </div>
         </div>
@@ -212,9 +225,18 @@ const Signup = () => {
       transition
       duration-150
       ease-in-out"
-        >
-          Sign up
-        </input>
+        />
+         
+       
+        <p className="text-gray-800 mt-6 text-center">
+          Already Have an account
+          <Link
+            to="/login"
+            className="text-blue-600 hover:text-blue-700 focus:text-blue-700 transition duration-200 ease-in-out"
+          >
+            Login
+          </Link>
+        </p>
         {signUpError && <p className='text-red-600'>{signUpError}</p>}
       </form>
       <Toaster />

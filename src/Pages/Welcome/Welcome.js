@@ -9,13 +9,13 @@ const Welcome = () => {
     <>
       <button
         className="btn btn-outline btn-success my-3 w-1/2 text-xl rounded-full"
-        onClick={() => navigate("/auth/login")}
+        onClick={() => navigate("/login")}
       >
         Login
       </button>
       <button
         className="btn btn-outline btn-warning my-3 w-1/2 text-xl rounded-full"
-        onClick={() => navigate("/auth/sign-up")}
+        onClick={() => navigate("/sign-up")}
       >
         Signup
       </button>
