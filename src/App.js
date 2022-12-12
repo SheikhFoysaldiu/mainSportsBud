@@ -1,4 +1,4 @@
-import logo from "./logo.svg";
+import 'antd/dist/reset.css';
 import "./App.css";
 import router from "./Routes/Routes";
 import { RouterProvider } from "react-router-dom";
