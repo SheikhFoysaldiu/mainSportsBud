@@ -5,10 +5,10 @@ import tw from "tailwind-styled-components"
 import { UserAddOutlined } from '@ant-design/icons';
 
 const Container = tw.div`
-    overflow-auto
     px-0
     py-4
     shadow-lg
+    flex whitespace-nowrap overflow-auto scrollbar-hide md:scrollbar-default
 `
 const AddMeContiner = tw.div`
     flex
@@ -42,9 +42,7 @@ const UserCard = () => {
         <Container
             id="scrollableDiv"
             style={{
-
-                overflow: 'auto',
-                padding: '0 16px',
+                height: '60vh',
 
             }}
         >
@@ -63,13 +61,13 @@ const UserCard = () => {
                 //         active
                 //     />
                 // }
-                endMessage={<Divider plain>No User Left</Divider>}
+                endMessage={<Divider plain>No more result found</Divider>}
                 scrollableTarget="scrollableDiv"
             >
 
                 <List
                     grid={{
-                        gutter: 5,
+                        gutter: 0,
                         xs: 1,
                         sm: 2,
                         md: 2,
@@ -96,10 +94,10 @@ const UserCard = () => {
                                 description={
                                     <div >
                                         <div>
-                                            Age: 25
+                                            25 Years Old
                                         </div>
                                         <div>
-                                            Address: Jamgora,Ashulia
+                                            Jamgora, Ashulia
                                         </div>
                                     </div >
                                 }
