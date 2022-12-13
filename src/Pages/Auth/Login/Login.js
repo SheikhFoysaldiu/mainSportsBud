@@ -7,10 +7,10 @@ import { AuthContext } from "../../../Context/AuthProvider";
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const {signIn} = useContext(AuthContext)
+  const { signIn } = useContext(AuthContext)
   const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
- 
+
 
   const handleLogin = (data) => {
     setLoginError('');

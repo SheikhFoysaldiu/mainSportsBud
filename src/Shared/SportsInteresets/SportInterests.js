@@ -1,25 +1,75 @@
+import { PlusSquareOutlined, UserOutlined } from "@ant-design/icons";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Pagination from "../../Components/Pagination/Pagination";
+import tw from 'tailwind-styled-components'
+import tc from 'thousands-counter';
+const Container = tw.div`
+  w-full 
+  max-w-sm 
+  bg-white 
+  rounded-lg 
+  dark:bg-gray-800 
+  dark:border-gray-700
+  p-2
+  my-2
+  shadow-2xl
 
-const SportInterests = ({ sports }) => {
-  const navigate = useNavigate();
-  return (
-    <button onClick={() => navigate("SportChoice")}>
-      <div class="grid grid-cols-2 grid-rows-2 gap-4">
-        {sports.map((sport) => (
-          <div class="flex flex-col justify-center items-center" key={sport.id}>
-            <div class="rounded-full bg-gray-200">
-              <img src={sport.image} alt="" />
-            </div>
-            <h3 class="text-gray-700 text-lg font-bold my-3">{sport.name}</h3>
-          </div>
-        ))}
-      </div>
 
-      <Pagination />
-    </button>
-  );
-};
+
+  
+`
+const GridContainer = tw.div`
+    grid 
+    grid-cols-1 
+    md:grid-cols-2
+    xl:grid-cols-3
+    place-items-center
+    py-3
+`
+
+const
+  SportInterests = ({ sports }) => {
+    const navigate = useNavigate();
+    return (
+      <GridContainer >
+        {
+          sports.map((sport, idx) => (
+            <button key={idx} onClick={() => navigate(`SportChoice/${sport.id}`)}>
+              <Container>
+                <img class="p-8 rounded-t-lg object-cover" src={sport.image} alt="product image" />
+
+                <div class="px-5 pb-5">
+
+                  <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{sport.name}</h5>
+                  <p>
+                    {sport.description}
+                  </p>
+
+
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-between  text-xl  text-gray-900 dark:text-white">
+                      <UserOutlined />
+                      <span>
+                        {tc(sport.users, {
+                          digits: 1,
+                          uppercase: true
+                        }
+                        )}
+                      </span>
+                    </div>
+                    <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                      Follow
+                    </button>
+                  </div>
+                </div>
+              </Container>
+            </button>
+          ))
+        }
+      </GridContainer>
+    )
+
+  }
 
 export default SportInterests;
+
