@@ -51,12 +51,11 @@ const UserCard = () => {
                 dataLength={data.length}
                 next={loadMoreData}
                 hasMore={data.length < 100}
-
                 // loader={
-                //     <Skeleton
+                //     <Skeleton 
                 //         avatar
                 //         paragraph={{
-                //             rows: 1,
+                //             rows: 2,
                 //         }}
                 //         active
                 //     />

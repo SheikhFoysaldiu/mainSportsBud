@@ -47,7 +47,7 @@ const Filter = () => {
                 {/* <MenuOutlined /> */}
                 <SettingOutlined />
             </Button>
-            <Drawer title="Filter Item" placement="right" onClose={onClose} open={open}>
+            <Drawer title="Filter Item" className='' placement="right" onClose={onClose} open={open}>
                 <Selection>Age : <AgeSlider /> </Selection>
                 <Selection>Location : <LocationSelect /> </Selection>
                 <Selection>Gender : <GenderSelection /> </Selection>

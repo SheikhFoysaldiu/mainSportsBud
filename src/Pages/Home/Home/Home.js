@@ -9,7 +9,6 @@ const Home = () => {
   return (
     <div className="">
       <PageInfo />
-      <Search />
       <SportInterests sports={sports} />
     </div>
   );

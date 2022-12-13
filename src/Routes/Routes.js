@@ -30,7 +30,7 @@ const router = createBrowserRouter([
         element: <Home></Home>,
       },
       {
-        path: '/main/sportchoice',
+        path: '/main/sportchoice/:id',
         element: <SportChoice></SportChoice>
       },
       {
@@ -90,7 +90,7 @@ const router = createBrowserRouter([
 
     ],
   },
-  
+
 ]);
 
 export default router;

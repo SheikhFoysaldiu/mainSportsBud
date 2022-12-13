@@ -1,8 +1,9 @@
+import { AppleOutlined, FacebookOutlined, GoogleOutlined } from '@ant-design/icons';
 import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="footer p-10 bg-neutral text-neutral-content">
+    <footer className="flex justify-evenly items-center footer p-10 bg-neutral text-neutral-content">
       <div>
         <span className="footer-title">Services</span>
         <a className="link link-hover">Branding</a>
@@ -22,6 +23,11 @@ const Footer = () => {
         <a className="link link-hover">Terms of use</a>
         <a className="link link-hover">Privacy policy</a>
         <a className="link link-hover">Cookie policy</a>
+        <div className='flex justify-between items-center'>
+          <FacebookOutlined style={{ fontSize: '25px', color: '#08c' }} />
+          <GoogleOutlined style={{ fontSize: '25px', color: 'green' }} />
+          <AppleOutlined style={{ fontSize: '25px', color: 'black' }} />
+        </div>
       </div>
     </footer>
   );
