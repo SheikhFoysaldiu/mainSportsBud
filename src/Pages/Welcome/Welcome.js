@@ -8,13 +8,13 @@ const Welcome = () => {
   return (
     <>
       <button
-        className="btn btn-outline btn-success my-3 w-1/2 text-xl rounded-full"
+        className="btn btn-outline btn-success my-3 w-1/3 text-xl rounded-full"
         onClick={() => navigate("/login")}
       >
         Login
       </button>
       <button
-        className="btn btn-outline btn-warning my-3 w-1/2 text-xl rounded-full"
+        className="btn btn-outline btn-warning my-3 w-1/3 text-xl rounded-full"
         onClick={() => navigate("/sign-up")}
       >
         Signup
