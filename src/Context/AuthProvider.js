@@ -21,6 +21,12 @@ const AuthProvider = ({ children }) => {
         return signInWithEmailAndPassword(auth, email, password);
     };
 
+    const logOut = () =>{
+        setLoading(true);
+        return signOut(auth);
+    }
+
+
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, currentUser => {
             console.log('user observing');
@@ -35,6 +41,7 @@ const AuthProvider = ({ children }) => {
         user,
         createUser,
         signIn,
+        logOut,
         loading
     }
 

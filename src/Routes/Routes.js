@@ -16,6 +16,7 @@ import ProfileFilter from "../Pages/Profile/ProfileFilter";
 import Users from "../Pages/Users/Users";
 import Community from "../Pages/Community/Community";
 import Feedback from "../Pages/Community/Feedback";
+import PrivateRoute from "./PrivateRoute/PrivateRoute";
 
 
 
@@ -23,7 +24,7 @@ import Feedback from "../Pages/Community/Feedback";
 const router = createBrowserRouter([
   {
     path: "/main",
-    element: <Main></Main>,
+    element: <PrivateRoute><Main></Main></PrivateRoute>,
     children: [
       {
         path: "/main",

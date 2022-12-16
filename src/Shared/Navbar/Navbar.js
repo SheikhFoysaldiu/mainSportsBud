@@ -18,6 +18,8 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Search from '../Search/Search';
 import { MessageOutlined } from '@ant-design/icons';
 import { SearchOffRounded } from '@mui/icons-material';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { AuthContext } from '../../Context/AuthProvider';
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -25,6 +27,13 @@ export default function PrimarySearchAppBar() {
   const [searchOpen, setSearchOpen] = React.useState(false);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const { logOut } = React.useContext(AuthContext)
+
+  const handleLogOut = () => {
+    logOut()
+        .then(() => { })
+        .catch(err => console.log(err))
+}
   const handleSearchOpen = () => {
     setSearchOpen(prev => !prev)
     console.log(searchOpen)
@@ -65,7 +74,10 @@ export default function PrimarySearchAppBar() {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      
     </Menu>
+    
+
   );
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
@@ -128,8 +140,22 @@ export default function PrimarySearchAppBar() {
           </Badge>
         </IconButton>
         <p>Notifications</p>
+        
       </MenuItem>
-
+      <MenuItem>
+      <IconButton
+          size="large"
+          aria-label="Search"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          
+            <LogoutIcon></LogoutIcon>
+          
+        </IconButton>
+      <p onClick={handleLogOut}>LogOut</p>
+      </MenuItem>
     </Menu>
   );
 
@@ -151,7 +177,7 @@ export default function PrimarySearchAppBar() {
           <Box sx={{ flexGrow: 0.3, display: { xs: 'none', md: 'flex' } }} >
             <Search />
           </Box>
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{flexGrow: 0.1, display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
                 <MessageOutlined />
@@ -177,7 +203,9 @@ export default function PrimarySearchAppBar() {
             >
               <AccountCircle />
             </IconButton>
+            
           </Box>
+          <Box sx={{flexGrow:0., display: { xs: 'none', md: 'flex' } }}><button onClick={handleLogOut}className='btn btn-primary'>Logout</button> </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
