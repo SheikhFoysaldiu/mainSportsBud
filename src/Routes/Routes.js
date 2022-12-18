@@ -17,6 +17,7 @@ import Users from "../Pages/Users/Users";
 import Community from "../Pages/Community/Community";
 import Feedback from "../Pages/Community/Feedback";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
+import Notification from "../Pages/Notification/Notification";
 
 
 
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: '/main/users',
         element: <Users></Users>
+      },
+      {
+        path: '/main/notification',
+        element: <Notification></Notification>
       },
       {
         path: '/main/community',
