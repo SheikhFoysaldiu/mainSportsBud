@@ -95,13 +95,15 @@ export default function PrimarySearchAppBar() {
       <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
         <AppBar position="sticky" color='transparent'>
           <Toolbar>
+
             <Typography
               variant="h6"
               noWrap
               component="div"
               sx={{ flexGrow: 1, display: { xs: 'flex' } }}
+
             >
-              SportZBud
+              <Link to='/main'>SportZBud</Link>
             </Typography>
 
 
