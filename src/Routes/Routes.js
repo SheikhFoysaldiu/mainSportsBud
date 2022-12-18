@@ -17,7 +17,8 @@ import Users from "../Pages/Users/Users";
 import Community from "../Pages/Community/Community";
 import Feedback from "../Pages/Community/Feedback";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
-
+import Notification from "../Pages/Notification/Notification";
+import PageNotFound from "../Pages/404/PageNotFound";
 
 
 
@@ -55,15 +56,24 @@ const router = createBrowserRouter([
         element: <Users></Users>
       },
       {
+        path: '/main/notification',
+        element: <Notification></Notification>
+      },
+      {
         path: '/main/community',
         element: <Community></Community>
       },
       {
         path: '/main/feedback',
         element: <Feedback></Feedback>
+      },
+      {
+        path: '/main/404',
+        element: <PageNotFound></PageNotFound>
       }
     ],
   },
+
   {
     path: "/",
     element: <WelcomeLayout></WelcomeLayout>,

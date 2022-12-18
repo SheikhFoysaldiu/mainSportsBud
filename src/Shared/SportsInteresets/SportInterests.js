@@ -20,7 +20,7 @@ const Container = tw.div`
 `
 const GridContainer = tw.div`
     grid 
-    grid-cols-1 
+    sm:grid-cols-1 
     md:grid-cols-2
     xl:grid-cols-3
     place-items-center

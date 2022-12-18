@@ -7,7 +7,7 @@ const Main = () => {
   return (
     <div className="m-auto">
       <Navbar></Navbar>
-      <div className="max-w-7xl m-auto">
+      <div className=" m-auto">
         <Outlet></Outlet>
       </div>
 

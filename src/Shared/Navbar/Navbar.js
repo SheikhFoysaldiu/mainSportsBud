@@ -1,25 +1,28 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
+
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
+
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
+
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Search from '../Search/Search';
-import { MessageOutlined } from '@ant-design/icons';
-import { SearchOffRounded } from '@mui/icons-material';
-import LogoutIcon from '@mui/icons-material/Logout';
+
 import { AuthContext } from '../../Context/AuthProvider';
+import { Markunread } from '@material-ui/icons';
+
+import { Link } from 'react-router-dom';
+
+import profilePic from '../../Asset/person/profile.png';
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -31,9 +34,9 @@ export default function PrimarySearchAppBar() {
 
   const handleLogOut = () => {
     logOut()
-        .then(() => { })
-        .catch(err => console.log(err))
-}
+      .then(() => { })
+      .catch(err => console.log(err))
+  }
   const handleSearchOpen = () => {
     setSearchOpen(prev => !prev)
     console.log(searchOpen)
@@ -72,11 +75,11 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      
+      <MenuItem onClick={handleMenuClose}><Link to="/main/profileuser">  <button>Profile</button></Link></MenuItem>
+      <MenuItem onClick={handleMenuClose}><button onClick={handleLogOut}>Logout</button></MenuItem>
+
     </Menu>
-    
+
 
   );
 
@@ -119,12 +122,12 @@ export default function PrimarySearchAppBar() {
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        <Link to="/main/profileuser">  <p>Profile</p></Link>
       </MenuItem>
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
-            <MessageOutlined />
+            <Markunread />
           </Badge>
         </IconButton>
         <p>Messages</p>
@@ -140,89 +143,62 @@ export default function PrimarySearchAppBar() {
           </Badge>
         </IconButton>
         <p>Notifications</p>
-        
+
       </MenuItem>
-      <MenuItem>
-      <IconButton
-          size="large"
-          aria-label="Search"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          
-            <LogoutIcon></LogoutIcon>
-          
-        </IconButton>
-      <p onClick={handleLogOut}>LogOut</p>
-      </MenuItem>
+
     </Menu>
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="sticky" color='transparent'>
-        <Toolbar>
+    <>
 
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'flex' } }}
-          >
-            SportZBud
-          </Typography>
+      <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+        <AppBar position="sticky" color='transparent'>
+          <Toolbar>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ flexGrow: 1, display: { xs: 'flex' } }}
+            >
+              SportZBud
+            </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} />
-          <Box sx={{ flexGrow: 0.3, display: { xs: 'none', md: 'flex' } }} >
-            <Search />
-          </Box>
-          <Box sx={{flexGrow: 0.1, display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MessageOutlined />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-            
-          </Box>
-          <Box sx={{flexGrow:0., display: { xs: 'none', md: 'flex' } }}><button onClick={handleLogOut}className='btn btn-primary'>Logout</button> </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
 
-        </Toolbar>
-      </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
-    </Box >
+            <Box sx={{ flexGrow: 3, display: { xs: 'none', md: 'flex' } }} >
+              <Search />
+            </Box>
+
+            <Box sx={{ flexGrow: 0.1, display: { xs: 'none', md: 'flex' } }}>
+              <Link to='/main/message'>
+                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                  <Badge badgeContent={4} color="error">
+                    <Markunread />
+                  </Badge>
+                </IconButton>
+              </Link>
+              <IconButton
+                size="large"
+                aria-label="show 17 new notifications"
+                color="inherit"
+              >
+                <Badge badgeContent={17} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <img onClick={handleProfileMenuOpen} class="w-10 h-10 rounded-full cursor-pointer" src={profilePic} alt="Profile Pic" />
+
+            </Box>
+
+
+          </Toolbar>
+        </AppBar>
+        {renderMobileMenu}
+        {renderMenu}
+      </Box >
+
+    </>
+
+
   );
 }
