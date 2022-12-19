@@ -23,6 +23,7 @@ import { Markunread } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 
 import profilePic from '../../Asset/person/profile.png';
+import NotificationDropDown from '../../Components/Notification/NotificationDropDown';
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -31,32 +32,26 @@ export default function PrimarySearchAppBar() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const { logOut } = React.useContext(AuthContext)
-
+  const [notificationOpen, setNotificationOpen] = React.useState(false)
   const handleLogOut = () => {
     logOut()
       .then(() => { })
       .catch(err => console.log(err))
   }
-  const handleSearchOpen = () => {
-    setSearchOpen(prev => !prev)
-    console.log(searchOpen)
-  }
+
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
+
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    handleMobileMenuClose();
+
   };
 
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
+
+
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -75,79 +70,24 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}><Link to="/main/profileuser">  <button>Profile</button></Link></MenuItem>
-      <MenuItem onClick={handleMenuClose}><button onClick={handleLogOut}>Logout</button></MenuItem>
 
+      <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
+        <ul class="py-1 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
+          <li onClick={handleMenuClose}>
+            <Link to="/main/profileuser" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
+          </li>
+          <li onClick={handleMenuClose}>
+            <Link onClick={handleLogOut} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logout</Link>
+          </li>
+        </ul>
+
+      </div>
     </Menu>
 
 
   );
 
-  const mobileMenuId = 'primary-search-account-menu-mobile';
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem onClick={handleSearchOpen}>
-        <IconButton
-          size="large"
-          aria-label="Search"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <SearchIcon />
-        </IconButton>
-        <p>Search</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <Link to="/main/profileuser">  <p>Profile</p></Link>
-      </MenuItem>
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <Markunread />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
 
-      </MenuItem>
-
-    </Menu>
-  );
 
   return (
     <>
@@ -155,13 +95,15 @@ export default function PrimarySearchAppBar() {
       <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
         <AppBar position="sticky" color='transparent'>
           <Toolbar>
+
             <Typography
               variant="h6"
               noWrap
               component="div"
               sx={{ flexGrow: 1, display: { xs: 'flex' } }}
+
             >
-              SportZBud
+              <Link to='/main'>SportZBud</Link>
             </Typography>
 
 
@@ -177,25 +119,32 @@ export default function PrimarySearchAppBar() {
                   </Badge>
                 </IconButton>
               </Link>
-              <IconButton
-                size="large"
-                aria-label="show 17 new notifications"
-                color="inherit"
-              >
-                <Badge badgeContent={17} color="error">
+
+              <IconButton onClick={() => setNotificationOpen(prev => !prev, console.log(notificationOpen))} size="large" aria-label="show 4 new mails" color="inherit">
+                <Badge badgeContent={4} color="error">
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
+
+
               <img onClick={handleProfileMenuOpen} class="w-10 h-10 rounded-full cursor-pointer" src={profilePic} alt="Profile Pic" />
 
             </Box>
 
 
           </Toolbar>
+
         </AppBar>
-        {renderMobileMenu}
+
         {renderMenu}
+
       </Box >
+      {notificationOpen &&
+        <NotificationDropDown
+          notificationOpen={notificationOpen}
+          setNotificationOpen={setNotificationOpen}
+
+        />}
 
     </>
 

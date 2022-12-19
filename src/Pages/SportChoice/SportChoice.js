@@ -25,16 +25,14 @@ const SportChoice = () => {
 
     return (
         <div>
-            <div>
-                <div className='text-3xl font-bold text-center'>{sport.name} Page</div>
-                <div className='flex my-10 justify-end'>
-                    <Filter />
-                </div>
-                <UserCard />
+            <div className='text-3xl font-bold text-center'>{sport.name} Page</div>
+            <div className='flex my-10 justify-end'>
+                <Filter />
             </div>
+            <UserCard />
+        </div >
 
 
-        </div>
     );
 };
 

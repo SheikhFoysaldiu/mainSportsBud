@@ -5,12 +5,12 @@ import tw from 'tailwind-styled-components'
 import tc from 'thousands-counter';
 const Container = tw.div`
   w-full 
-  max-w-sm 
+  max-w-lg
   bg-white 
   rounded-lg 
   dark:bg-gray-800 
   dark:border-gray-700
-  p-2
+
   my-2
   shadow-2xl
 
