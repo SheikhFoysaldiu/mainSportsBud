@@ -18,12 +18,15 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Search from '../Search/Search';
 
 import { AuthContext } from '../../Context/AuthProvider';
-import { Markunread } from '@material-ui/icons';
+import { Markunread, People } from '@material-ui/icons';
 
 import { Link } from 'react-router-dom';
 
 import profilePic from '../../Asset/person/profile.png';
 import NotificationDropDown from '../../Components/Notification/NotificationDropDown';
+import { TeamOutlined } from '@ant-design/icons';
+import { TheaterComedyOutlined } from '@mui/icons-material';
+import FriendRequestDropDown from '../../Components/FriendRequest/FriendRequestDropDown';
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -33,6 +36,7 @@ export default function PrimarySearchAppBar() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const { logOut } = React.useContext(AuthContext)
   const [notificationOpen, setNotificationOpen] = React.useState(false)
+  const [friendRequestDrowpDown, setFriendRequestDrowpDown] = React.useState(false)
   const handleLogOut = () => {
     logOut()
       .then(() => { })
@@ -49,6 +53,7 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(null);
 
   };
+
 
 
 
@@ -71,13 +76,13 @@ export default function PrimarySearchAppBar() {
       onClose={handleMenuClose}
     >
 
-      <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
-        <ul class="py-1 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
+      <div className="hidden w-full md:block md:w-auto" id="navbar-dropdown">
+        <ul className="py-1 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
           <li onClick={handleMenuClose}>
-            <Link to="/main/profileuser" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
+            <Link to="/main/profileuser" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
           </li>
           <li onClick={handleMenuClose}>
-            <Link onClick={handleLogOut} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logout</Link>
+            <Link onClick={handleLogOut} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logout</Link>
           </li>
         </ul>
 
@@ -112,6 +117,13 @@ export default function PrimarySearchAppBar() {
             </Box>
 
             <Box sx={{ flexGrow: 0.1, display: { xs: 'none', md: 'flex' } }}>
+
+              <IconButton onClick={() => setFriendRequestDrowpDown(prev => !prev, console.log(friendRequestDrowpDown))} size="large" aria-label="show 4 new mails" color="inherit">
+                <Badge badgeContent={4} color="error">
+                  <People />
+                </Badge>
+              </IconButton>
+
               <Link to='/main/message'>
                 <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                   <Badge badgeContent={4} color="error">
@@ -127,7 +139,10 @@ export default function PrimarySearchAppBar() {
               </IconButton>
 
 
-              <img onClick={handleProfileMenuOpen} class="w-10 h-10 rounded-full cursor-pointer" src={profilePic} alt="Profile Pic" />
+
+
+
+              <img onClick={handleProfileMenuOpen} className="w-10 h-10 rounded-full cursor-pointer" src={profilePic} alt="Profile Pic" />
 
             </Box>
 
@@ -143,6 +158,12 @@ export default function PrimarySearchAppBar() {
         <NotificationDropDown
           notificationOpen={notificationOpen}
           setNotificationOpen={setNotificationOpen}
+
+        />}
+      {friendRequestDrowpDown &&
+        <FriendRequestDropDown
+          friendRequestDrowpDown={friendRequestDrowpDown}
+          setFriendRequestDrowpDown={setFriendRequestDrowpDown}
 
         />}
 
