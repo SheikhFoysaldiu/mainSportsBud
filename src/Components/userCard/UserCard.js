@@ -8,7 +8,7 @@ const Container = tw.div`
     px-0
     py-4
     shadow-lg
-    flex whitespace-nowrap overflow-auto scrollbar-hide md:scrollbar-default
+    whitespace-nowrap overflow-auto scrollbar-hide md:scrollbar-default 
 `
 const AddMeContiner = tw.div`
     flex

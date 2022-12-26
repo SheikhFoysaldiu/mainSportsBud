@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../../Context/AuthProvider";
 import toast, { Toaster } from 'react-hot-toast';
@@ -14,19 +14,19 @@ const Signup = () => {
     setSignUPError('');
     console.log(data)
     createUser(data.email, data.password)
-        .then(result => {
-            const user = result.user;
-            console.log(user);
-            toast('User Created Successfully.');
-            navigate('/main')
-                    // saveUser(data.name, data.email);
+      .then(result => {
+        const user = result.user;
+        console.log(user);
+        toast('User Created Successfully.');
+        navigate('/main')
+        // saveUser(data.name, data.email);
 
-        })
-        .catch(error => {
-            console.log(error)
-            setSignUPError(error.message)
-        });
-}
+      })
+      .catch(error => {
+        console.log(error)
+        setSignUPError(error.message)
+      });
+  }
 
   return (
     <div className="block p-6 rounded-lg shadow-lg bg-white max-w-md">
@@ -36,7 +36,7 @@ const Signup = () => {
             <input
               type="text" {...register("fname", {
                 required: "First name is Required"
-            })}
+              })}
               className="
           block
           w-full
@@ -56,13 +56,13 @@ const Signup = () => {
               aria-describedby="emailHelp123"
               placeholder="First name"
             />
-             {errors.fname && <p className='text-red-500'>{errors.fname.message}</p>}
+            {errors.fname && <p className='text-red-500'>{errors.fname.message}</p>}
           </div>
           <div className="form-group mb-6">
             <input
               type="text" {...register("lname", {
                 required: "Last name is Required"
-            })}
+              })}
               className="
           block
           w-full
@@ -89,7 +89,7 @@ const Signup = () => {
           <input
             type="email" {...register("email", {
               required: "Email is Required"
-          })}
+            })}
             className="block
         w-full
         px-3
@@ -113,7 +113,7 @@ const Signup = () => {
           <input
             type="password"  {...register("password", {
               required: "Password is Required"
-          })}
+            })}
             className="block
         w-full
         px-3
@@ -138,7 +138,7 @@ const Signup = () => {
           <input
             type="password" {...register("confirmpassword", {
               required: "Confirm password is Required"
-          })}
+            })}
             className="block
         w-full
         px-3
@@ -167,9 +167,9 @@ const Signup = () => {
             <input
               type="date" {...register("date", {
                 required: "Select a date"
-            })}
+              })}
               placeholder='dd/mm/yy'
-               className="block w-full px-3
+              className="block w-full px-3
                py-1.5
                text-base
                font-normal
@@ -180,12 +180,12 @@ const Signup = () => {
                transition
                ease-in-out
                m-0
-               focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" 
-              
+               focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+
             />
             {errors.date && <p className='text-red-500'>{errors.date.message}</p>}
-           
-            
+
+
           </div>
         </div>
 
@@ -193,7 +193,7 @@ const Signup = () => {
           <input
             type="checkbox" {...register("value", {
               required: true
-          })}
+            })}
             className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain mr-2 cursor-pointer"
             id="exampleCheck25"
           />
@@ -226,8 +226,8 @@ const Signup = () => {
       duration-150
       ease-in-out"
         />
-         
-       
+
+
         <p className="text-gray-800 mt-6 text-center">
           Already Have an account
           <Link
