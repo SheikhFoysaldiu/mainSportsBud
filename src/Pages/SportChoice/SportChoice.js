@@ -20,7 +20,8 @@ const SportChoice = () => {
         getSport(parseInt(params.id))
     }, []);
 
-    if (lodding || !sport) return <div>lodding...</div>
+    if (lodding || !sport)
+        return <div>lodding...</div>
 
 
     return (

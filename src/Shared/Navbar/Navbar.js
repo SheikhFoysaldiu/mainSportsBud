@@ -19,12 +19,15 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Search from '../Search/Search';
 
 import { AuthContext } from '../../Context/AuthProvider';
-import { Markunread } from '@material-ui/icons';
+import { Markunread, People } from '@material-ui/icons';
 
 import { Link } from 'react-router-dom';
 
 import profilePic from '../../Asset/person/profile.png';
 import NotificationDropDown from '../../Components/Notification/NotificationDropDown';
+import { TeamOutlined } from '@ant-design/icons';
+import { TheaterComedyOutlined } from '@mui/icons-material';
+import FriendRequestDropDown from '../../Components/FriendRequest/FriendRequestDropDown';
 
 export default function PrimarySearchAppBar() {
   const [active, setActive] = React.useState(false)
@@ -35,6 +38,7 @@ export default function PrimarySearchAppBar() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const { logOut } = React.useContext(AuthContext)
   const [notificationOpen, setNotificationOpen] = React.useState(false)
+  const [friendRequestDrowpDown, setFriendRequestDrowpDown] = React.useState(false)
   const handleLogOut = () => {
     logOut()
       .then(() => { })
@@ -78,13 +82,13 @@ export default function PrimarySearchAppBar() {
       onClose={handleMenuClose}
     >
 
-      <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
-        <ul class="py-1 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
+      <div className="hidden w-full md:block md:w-auto" id="navbar-dropdown">
+        <ul className="py-1 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
           <li onClick={handleMenuClose}>
-            <Link to="/main/profileuser" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
+            <Link to="/main/profileuser" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
           </li>
           <li onClick={handleMenuClose}>
-            <Link onClick={handleLogOut} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logout</Link>
+            <Link onClick={handleLogOut} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logout</Link>
           </li>
         </ul>
 
@@ -101,13 +105,13 @@ export default function PrimarySearchAppBar() {
     <div className="drawer">
   <input id="my-drawer" type="checkbox" className="drawer-toggle" />
   <div className="drawer-content">
-    <!-- Page content here -->
+   
     <label htmlFor="my-drawer" className="btn btn-primary drawer-button">Open drawer</label>
   </div> 
   <div className="drawer-side">
     <label htmlFor="my-drawer" className="drawer-overlay"></label>
     <ul className="menu p-4 w-80 bg-base-100 text-base-content">
-      <!-- Sidebar content here -->
+    
       <li><a>Sidebar Item 1</a></li>
       <li><a>Sidebar Item 2</a></li>
       

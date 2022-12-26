@@ -36,18 +36,18 @@ const
           sports.map((sport, idx) => (
             <button key={idx} onClick={() => navigate(`SportChoice/${sport.id}`)}>
               <Container>
-                <img class="p-8 rounded-t-lg object-cover" src={sport.image} alt="product image" />
+                <img className="p-8 rounded-t-lg object-cover" src={sport.image} alt="product image" />
 
-                <div class="px-5 pb-5">
+                <div className="px-5 pb-5">
 
-                  <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{sport.name}</h5>
+                  <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{sport.name}</h5>
                   <p>
                     {sport.description}
                   </p>
 
 
-                  <div class="flex items-center justify-between">
-                    <div class="flex items-center justify-between  text-xl  text-gray-900 dark:text-white">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between  text-xl  text-gray-900 dark:text-white">
                       <UserOutlined />
                       <span>
                         {tc(sport.users, {
@@ -57,7 +57,7 @@ const
                         )}
                       </span>
                     </div>
-                    <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                    <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
                       Follow
                     </button>
                   </div>
