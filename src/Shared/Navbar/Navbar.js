@@ -1,4 +1,5 @@
 import * as React from 'react';
+import './Navbar.css'
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -29,6 +30,7 @@ import { TheaterComedyOutlined } from '@mui/icons-material';
 import FriendRequestDropDown from '../../Components/FriendRequest/FriendRequestDropDown';
 
 export default function PrimarySearchAppBar() {
+  const [active, setActive] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [searchOpen, setSearchOpen] = React.useState(false);
@@ -54,7 +56,11 @@ export default function PrimarySearchAppBar() {
 
   };
 
+  const handletoggle = ()=>{
+    setActive(true)
+  }
 
+ 
 
 
 
@@ -96,77 +102,74 @@ export default function PrimarySearchAppBar() {
 
   return (
     <>
+    <div className="drawer">
+  <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+  <div className="drawer-content">
+   
+    <label htmlFor="my-drawer" className="btn btn-primary drawer-button">Open drawer</label>
+  </div> 
+  <div className="drawer-side">
+    <label htmlFor="my-drawer" className="drawer-overlay"></label>
+    <ul className="menu p-4 w-80 bg-base-100 text-base-content">
+    
+      <li><a>Sidebar Item 1</a></li>
+      <li><a>Sidebar Item 2</a></li>
+      
+    </ul>
+  </div>
+</div>
 
-      <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-        <AppBar position="sticky" color='transparent'>
-          <Toolbar>
+      <div className="navbar bg-base-100">
+        <div className="navbar-start w-[5%]">
+          <div className="dropdown">
+            <label tabIndex={0} className="btn btn-ghost btn-circle">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
+            </label>
+            <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 h-[100vh] dropdown-left">
+              <li><Link to=''>Home</Link></li>
+              <li><Link to=''>Sport Choice</Link></li>
+              <li><Link to=''>Community</Link></li>
+            </ul>
+          </div>
+        </div>
+        <div className="navbar-start">
+          <a className="normal-case text-sm lg:text-xl">daisyUI</a>
+        </div>
+        <div className="navbar-end">
+          
+            <div className='flex items-center'>
+              
+              <input type="text"  placeholder='Search'  onClick={handletoggle} className={`w-20  ${active? "border rounded-xl shadow-md w-32" : "border-none"}`}/>
+            
+            </div>
+            
+         
+          <button className="btn btn-ghost btn-circle ml-0 lg:ml-4">
+            <div className="indicator">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 lg:h-7 lg:w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+              <span className="badge badge-xs badge-primary indicator-item"></span>
+            </div>
+          </button>
+          <button className="btn btn-ghost btn-circle">
+            <div className="dropdown dropdown-end">
+              <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                <div className="w-7 lg:w-8 rounded-full">
+                  <img src="https://placeimg.com/80/80/people" />
+                </div>
+              </label>
+              <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+                <li>
+                <Link to='/main/profileuser' className='justify-between'>Profile</Link>
+                 
+                </li>
+                <li><Link>Settings</Link></li>
+                <li><Link onClick={handleLogOut}>Logout</Link></li>
+              </ul>
+            </div>
+          </button>
 
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ flexGrow: 1, display: { xs: 'flex' } }}
-
-            >
-              <Link to='/main'>SportZBud</Link>
-            </Typography>
-
-
-            <Box sx={{ flexGrow: 3, display: { xs: 'none', md: 'flex' } }} >
-              <Search />
-            </Box>
-
-            <Box sx={{ flexGrow: 0.1, display: { xs: 'none', md: 'flex' } }}>
-
-              <IconButton onClick={() => setFriendRequestDrowpDown(prev => !prev, console.log(friendRequestDrowpDown))} size="large" aria-label="show 4 new mails" color="inherit">
-                <Badge badgeContent={4} color="error">
-                  <People />
-                </Badge>
-              </IconButton>
-
-              <Link to='/main/message'>
-                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                  <Badge badgeContent={4} color="error">
-                    <Markunread />
-                  </Badge>
-                </IconButton>
-              </Link>
-
-              <IconButton onClick={() => setNotificationOpen(prev => !prev, console.log(notificationOpen))} size="large" aria-label="show 4 new mails" color="inherit">
-                <Badge badgeContent={4} color="error">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-
-
-
-
-
-              <img onClick={handleProfileMenuOpen} className="w-10 h-10 rounded-full cursor-pointer" src={profilePic} alt="Profile Pic" />
-
-            </Box>
-
-
-          </Toolbar>
-
-        </AppBar>
-
-        {renderMenu}
-
-      </Box >
-      {notificationOpen &&
-        <NotificationDropDown
-          notificationOpen={notificationOpen}
-          setNotificationOpen={setNotificationOpen}
-
-        />}
-      {friendRequestDrowpDown &&
-        <FriendRequestDropDown
-          friendRequestDrowpDown={friendRequestDrowpDown}
-          setFriendRequestDrowpDown={setFriendRequestDrowpDown}
-
-        />}
-
+        </div>
+      </div>
     </>
 
 

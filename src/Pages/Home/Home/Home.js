@@ -1,8 +1,8 @@
 import React from "react";
 import PageInfo from "../../../Components/PageInfo/PageInfo";
 import Search from "../../../Shared/Search/Search";
-import SportInterests from "../../../Shared/SportsInteresets/SportInterests";
-import { sports } from "../../../Asset/Dummy/data";
+import SportInterests from "../SportsInteresets/SportInterests";
+import { sports } from "../../../Asset/Dummy/SportsInterestData";
 import "./Home.css";
 
 const Home = () => {

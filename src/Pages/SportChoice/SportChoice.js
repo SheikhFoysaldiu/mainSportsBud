@@ -3,7 +3,7 @@ import Filter from '../../Components/Filter/Filter';
 
 import UserCard from '../../Components/userCard/UserCard';
 import { useParams } from 'react-router-dom';
-import { sports } from '../../Asset/Dummy/data';
+import { sports } from '../../Asset/Dummy/SportsInterestData';
 
 const SportChoice = () => {
     const params = useParams();
