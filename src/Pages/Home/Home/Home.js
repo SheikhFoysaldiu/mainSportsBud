@@ -7,7 +7,7 @@ import "./Home.css";
 
 const Home = () => {
   return (
-    <div className="">
+    <div >
       <PageInfo />
       <SportInterests sports={sports} />
     </div>
