@@ -29,6 +29,12 @@ import { TeamOutlined } from '@ant-design/icons';
 import { TheaterComedyOutlined } from '@mui/icons-material';
 import FriendRequestDropDown from '../../Components/FriendRequest/FriendRequestDropDown';
 
+import * as FaIcons from "react-icons/fa";
+import {AiOutlineHome} from "react-icons/ai";
+import {MdSportsBaseball} from "react-icons/md";
+import {MdOutlineFeedback} from "react-icons/md";
+import * as AiIcons from "react-icons/ai";
+
 export default function PrimarySearchAppBar() {
   const [active, setActive] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -39,6 +45,14 @@ export default function PrimarySearchAppBar() {
   const { logOut } = React.useContext(AuthContext)
   const [notificationOpen, setNotificationOpen] = React.useState(false)
   const [friendRequestDrowpDown, setFriendRequestDrowpDown] = React.useState(false)
+  const [isOpen, setIsopen] = React.useState(false);
+  const [sidebar, setSidebar] = React.useState(false);
+
+  const showSidebar = () => {
+    
+    
+    setSidebar(!sidebar)
+  };
   const handleLogOut = () => {
     logOut()
       .then(() => { })
@@ -56,11 +70,11 @@ export default function PrimarySearchAppBar() {
 
   };
 
-  const handletoggle = ()=>{
+  const handletoggle = () => {
     setActive(true)
   }
 
- 
+
 
 
 
@@ -102,48 +116,66 @@ export default function PrimarySearchAppBar() {
 
   return (
     <>
-    <div className="drawer">
-  <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-  <div className="drawer-content">
-   
-    <label htmlFor="my-drawer" className="btn btn-primary drawer-button">Open drawer</label>
-  </div> 
-  <div className="drawer-side">
-    <label htmlFor="my-drawer" className="drawer-overlay"></label>
-    <ul className="menu p-4 w-80 bg-base-100 text-base-content">
-    
-      <li><a>Sidebar Item 1</a></li>
-      <li><a>Sidebar Item 2</a></li>
-      
-    </ul>
-  </div>
-</div>
-
-      <div className="navbar bg-base-100">
+  
+      <div className="navbar bg-base-100 shadow-md">
         <div className="navbar-start w-[5%]">
-          <div className="dropdown">
-            <label tabIndex={0} className="btn btn-ghost btn-circle">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
-            </label>
-            <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 h-[100vh] dropdown-left">
-              <li><Link to=''>Home</Link></li>
-              <li><Link to=''>Sport Choice</Link></li>
-              <li><Link to=''>Community</Link></li>
-            </ul>
+          <div className="">
+            <Link to="#" className="menu-bars1">
+              
+              <svg onClick={showSidebar} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-0 lg:ml-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
+      
+            </Link>
           </div>
+          
+          <nav className={sidebar ? "nav-menu w-100% lg:w-[15%] active bg-base-100" : "nav-menu w-100% lg:w-[15%] bg-base-100"}>
+            
+            <ul className="nav-menu-items" onClick={showSidebar}>
+              <li className="navbar-toggle flex items-center justify-center">
+              <p className='text-white text-sm lg:text-xl mx-1 lg:mx-5'>Sportsbud</p>
+              <p>
+              <AiIcons.AiOutlineClose  className='menu-bars cursor-pointer'/>
+              </p>
+              
+               
+              </li>
+              <li >
+                <Link to='/main' className="navbar-toggle1 text-center mt-6 text-sm lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center">
+                <AiOutlineHome className='mr-2' ></AiOutlineHome>
+                Home
+                </Link>
+              </li>
+              <li >
+                <Link to='/' className="navbar-toggle1 text-center mt-6 text-sm lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center">
+                <MdSportsBaseball className='mr-2' ></MdSportsBaseball>
+                Sport Choice
+                </Link>
+              </li>
+              <li >
+                <Link to='/main/feedback' className="navbar-toggle1 text-center mt-6 text-sm lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center">
+                <MdOutlineFeedback className='mr-2' ></MdOutlineFeedback>
+                Feedback
+                </Link>
+              </li>
+              
+            </ul>
+          </nav>
+          <div
+        className={`sidebar-overlay ${sidebar === true ? "active" : ""}`}
+        onClick={showSidebar}
+      ></div>
         </div>
         <div className="navbar-start">
-          <a className="normal-case text-sm lg:text-xl">daisyUI</a>
+          <a className="normal-case text-sm lg:text-xl ml-10">Sportsbud</a>
         </div>
         <div className="navbar-end">
-          
-            <div className='flex items-center'>
-              
-              <input type="text"  placeholder='Search'  onClick={handletoggle} className={`w-20  ${active? "border rounded-xl shadow-md w-32" : "border-none"}`}/>
-            
-            </div>
-            
-         
+
+          <div className='flex items-center'>
+
+            <input type="text" placeholder='Search' onClick={handletoggle} className={`w-20  ${active ? "border rounded-xl shadow-md w-32 lg:w-38" : "border-none"}`} />
+
+          </div>
+
+
           <button className="btn btn-ghost btn-circle ml-0 lg:ml-4">
             <div className="indicator">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 lg:h-7 lg:w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
@@ -159,8 +191,8 @@ export default function PrimarySearchAppBar() {
               </label>
               <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
                 <li>
-                <Link to='/main/profileuser' className='justify-between'>Profile</Link>
-                 
+                  <Link to='/main/profileuser' className='justify-between'>Profile</Link>
+
                 </li>
                 <li><Link>Settings</Link></li>
                 <li><Link onClick={handleLogOut}>Logout</Link></li>
@@ -169,7 +201,9 @@ export default function PrimarySearchAppBar() {
           </button>
 
         </div>
+      
       </div>
+        
     </>
 
 

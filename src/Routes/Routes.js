@@ -25,7 +25,7 @@ import PageNotFound from "../Pages/404/PageNotFound";
 const router = createBrowserRouter([
   {
     path: "/main",
-    element: <PrivateRoute><Main></Main></PrivateRoute>,
+    element:<Main></Main>,
     children: [
       {
         path: "/main",
