@@ -127,31 +127,31 @@ export default function PrimarySearchAppBar() {
             </Link>
           </div>
           
-          <nav className={sidebar ? "nav-menu w-100% lg:w-[15%] active bg-base-100" : "nav-menu w-100% lg:w-[15%] bg-base-100"}>
+          <nav className={`w-[100%] lg:w-[17%] ${sidebar ? "nav-menu active bg-base-100" : "nav-menu bg-base-100"}`}>
             
-            <ul className="nav-menu-items" onClick={showSidebar}>
-              <li className="navbar-toggle flex items-center justify-center">
-              <p className='text-white text-sm lg:text-xl mx-1 lg:mx-5'>Sportsbud</p>
-              <p>
-              <AiIcons.AiOutlineClose  className='menu-bars cursor-pointer'/>
+            <ul className="nav-menu-items">
+              <li className="navbar-toggle flex items-center justify-center text-center shadow-md p-5" onClick={showSidebar}>
+              <p className='text-black text-2xl lg:text-xl mx-5 lg:mx-5 font-bold my-auto '>Sportsbud</p>
+              <p className='my-auto bg-red-200-50 shadow-md rounded-full p-2'>
+              <AiIcons.AiOutlineClose  className='text-black font-bold cursor-pointer text-2xl lg:text-xl'/>
               </p>
               
                
               </li>
               <li >
-                <Link to='/main' className="navbar-toggle1 text-center mt-6 text-sm lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center">
+                <Link to='/main' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start">
                 <AiOutlineHome className='mr-2' ></AiOutlineHome>
                 Home
                 </Link>
               </li>
               <li >
-                <Link to='/' className="navbar-toggle1 text-center mt-6 text-sm lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center">
+                <Link to='/' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start">
                 <MdSportsBaseball className='mr-2' ></MdSportsBaseball>
                 Sport Choice
                 </Link>
               </li>
               <li >
-                <Link to='/main/feedback' className="navbar-toggle1 text-center mt-6 text-sm lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center">
+                <Link to='/main/feedback' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start">
                 <MdOutlineFeedback className='mr-2' ></MdOutlineFeedback>
                 Feedback
                 </Link>
@@ -161,7 +161,7 @@ export default function PrimarySearchAppBar() {
           </nav>
           <div
         className={`sidebar-overlay ${sidebar === true ? "active" : ""}`}
-        onClick={showSidebar}
+        
       ></div>
         </div>
         <div className="navbar-start">
@@ -171,7 +171,7 @@ export default function PrimarySearchAppBar() {
 
           <div className='flex items-center'>
 
-            <input type="text" placeholder='Search' onClick={handletoggle} className={`w-20  ${active ? "border rounded-xl shadow-md w-32 lg:w-38" : "border-none"}`} />
+            <input type="text" placeholder='Search' onClick={handletoggle} className={`w-20  ${active ? "border rounded-xl shadow-md w-32 lg:w-96" : "border-none"}`} />
 
           </div>
 
