@@ -9,8 +9,8 @@ function CommunityInfo() {
                     <div class="w-full h-[450px] ">
                         <img src={CommunityDetails.picture} class="w-full h-full rounded-tl-lg rounded-tr-lg  object-cover object-top" />
                     </div>
-                    <div className='flex items-center justify-between p-3'>
-                        <div className='text-xl text-gray-900 font-bold'>{CommunityDetails.name}</div>
+                    <div className='flex items-center justify-between p-3 mx-5'>
+                        <div className='text-xl text-gray-900 font-bold '>{CommunityDetails.name}</div>
 
                         <button class="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
