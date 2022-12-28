@@ -9,15 +9,10 @@ input:focus{
   
  
   
-  .menu-bars {
-   
-    font-size: 1.5rem;
-    background: none;
-    color: #f5ebebfd;
-  }
+ 
   
   .nav-menu { 
-    z-index: 1;
+    z-index: 10001;
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -64,12 +59,9 @@ input:focus{
   }
   
   .navbar-toggle {
-    background-color: black;
+    background-color: rgb(238, 237, 237);
     width: 100%;
-    padding: 10px;
     display: flex;
-    justify-content: start;
-    align-items: center;
   }
   
   .navbar-toggle1 {
@@ -84,6 +76,7 @@ input:focus{
 
   .sidebar-overlay{
     position: fixed;
+    z-index: 1000;
     top: 0;
     left: 0;
     width: 100%;
