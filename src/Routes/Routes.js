@@ -19,13 +19,14 @@ import Feedback from "../Pages/Community/Feedback";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
 
 import PageNotFound from "../Pages/404/PageNotFound";
+import CommunityInfo from "../Pages/Community/CommunityInfo";
 
 
 
 const router = createBrowserRouter([
   {
     path: "/main",
-    element:<Main></Main>,
+    element: <Main></Main>,
     children: [
       {
         path: "/main",
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
       {
         path: '/main/community',
         element: <Community></Community>
+      },
+      {
+        path: '/main/community/1',
+        element: <CommunityInfo></CommunityInfo>
       },
       {
         path: '/main/feedback',
