@@ -29,10 +29,14 @@ const GridContainer = tw.div`
 
 const
   SportInterests = ({ sports }) => {
+   
     const navigate = useNavigate();
     return (
-      <GridContainer >
+    
+        <GridContainer>
         {
+          
+        
           sports.map((sport, idx) => (
             <button key={idx} onClick={() => navigate(`SportChoice/${sport.id}`)}>
               <Container>
@@ -67,6 +71,8 @@ const
           ))
         }
       </GridContainer>
+     
+      
     )
 
   }
