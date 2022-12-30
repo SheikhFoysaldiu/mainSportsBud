@@ -5,9 +5,9 @@ import BottomNav from '../../Components/BottomNav/BottmNav';
 
 const Footer = () => {
   return (
-    <div >
+    <div className="mt-auto ">
 
-      <footer className="flex sm:pb-[120px] xm:pb-[120px] lg:p-10 justify-evenly items-center footer bg-neutral text-neutral-content">
+      {/* <footer className="flex sm:pb-[120px] xm:pb-[120px] lg:p-10 justify-evenly items-center footer bg-neutral text-neutral-content">
         <div>
           <span className="footer-title">Services</span>
           <a className="link link-hover">Branding</a>
@@ -37,7 +37,7 @@ const Footer = () => {
       </footer>
       {/* <Box sx={{ display: { md: 'none', lg: 'none', xl: 'none', xxl: 'none' } }}>
         <BottomNav />
-      </Box> */}
+      </Box> */} 
 
     </div>
 

@@ -33,6 +33,7 @@ import * as FaIcons from "react-icons/fa";
 import {AiOutlineHome} from "react-icons/ai";
 import {MdSportsBaseball} from "react-icons/md";
 import {MdOutlineFeedback} from "react-icons/md";
+import {CgCommunity} from "react-icons/cg";
 import * as AiIcons from "react-icons/ai";
 
 export default function PrimarySearchAppBar() {
@@ -117,7 +118,7 @@ export default function PrimarySearchAppBar() {
   return (
     <>
   
-      <div className="navbar bg-base-100 shadow-md">
+      <div className="navbar bg-base-100 shadow-md fixed top-0 w-full z-50">
         <div className="navbar-start w-[5%]">
           <div className="">
             <Link to="#" className="menu-bars1">
@@ -139,19 +140,25 @@ export default function PrimarySearchAppBar() {
                
               </li>
               <li >
-                <Link to='/main' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start">
+                <Link to='/main' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start" onClick={showSidebar}>
                 <AiOutlineHome className='mr-2' ></AiOutlineHome>
                 Home
                 </Link>
               </li>
               <li >
-                <Link to='/' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start">
+                <Link to='/' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start" onClick={showSidebar}>
                 <MdSportsBaseball className='mr-2' ></MdSportsBaseball>
                 Sport Choice
                 </Link>
               </li>
               <li >
-                <Link to='/main/feedback' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start">
+                <Link to='/main/community' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start" onClick={showSidebar}>
+                <CgCommunity className='mr-2' ></CgCommunity>
+                Community
+                </Link>
+              </li>
+              <li >
+                <Link to='/main/feedback' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start" onClick={showSidebar}>
                 <MdOutlineFeedback className='mr-2' ></MdOutlineFeedback>
                 Feedback
                 </Link>
