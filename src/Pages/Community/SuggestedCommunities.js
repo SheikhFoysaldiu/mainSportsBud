@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const SuggestedCommunities = ({ community }) => {
     const { title, logo, category, id } = community;
@@ -9,7 +10,7 @@ const SuggestedCommunities = ({ community }) => {
                 <h2 className="card-title">{title}</h2>
                 <p>{category}</p>
                 <div className="card-actions justify-end">
-                    <button className="btn btn-primary">Join</button>
+                    <Link to={`/main/community/${id}`} className="btn btn-primary">Join</Link>
                 </div>
             </div>
         </div>
