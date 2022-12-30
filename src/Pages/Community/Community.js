@@ -56,10 +56,10 @@ const Community = () => {
    
     return (
         <div className='grid grid-cols-3 bg-slate-300 mt-16' >
-             <div className='bg-slate-200 shadow-lg relative'>
+             <div className='bg-slate-200 shadow-lg relative hidden lg:block'>
             <h1>My Community</h1>
             </div>
-            <div className='col-span-2'>
+            <div className='col-span-3 lg:col-span-2'>
                 <div className='flex justify-center items-center'>
                 <form action="" className='w-3/4 my-6 z-50 relative '>
                     <FcSearch className='absolute search'> </FcSearch>
@@ -69,7 +69,7 @@ const Community = () => {
                 </div>
                 
 
-                <div className='grid gap-[34px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto px-6 my-5 pb-16 overflow-y-scroll h-[600px]'>
+                <div className='grid gap-[34px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto px-6 my-5 pb-16  s'>
                 {
                     
                     communities.map(community=><SuggestedCommunities key={community.id} community={community}></SuggestedCommunities>)
