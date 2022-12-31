@@ -61,7 +61,7 @@ const router = createBrowserRouter([
         element: <Community></Community>
       },
       {
-        path: '/main/community/1',
+        path: '/main/community/:id',
         element: <CommunityInfo></CommunityInfo>
       },
       {
@@ -71,7 +71,8 @@ const router = createBrowserRouter([
       {
         path: '/main/404',
         element: <PageNotFound></PageNotFound>
-      }
+      },
+      
     ],
   },
 
