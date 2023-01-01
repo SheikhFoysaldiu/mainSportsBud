@@ -1,40 +1,39 @@
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 import { AuthContext } from "../../../Context/AuthProvider";
 
-
 const Login = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const { signIn } = useContext(AuthContext)
-  const [loginError, setLoginError] = useState('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const { signIn } = useContext(AuthContext);
+  const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
 
-
   const handleLogin = (data) => {
-    setLoginError('');
+    setLoginError("");
     signIn(data.email, data.password)
-      .then(result => {
-        const user = result.user;
-        console.log(user);
-        toast('Login Successfully.')
-        navigate('/main');
-
+      .then((result) => {
+        toast("Login Successfully.");
+        navigate("/main");
       })
-      .catch(error => {
-        console.log(error.message)
+      .catch((error) => {
+        console.log(error.message);
         setLoginError(error.message);
       });
-  }
+  };
   return (
     <div className="block p-6 rounded-lg shadow-lg bg-white max-w-sm">
       <form onSubmit={handleSubmit(handleLogin)}>
         <div className="form-group mb-6">
-
           <input
-            type="email" {...register("email", {
-              required: "Email is Required"
+            type="email"
+            {...register("email", {
+              required: "Email is Required",
             })}
             className="
         block
@@ -55,12 +54,15 @@ const Login = () => {
             aria-describedby="emailHelp"
             placeholder="Enter email"
           />
-          {errors.email && <p className='text-red-600'>{errors.email?.message}</p>}
+          {errors.email && (
+            <p className="text-red-600">{errors.email?.message}</p>
+          )}
         </div>
         <div className="form-group mb-6">
           <input
-            type="password" {...register("password", {
-              required: "Password is Required"
+            type="password"
+            {...register("password", {
+              required: "Password is Required",
             })}
             className="block
         w-full
@@ -79,14 +81,15 @@ const Login = () => {
             id="exampleInputPassword2"
             placeholder="Password"
           />
-          {errors.password && <p className='text-red-600'>{errors.password?.message}</p>}
+          {errors.password && (
+            <p className="text-red-600">{errors.password?.message}</p>
+          )}
         </div>
         <div className="mb-6 flex flex-col justify-start items-start">
           <div className="form-group form-check">
             <input
-              type="checkbox" {...register("value", {
-
-              })}
+              type="checkbox"
+              {...register("value", {})}
               className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
               id="exampleCheck2"
             />
