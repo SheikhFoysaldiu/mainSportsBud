@@ -30,10 +30,10 @@ import { TheaterComedyOutlined } from '@mui/icons-material';
 import FriendRequestDropDown from '../../Components/FriendRequest/FriendRequestDropDown';
 
 import * as FaIcons from "react-icons/fa";
-import {AiOutlineHome} from "react-icons/ai";
-import {MdSportsBaseball} from "react-icons/md";
-import {MdOutlineFeedback} from "react-icons/md";
-import {CgCommunity} from "react-icons/cg";
+import { AiOutlineHome } from "react-icons/ai";
+import { MdSportsBaseball } from "react-icons/md";
+import { MdOutlineFeedback } from "react-icons/md";
+import { CgCommunity } from "react-icons/cg";
 import * as AiIcons from "react-icons/ai";
 
 export default function PrimarySearchAppBar() {
@@ -50,8 +50,8 @@ export default function PrimarySearchAppBar() {
   const [sidebar, setSidebar] = React.useState(false);
 
   const showSidebar = () => {
-    
-    
+
+
     setSidebar(!sidebar)
   };
   const handleLogOut = () => {
@@ -117,59 +117,59 @@ export default function PrimarySearchAppBar() {
 
   return (
     <>
-  
+
       <div className="navbar bg-base-100 shadow-md fixed top-0 w-full z-50">
         <div className="navbar-start w-[5%]">
           <div className="">
             <Link to="#" className="menu-bars1">
-              
+
               <svg onClick={showSidebar} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-0 lg:ml-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
-      
+
             </Link>
           </div>
-          
+
           <nav className={`w-[100%] lg:w-[17%] ${sidebar ? "nav-menu active bg-base-100" : "nav-menu bg-base-100"}`}>
-            
+
             <ul className="nav-menu-items">
               <li className="navbar-toggle flex items-center justify-center text-center shadow-md p-5" onClick={showSidebar}>
-              <p className='text-black text-2xl lg:text-xl mx-5 lg:mx-5 font-bold my-auto '>Sportsbud</p>
-              <p className='my-auto bg-red-200-50 shadow-md rounded-full p-2'>
-              <AiIcons.AiOutlineClose  className='text-black font-bold cursor-pointer text-2xl lg:text-xl'/>
-              </p>
-              
-               
+                <p className='text-black text-2xl lg:text-xl mx-5 lg:mx-5 font-bold my-auto '>Sportsbud</p>
+                <p className='my-auto bg-red-200-50 shadow-md rounded-full p-2'>
+                  <AiIcons.AiOutlineClose className='text-black font-bold cursor-pointer text-2xl lg:text-xl' />
+                </p>
+
+
               </li>
               <li >
                 <Link to='/main' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start" onClick={showSidebar}>
-                <AiOutlineHome className='mr-2' ></AiOutlineHome>
-                Home
+                  <AiOutlineHome className='mr-2' ></AiOutlineHome>
+                  Home
                 </Link>
               </li>
               <li >
                 <Link to='/' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start" onClick={showSidebar}>
-                <MdSportsBaseball className='mr-2' ></MdSportsBaseball>
-                Sport Choice
+                  <MdSportsBaseball className='mr-2' ></MdSportsBaseball>
+                  Sport Choice
                 </Link>
               </li>
               <li >
                 <Link to='/main/community' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start" onClick={showSidebar}>
-                <CgCommunity className='mr-2' ></CgCommunity>
-                Community
+                  <CgCommunity className='mr-2' ></CgCommunity>
+                  Community
                 </Link>
               </li>
               <li >
                 <Link to='/main/feedback' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start" onClick={showSidebar}>
-                <MdOutlineFeedback className='mr-2' ></MdOutlineFeedback>
-                Feedback
+                  <MdOutlineFeedback className='mr-2' ></MdOutlineFeedback>
+                  Feedback
                 </Link>
               </li>
-              
+
             </ul>
           </nav>
           <div
-        className={`sidebar-overlay ${sidebar === true ? "active" : ""}`}
-        
-      ></div>
+            className={`sidebar-overlay ${sidebar === true ? "active" : ""}`}
+
+          ></div>
         </div>
         <div className="navbar-start">
           <a className="normal-case text-sm lg:text-xl ml-10">Sportsbud</a>
@@ -208,9 +208,9 @@ export default function PrimarySearchAppBar() {
           </button>
 
         </div>
-      
+
       </div>
-        
+
     </>
 
 
