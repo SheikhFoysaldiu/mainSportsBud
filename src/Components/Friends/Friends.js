@@ -9,6 +9,46 @@ import ListFriends from '../../Asset/Dummy/Friends'
 
 import profile from '../../Asset/person/profile.png';
 
+const FriendItem = ({ item }) => {
+
+    return (<Link to='/main/profileUser/1'>
+        <div className="flex flex-row shadow-lg rounded-lg border border-gray-200/80 bg-white mx-2 my-4">
+            <div className="relative">
+                <img className="w-40 h-40 rounded-md object-cover" src={profile}
+                    alt="User" />
+                {/* Active Icon */}
+            </div>
+
+            <div className="flex flex-col px-6 mt-5 ">
+                <div className="flex h-8 flex-row">
+                    <h2 className="text-lg font-semibold">{item.name}</h2>
+                </div>
+
+                <div className="my-2 flex flex-row space-x-8">
+
+                    <div className="flex flex-row">
+                        <Recommend fontSize='small' />
+
+                        <div className="text-xs text-gray-400/80 hover:text-gray-400">{item.interestedIn}</div>
+                    </div>
+
+
+                    <div className="flex flex-row">
+                        <CalendarMonth fontSize='small' />
+
+                        <div className="text-xs text-gray-400/80 hover:text-gray-400">{item.age} Years</div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+    </Link>
+    )
+}
+
 function Friends() {
     const [menu, setmenu] = React.useState(false);
     return (
@@ -25,68 +65,26 @@ function Friends() {
                             <SearchRounded />
                         </button>
                     </div>
-                    <h1>
-                        <Link to='/friendrequest' className='flex justify-start items-center ml-4 text-sm'> <UserAddOutlined /> Friend Request</Link>
-                    </h1>
 
                 </div>
                 <div className="mt-4 h-0.5 w-full bg-gray-200"></div>
                 <div>
                     <h1 className='mt-4 p-2 m-2'>Friends </h1>
                 </div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 ">
+                <div class="text-center text-2xl">
                     {
-                        ListFriends.length > 0 ?
-                            ListFriends.map((item, index) => {
-                                return (
-                                    <Link to='/main/profileUser/1'>
-                                        <div className="flex flex-row shadow-lg rounded-lg border border-gray-200/80 bg-white mx-2 my-4">
-                                            <div className="relative">
-                                                <img className="w-40 h-40 rounded-md object-cover" src={profile}
-                                                    alt="User" />
-                                                {/* Active Icon */}
-                                            </div>
+                        ListFriends.length === 0 &&
+                        <h1>Empty Friend List</h1>
+                    }
+                </div>
 
-                                            <div className="flex flex-col px-6 mt-5 ">
-                                                <div className="flex h-8 flex-row">
-                                                    <h2 className="text-lg font-semibold">{item.name}</h2>
-                                                </div>
-
-                                                <div className="my-2 flex flex-row space-x-8">
-
-                                                    <div className="flex flex-row">
-                                                        <Recommend fontSize='small' />
-
-                                                        <div className="text-xs text-gray-400/80 hover:text-gray-400">{item.interestedIn}</div>
-                                                    </div>
-
-
-                                                    <div className="flex flex-row">
-                                                        <CalendarMonth fontSize='small' />
-
-                                                        <div className="text-xs text-gray-400/80 hover:text-gray-400">{item.age} Years</div>
-                                                    </div>
-                                                </div>
-
-
-
-                                            </div>
-                                        </div>
-
-                                    </Link>
-
-
-                                )
-
-                            }
-                            )
-                            :
-
-
-                            <div>
-                                <h1>Empty Friend List.</h1>
-                            </div>
-
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 overflow-y-scroll h-[650px]">
+                    {
+                        ListFriends.length > 0 &&
+                        ListFriends.map((item, index) => (
+                            <FriendItem item={item} key={index} />
+                        )
+                        )
 
                     }
 
