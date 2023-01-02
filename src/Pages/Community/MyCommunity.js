@@ -4,7 +4,7 @@ const MyCommunity = ({ mycommunity }) => {
     const { title, logo, id, category } = mycommunity
     return (
         <div>
-            <button className='my-2 flex items-center hover:bg-slate-100 w-full py-5 px-2 rounded-lg'>
+            <button className='border-b-2 shadow-sm rounded-md border-gray-300 my-2 flex items-center hover:bg-slate-100 w-full py-5 px-2 rounded-lg'>
                 <div className='mr-3'>
                     <div className="avatar">
                         <div className="w-12 rounded">

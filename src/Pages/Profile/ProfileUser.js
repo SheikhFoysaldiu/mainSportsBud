@@ -26,7 +26,7 @@ const ProfileUser = () => {
             <div className="h-full bg-gray-200 mt-16 lg:px-20">
                 <div className="bg-white">
                     {/* Settings Menu  */}
-                    <div className="absolute right-20 lg:right-24 mt-4 rounded">
+                    <div className="absolute right-10 lg:right-24 mt-4 rounded">
                         <button onClick={() => setSettings(prev => !prev)} className="border border-gray-400 p-2 rounded text-gray-300 hover:text-gray-300 bg-gray-100 bg-opacity-10 hover:bg-opacity-20">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
@@ -127,7 +127,7 @@ const ProfileUser = () => {
                     <div className="tab-pane fade show active " id="tabs-home" role="tabpanel" aria-labelledby="tabs-home-tab">
                         <About />
                     </div>
-                    <div className="tab-pane fade " id="tabs-profile" role="tabpanel" aria-labelledby="tabs-profile-tab">
+                    <div className="tab-pane fade  " id="tabs-profile" role="tabpanel" aria-labelledby="tabs-profile-tab">
                         <Friends />
                     </div>
                     <div className="tab-pane fade" id="tabs-messages" role="tabpanel" aria-labelledby="tabs-profile-tab">
