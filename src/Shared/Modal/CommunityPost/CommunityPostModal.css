@@ -1,0 +1,44 @@
+.area
+{
+  outline: none;
+  border: 0;
+}
+.area::-moz-focus-inner,
+.area::-moz-focus-inner {
+  border: 0;
+}
+
+/*
+  Accessibility (A11Y)
+  Don't forget! User accessibility is important
+*/
+.area:focus
+{
+    outline: none !important;
+  border: none !important;
+} 
+
+.cursor {
+	position: relative;
+}
+.cursor	i {
+	position: absolute;
+	width: 1px;
+	height: 22px;
+	background-color: black;
+	left: 16px;
+	top: 15%;
+	animation-name: blink;
+	animation-duration: 1000ms;
+	animation-iteration-count: infinite;
+	opacity: 1;
+}
+
+.area:focus + i {
+	display: none;
+}
+
+@keyframes blink {
+	from { opacity: 5; }
+	to { opacity: 0; }
+}

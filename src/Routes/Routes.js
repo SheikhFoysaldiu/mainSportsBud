@@ -20,6 +20,8 @@ import PrivateRoute from "./PrivateRoute/PrivateRoute";
 
 import PageNotFound from "../Pages/404/PageNotFound";
 import CommunityInfo from "../Pages/Community/CommunityInfo";
+import MyCommunitySingle from "../Pages/Community/MyCommunitySingle/MyCommunitySingle";
+
 
 
 
@@ -63,6 +65,10 @@ const router = createBrowserRouter([
       {
         path: '/main/community/:id',
         element: <CommunityInfo></CommunityInfo>
+      },
+      {
+        path: '/main/mycommunitysingle/:id',
+        element: <MyCommunitySingle></MyCommunitySingle>
       },
       {
         path: '/main/feedback',
