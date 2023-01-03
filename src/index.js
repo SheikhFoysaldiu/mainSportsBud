@@ -4,24 +4,17 @@ import "tw-elements";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import {
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AuthProvider from "./Context/AuthProvider";
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-  <QueryClientProvider client={queryClient}>
-
-  <AuthProvider>
-    <App/>
-  </AuthProvider>
- 
-  </QueryClientProvider>
-</React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

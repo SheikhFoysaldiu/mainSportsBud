@@ -4,7 +4,6 @@ import Login from "../Pages/Auth/Login/Login";
 import SignUp from "../Pages/Auth/Signup/Signup";
 import ForgotPassword from "../Pages/Auth/Forgot-Password/ForgotPassword";
 import ResetPassword from "../Pages/Auth/Reset-Password/ResetPassword";
-import ProgressBar from "../Components/ProgressBar/ProgressBar";
 import WelcomeLayout from "../Layout/WelcomeLayout";
 import Welcome from "../Pages/Welcome/Welcome";
 import Home from "../Pages/Home/Home/Home";
@@ -22,69 +21,81 @@ import PageNotFound from "../Pages/404/PageNotFound";
 import CommunityInfo from "../Pages/Community/CommunityInfo";
 import MyCommunitySingle from "../Pages/Community/MyCommunitySingle/MyCommunitySingle";
 
-
-
+import CreateCommunity from "../Pages/Community/CreateCommunity";
+import AuthProvider from "../Context/AuthProvider";
 
 const router = createBrowserRouter([
   {
     path: "/main",
-    element: <Main></Main>,
+    element: (
+      <AuthProvider>
+        <Main></Main>
+      </AuthProvider>
+    ),
     children: [
       {
         path: "/main",
         element: <Home></Home>,
       },
       {
-        path: '/main/sportchoice/:id',
-        element: <SportChoice></SportChoice>
+        path: "/main/sportchoice/:id",
+        element: <SportChoice></SportChoice>,
       },
       {
-        path: '/main/filterchoice',
-        element: <FilterChoice></FilterChoice>
+        path: "/main/filterchoice",
+        element: <FilterChoice></FilterChoice>,
       },
       {
-        path: '/main/message',
-        element: <Message></Message>
+        path: "/main/message",
+        element: <Message></Message>,
       },
       {
-        path: '/main/profileuser',
-        element: <ProfileUser></ProfileUser>
+        path: "/main/profileuser",
+        element: <ProfileUser></ProfileUser>,
       },
       {
-        path: '/main/profilefilter',
-        element: <ProfileFilter></ProfileFilter>
-      },
-      {
-        path: '/main/users',
+        path: '/main/profileuser/1',
         element: <Users></Users>
       },
       {
-        path: '/main/community',
-        element: <Community></Community>
+        path: "/main/profilefilter",
+        element: <ProfileFilter></ProfileFilter>,
+      },
+
+      {
+        path: "/main/community",
+        element: <Community></Community>,
       },
       {
-        path: '/main/community/:id',
-        element: <CommunityInfo></CommunityInfo>
+        path: "/main/community/:id",
+        element: <CommunityInfo></CommunityInfo>,
+      },
+      {
+        path: '/main/createcommunity',
+        element: <CreateCommunity></CreateCommunity>
       },
       {
         path: '/main/mycommunitysingle/:id',
         element: <MyCommunitySingle></MyCommunitySingle>
       },
       {
-        path: '/main/feedback',
-        element: <Feedback></Feedback>
+        path: "/main/feedback",
+        element: <Feedback></Feedback>,
       },
       {
-        path: '/main/404',
-        element: <PageNotFound></PageNotFound>
+        path: "/main/404",
+        element: <PageNotFound></PageNotFound>,
       },
-      
     ],
   },
 
   {
     path: "/",
-    element: <WelcomeLayout></WelcomeLayout>,
+    element: (
+      <AuthProvider>
+        <WelcomeLayout></WelcomeLayout>
+      </AuthProvider>
+    ),
     children: [
       {
         path: "/",
@@ -106,10 +117,8 @@ const router = createBrowserRouter([
         path: "/reset-password",
         element: <ResetPassword></ResetPassword>,
       },
-
     ],
   },
-
 ]);
 
 export default router;
