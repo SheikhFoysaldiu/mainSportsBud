@@ -4,10 +4,10 @@ function CommunityInfo() {
     return (
         <>
             {/* Header Section */}
-            <div className="h-full bg-gray-200">
-                <div className="bg-white rounded-lg shadow-xl pb-8">
-                    <div className="w-full h-[450px] ">
-                        <img src={CommunityDetails.picture} className="w-full h-full rounded-tl-lg rounded-tr-lg  object-cover object-top" />
+            <div class="h-full bg-gray-300">
+                <div class="bg-white rounded-lg shadow-xl pb-8">
+                    <div class="w-full h-[450px] ">
+                        <img src={CommunityDetails.picture} alt="cover" class="w-full h-full rounded-tl-lg rounded-tr-lg  object-cover object-top" />
                     </div>
                     <div className='flex items-center justify-between p-3 mx-5'>
                         <div className='text-xl text-gray-900 font-bold '>{CommunityDetails.name}</div>
@@ -64,8 +64,8 @@ function CommunityInfo() {
                         {
                             CommunityDetails.members.map(
                                 member => (
-                                    <a href="#" className="flex flex-col items-center justify-center text-gray-800 hover:text-blue-600" title="View Profile">
-                                        <img src={member.picture} className="w-16 h-16 rounded-full" />
+                                    <a href="#" class="flex flex-col items-center justify-center text-gray-800 hover:text-blue-600" title="View Profile">
+                                        <img src={member.picture} alt='member' class="w-16 h-16 rounded-full" />
                                     </a>
                                 )
                             )

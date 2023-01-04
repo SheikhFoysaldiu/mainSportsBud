@@ -19,6 +19,8 @@ import PrivateRoute from "./PrivateRoute/PrivateRoute";
 
 import PageNotFound from "../Pages/404/PageNotFound";
 import CommunityInfo from "../Pages/Community/CommunityInfo";
+import MyCommunitySingle from "../Pages/Community/MyCommunitySingle/MyCommunitySingle";
+
 import CreateCommunity from "../Pages/Community/CreateCommunity";
 import AuthProvider from "../Context/AuthProvider";
 
@@ -71,6 +73,10 @@ const router = createBrowserRouter([
       {
         path: '/main/createcommunity',
         element: <CreateCommunity></CreateCommunity>
+      },
+      {
+        path: '/main/mycommunitysingle/:id',
+        element: <MyCommunitySingle></MyCommunitySingle>
       },
       {
         path: "/main/feedback",
