@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import './CommunityPostModal.css'
 import { useForm } from 'react-hook-form';
 
-
-const CommunityPost = () => {
-    
+const CommunityPostModalUpdate = ({ data }) => {
+    const { id, user, userName, postDetails, img } = data
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [active, setActive] = useState(true);
     const [isPhoto, setIsPhoto] = useState(true);
-    var [selectedImages, setSelectedImages] = useState([]);
-    var [imageName, setImageName] = useState([]);
-    var [imgFile, setImgFile] = useState([]);
-    
+    const [selectedImages, setSelectedImages] = useState([]);
+    const [imageName, setImageName] = useState([]);
+    const [imgFile, setImgFile] = useState([]);
+    console.log(img)
+
+    useEffect(() => {
+        setSelectedImages(img)
+    }, [img])
+
     const onSelectFile = (event) => {
         const selectedFiles = event.target.files;
         const selectedFilesArray = Array.from(selectedFiles);
@@ -29,22 +32,21 @@ const CommunityPost = () => {
             return file;
         });
 
-        setSelectedImages((previousImages) =>{ 
+        setSelectedImages((previousImages) => {
             return previousImages.concat(imagesArray)
-            
+
         });
         setImageName((previousImages) => {
             return previousImages.concat(imagesArray2)
-           
+
         });
         setImgFile((previousImages) => {
             return previousImages.concat(imagesArray3)
-            
+
         });
 
         // FOR BUG IN CHROME
         event.target.value = "";
-       
 
     };
 
@@ -67,7 +69,7 @@ const CommunityPost = () => {
         setIsPhoto(q);
     }
 
-    const handlePost = (data,e) => {
+    const updatePost = (data, e) => {
         console.log(data.name);
         console.log(selectedImages)
         const formData = new FormData();
@@ -75,18 +77,19 @@ const CommunityPost = () => {
             formData.append(`file-${i}`, file, file.name);
         });
         console.log(formData);
-        
+
         e.target.reset();
-        selectedImages.length=0;
-        imgFile.length =0;
+        selectedImages.length = 0;
+        imgFile.length = 0;
+
     }
-   
+
     return (
         <div>
-            <input type="checkbox" id="my-modal" className="modal-toggle" />
+            <input type="checkbox" id="update-modal" className="modal-toggle" />
             <div className="modal">
                 <div className="modal-box">
-                    <form onSubmit={handleSubmit(handlePost)}>
+                    <form onSubmit={handleSubmit(updatePost)}>
                         <div className='flex items-center'>
                             <div className="w-14 mr-4">
 
@@ -104,7 +107,7 @@ const CommunityPost = () => {
 
 
                             <div className='cursor'>
-                                <textarea type="textarea" {...register("name")} className="textarea textarea-ghost resize-none w-full area rq-form-element text-lg" rows='8' placeholder="Write from here" onClick={() => blinkHandler(false)}></textarea>
+                                <textarea type="textarea" {...register("name")} className="textarea textarea-ghost resize-none w-full area rq-form-element text-lg" rows='8' placeholder="Write from here" defaultValue={postDetails} onClick={() => blinkHandler(false)}></textarea>
                                 <i className={`${active ? 'block' : 'invisible'}`}></i>
                             </div>
                             <div className={`flex flex-col justify-center ${isPhoto ? 'block' : 'invisible'}`} >
@@ -164,11 +167,11 @@ const CommunityPost = () => {
 
                         </div>
                         <div className="modal-action flex items-center">
-                           
-                            
-                                <label><input className="btn btn-accent mr-3" value="Post" type="submit" /></label>
-                            
-                            <label htmlFor="my-modal" className="btn" onClick={() => blinkHandler2(true)}>Cancel</label>
+
+
+                            <label><input className="btn btn-accent mr-3" value="Edit Post" type="submit" /></label>
+
+                            <label htmlFor="update-modal" className="btn" onClick={() => blinkHandler2(true)}>Cancel</label>
                         </div>
                     </form>
                 </div>
@@ -179,4 +182,4 @@ const CommunityPost = () => {
     );
 };
 
-export default CommunityPost;
+export default CommunityPostModalUpdate;

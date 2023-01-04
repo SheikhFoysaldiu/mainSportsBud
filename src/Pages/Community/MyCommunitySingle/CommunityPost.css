@@ -1,0 +1,127 @@
+.carousel1 {
+    display: flex;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.carousel1::-webkit-scrollbar {
+    display: none;
+}
+.carousel1.pointer-event {
+    touch-action: pan-y;
+}
+
+.carousel-item1 {
+    box-sizing: content-box;
+    display: flex;
+    flex: none;
+    scroll-snap-align: start;
+}
+.carousel-center .carousel-item1 {
+    scroll-snap-align: center;
+}
+.carousel-end .carousel-item1 {
+    scroll-snap-align: end;
+}
+.carousel-item1 {
+    display: none;
+    margin-right: -100%;
+    backface-visibility: hidden;
+    -webkit-transition: transform 0.6s ease-in-out;
+    transition: transform 0.6s ease-in-out;
+}
+.carousel-item1.active {
+    display: block;
+}
+.carousel-fade .carousel-item1 {
+    opacity: 0;
+    -webkit-transition-property: opacity;
+    transition-property: opacity;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+.carousel-fade .carousel-item1.active {
+    z-index: 1;
+    opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+    .form-control::file-selector-button {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .form-control::-webkit-file-upload-button {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .form-switch .form-check-input {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .form-range::-webkit-slider-thumb {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .form-range::-moz-range-thumb {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .form-floating > label {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .fade {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .collapsing {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .collapsing.collapse-horizontal {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .accordion-button::after {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .modal.fade .modal-dialog {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .carousel-item1 {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .carousel-fade .active.carousel-item1-start {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .carousel-fade .active.carousel-item1-end {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .carousel-control-prev {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .carousel-control-next {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .carousel-indicators [data-bs-target] {
+        -webkit-transition: none;
+        transition: none;
+    }
+    .spinner-border {
+        -webkit-animation-duration: 1.5s;
+        animation-duration: 1.5s;
+    }
+    .spinner-grow {
+        -webkit-animation-duration: 1.5s;
+        animation-duration: 1.5s;
+    }
+}

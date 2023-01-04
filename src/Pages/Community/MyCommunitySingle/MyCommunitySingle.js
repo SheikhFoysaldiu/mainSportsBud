@@ -15,16 +15,10 @@ const MyCommunitySingle = () => {
     const [hasAccess, setHasAccess] = useState(true);
     const [isAdmin, setAdmin] = useState(false)
     const [posts, setPost] = useState([])
-    
     const postParams = useParams()
 
     const [active, setActive] = React.useState(true);
-    var images = [
-        'https://webneel.com/wallpaper/sites/default/files/images/08-2018/3-nature-wallpaper-mountain.jpg',
-        'https://thumbs.dreamstime.com/b/environment-earth-day-hands-trees-growing-seedlings-bokeh-green-background-female-hand-holding-tree-nature-field-gra-130247647.jpg',
-        'https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823__340.jpg',
-        'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg'
-        ];
+   
 
     const getMyPosts = async () => {
         setPost(postProps)
@@ -37,7 +31,7 @@ const MyCommunitySingle = () => {
 
 
 
-
+    console.log(posts)
 
     if (!posts) {
         return <Loading></Loading>
@@ -170,16 +164,16 @@ const MyCommunitySingle = () => {
                             </div>
                             <div className='w-1/2 cursor-pointer'>
                             <label htmlFor="my-modal" className="w-full btn btn-outline">Create your post</label>
-                           
+                                
                                 <CommunityPostModal></CommunityPostModal>
-                            
+                                
                             
                             </div>
                         </div>
                         <div >
                         {
                             posts.length &&
-                            posts.map(post=><CommunityPost key={post.id} post={post}></CommunityPost>)
+                            posts.map(post=><CommunityPost key={post.id} post={post}/>)
                         }
                         </div>
                     </div>
