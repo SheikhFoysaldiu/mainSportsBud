@@ -93,7 +93,7 @@ const Community = () => {
                 </button>
                 <div>
                     <div>
-                        <h1 className='text-lg text-slate-500'>My Community</h1>
+                        <h1 className='text-lg text-slate-500 text-left'>My Community</h1>
                         <hr className='h-[4px] bg-slate-300 shadow-lg'></hr>
                     </div>
                     <div>

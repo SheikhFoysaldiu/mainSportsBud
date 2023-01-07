@@ -4,14 +4,14 @@ import { useForm } from 'react-hook-form';
 
 
 const CommunityPost = () => {
-    
+
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [active, setActive] = useState(true);
     const [isPhoto, setIsPhoto] = useState(true);
     var [selectedImages, setSelectedImages] = useState([]);
     var [imageName, setImageName] = useState([]);
     var [imgFile, setImgFile] = useState([]);
-    
+
     const onSelectFile = (event) => {
         const selectedFiles = event.target.files;
         const selectedFilesArray = Array.from(selectedFiles);
@@ -29,22 +29,22 @@ const CommunityPost = () => {
             return file;
         });
 
-        setSelectedImages((previousImages) =>{ 
+        setSelectedImages((previousImages) => {
             return previousImages.concat(imagesArray)
-            
+
         });
         setImageName((previousImages) => {
             return previousImages.concat(imagesArray2)
-           
+
         });
         setImgFile((previousImages) => {
             return previousImages.concat(imagesArray3)
-            
+
         });
 
         // FOR BUG IN CHROME
         event.target.value = "";
-       
+
 
     };
 
@@ -67,20 +67,24 @@ const CommunityPost = () => {
         setIsPhoto(q);
     }
 
-    const handlePost = (data,e) => {
+    const handlePost = (data, e) => {
         console.log(data.name);
         console.log(selectedImages)
-        const formData = new FormData();
-        imgFile.forEach((file, i) => {
-            formData.append(`file-${i}`, file, file.name);
-        });
-        console.log(formData);
         
+        if (imgFile) {
+            const formData = new FormData();
+            imgFile.forEach((file, i) => {
+                formData.append(`file-${i}`, file, file.name);
+            });
+            console.log(formData);
+        }
+
+
         e.target.reset();
-        selectedImages.length=0;
-        imgFile.length =0;
+        selectedImages.length = 0;
+        imgFile.length = 0;
     }
-   
+
     return (
         <div>
             <input type="checkbox" id="my-modal" className="modal-toggle" />
@@ -164,10 +168,10 @@ const CommunityPost = () => {
 
                         </div>
                         <div className="modal-action flex items-center">
-                           
-                            
-                                <label><input className="btn btn-accent mr-3" value="Post" type="submit" /></label>
-                            
+
+
+                            <label><input className="btn btn-accent mr-3" value="Post" type="submit" /></label>
+
                             <label htmlFor="my-modal" className="btn" onClick={() => blinkHandler2(true)}>Cancel</label>
                         </div>
                     </form>
