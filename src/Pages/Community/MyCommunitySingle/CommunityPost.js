@@ -180,15 +180,15 @@ const CommunityPost = ({ post }) => {
             </div>
             <div className='px-10 lg:px-20 my-8'>
                 <div className='grid grid-cols-3 gap-2 lg:gap-5 my-4'>
-                    <div className='flex items-center ml-36'>
+                    <div className='flex items-center ml-[42%]'>
                     <p className='mr-1 lg:mr-2 text-sm lg:text-lg'><AiOutlineDislike></AiOutlineDislike></p>
                     <p className='text-sm lg:text-lg'>{dislikeCount}</p>
                     </div>
-                    <div className='flex items-center ml-36'>
+                    <div className='flex items-center ml-[42%]'>
                     <p className='mr-1 lg:mr-2 text-sm lg:text-lg'><FcLike></FcLike></p>
                     <p className='text-sm lg:text-lg'>{likeCount}</p>
                     </div>
-                    <div className='flex items-center ml-36'>
+                    <div className='flex items-center ml-[42%]'>
                     <p className='mr-1 lg:mr-2 text-sm lg:text-lg'><FaRegCommentAlt></FaRegCommentAlt></p>
                     <p className='text-sm lg:text-lg'>{commentCount}</p>
                     </div>
