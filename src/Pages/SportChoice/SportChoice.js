@@ -3,25 +3,31 @@ import Filter from '../../Components/Filter/Filter';
 
 import UserCard from '../../Components/userCard/UserCard';
 import { useParams } from 'react-router-dom';
-import { sports } from '../../Asset/Dummy/SportsInterestData';
+// import { sports } from '../../Asset/Dummy/SportsInterestData';
+import { API_URL } from '../../API/config';
+import { useQuery } from '@tanstack/react-query';
 
 const SportChoice = () => {
     const params = useParams();
-    const [sport, setSport] = useState(undefined);
-    const [lodding, setLodding] = useState(false);
 
-    const getSport = async (id) => {
-        setLodding(true)
-        const sport = sports.find((sport) => sport.id === id);
-        setSport(sport)
-        setLodding(false)
-    }
-    useEffect(() => {
-        getSport(parseInt(params.id))
-    }, []);
+    const [sport, setSport] = useState();
+    const { data, refetch, isLoading, isError } = useQuery({
+        queryKey: ['sportById'],
+        queryFn: async () => {
+            const res = await fetch(`${API_URL}/api/v1/sport/sports/${parseInt(params.id)}`, {
+                headers: {
+                    method: 'GET',
+                    authorization: `bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const data = await res.json();
+            console.log(data)
+            setSport(data.sport);
+            return data.sport;
+        }
+    });
 
-    if (lodding || !sport)
-        return <div>lodding...</div>
+    if (isLoading || !sport) return <div>Loading...</div>
 
 
     return (

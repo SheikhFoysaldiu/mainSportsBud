@@ -10,13 +10,9 @@ const Container = tw.div`
   rounded-lg 
   dark:bg-gray-800 
   dark:border-gray-700
-
   my-2
   shadow-2xl
-
-
-
-  
+ 
 `
 const GridContainer = tw.div`
     grid 
@@ -29,18 +25,23 @@ const GridContainer = tw.div`
 
 const
   SportInterests = ({ sports }) => {
-   
+
     const navigate = useNavigate();
+    const handleFollow = () => {
+      console.log('followed')
+    }
+
+
     return (
-    
-        <GridContainer>
+
+      <GridContainer>
         {
-          
-        
+
+
           sports.map((sport, idx) => (
             <button key={idx} onClick={() => navigate(`SportChoice/${sport.id}`)}>
               <Container>
-                <img className="p-8 rounded-t-lg object-cover" src={sport.image} alt="product image" />
+                <img className="p-8 rounded-t-lg object-cover h-[240px] w-[240px]" src={sport.images[sport.images.length - 1]} alt="product image" />
 
                 <div className="px-5 pb-5">
 
@@ -55,13 +56,13 @@ const
                       <UserOutlined />
                       <span>
                         {tc(sport.users, {
-                          digits: 1,
+                          digits: 2,
                           uppercase: true
                         }
                         )}
                       </span>
                     </div>
-                    <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                    <button onClick={handleFollow} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
                       Follow
                     </button>
                   </div>
@@ -71,8 +72,8 @@ const
           ))
         }
       </GridContainer>
-     
-      
+
+
     )
 
   }

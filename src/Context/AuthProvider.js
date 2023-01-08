@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from "react";
 import app from "../firebase/firebase.config";
 import { getProfile, login, register } from "../API/auth/auth";
 import { useLocation } from "react-router-dom";
-import { API_URL } from "../API/config";
+import { API_URL } from "../API/config"
 
 export const AuthContext = createContext();
 
@@ -13,8 +13,9 @@ const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const createUser = async (email, password) => {
+  const createUser = async (data) => {
     setLoading(true);
+    console.log("create user Data:", data)
     try {
       const user = await fetch(`${API_URL}/api/v1/auth/register`, {
         method: "POST",
@@ -22,11 +23,13 @@ const AuthProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email,
-          password,
+          ...data,
+          firstName: data.fname,
+          lastName: data.lname,
         }),
       });
       const res = await user.json();
+      // console.log(res);
       setToken(res.token);
       localStorage.setItem("token", res.token);
       setLoading(false);
@@ -86,7 +89,7 @@ const AuthProvider = ({ children }) => {
       }
       setUser(res.user);
       setLoading(false);
-      console.log("current user", res.user);
+      // console.log("current user", res.user);
     } catch (error) {
       console.log(error);
       setLoading(false);
