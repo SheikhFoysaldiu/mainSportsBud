@@ -9,9 +9,17 @@ import Loading from '../../../Shared/Loading/Loading';
 import postProps from '../../../Asset/Dummy/communitypost.json';
 import CommunityPostModal from '../../../Shared/Modal/CommunityPost/CommunityPostModal'
 import CommunityPost from './CommunityPost';
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import memberProps from '../../../Asset/Dummy/user.json'
 import CommunityMember from './CommunityMember';
 import { BsThreeDots } from "react-icons/bs";
+=======
+
+>>>>>>> Stashed changes
+=======
+
+>>>>>>> Stashed changes
 
 const MyCommunitySingle = () => {
     const [hasAccess, setHasAccess] = useState(true);
@@ -21,6 +29,12 @@ const MyCommunitySingle = () => {
     const postParams = useParams()
     const memberParams = useParams()
     const [active, setActive] = React.useState(true);
+    var images = [
+        'https://webneel.com/wallpaper/sites/default/files/images/08-2018/3-nature-wallpaper-mountain.jpg',
+        'https://thumbs.dreamstime.com/b/environment-earth-day-hands-trees-growing-seedlings-bokeh-green-background-female-hand-holding-tree-nature-field-gra-130247647.jpg',
+        'https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823__340.jpg',
+        'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg'
+        ];
 
 
     const getPosts = async () => {
@@ -222,10 +236,23 @@ const MyCommunitySingle = () => {
                             </div>
                         </div>
                         <div >
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
                             {
                                 posts.length &&
                                 posts.map(post => <CommunityPost key={post.id} post={post} />)
                             }
+=======
+=======
+>>>>>>> Stashed changes
+                        {
+                            posts.length &&
+                            posts.map(post=><CommunityPost key={post.id} post={post}></CommunityPost>)
+                        }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
                         </div>
                     </div>
                     <div class="tab-pane fade h-auto" id="tabs-profile3" role="tabpanel" aria-labelledby="tabs-profile-tab3">
