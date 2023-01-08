@@ -1,10 +1,10 @@
 import React from "react";
 import SportSearch from "../SportSearch/SportSearch";
 import SportInterests from "../SportsInteresets/SportInterests";
-import "./Home.css";
-import { API_URL } from "../../../API/config";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+// import "./Home.css";
+// import { API_URL } from "../../../API/config";
+// import { useQuery } from "@tanstack/react-query";
+// import { useState } from "react";
 const Home = () => {
   // const [sports, setSports] = useState([]);
   // const { data, refetch, isLoading, isError } = useQuery({

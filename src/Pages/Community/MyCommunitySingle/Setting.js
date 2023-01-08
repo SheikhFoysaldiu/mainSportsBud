@@ -196,7 +196,7 @@ const Setting = () => {
                         </div>
                     </div>
                     <div class="tab-pane fade" id="tabs-memberSetting" role="tabpanel" aria-labelledby="tabs-profile-tabVertical">
-                        <div className='p-5 grid grid-cols-1 lg:grid-cols-2 gap-x-0 gap-y-5 lg:gap-x-32 mt-5'>
+                        <div className='p-0 lg:p-5 grid grid-cols-1 lg:grid-cols-2 gap-x-0 gap-y-5 lg:gap-x-32 mt-5'>
                             {
                                 members.length &&
                                 members.map(member => <MemberSetting key={member.id} member={member}></MemberSetting>)

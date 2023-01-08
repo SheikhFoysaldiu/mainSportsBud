@@ -229,12 +229,7 @@ const MyCommunitySingle = () => {
                             </div>
                         </div>
                         <div >
-
-                            {
-                                posts.length &&
-                                posts.map(post => <CommunityPost key={post.id} post={post} />)
-                            }
-
+                    
                         {
                             posts.length &&
                             posts.map(post=><CommunityPost key={post.id} post={post}></CommunityPost>)
