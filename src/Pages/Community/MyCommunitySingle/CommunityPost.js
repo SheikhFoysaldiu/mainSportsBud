@@ -104,7 +104,7 @@ const CommunityPost = ({ post }) => {
                 </div>
                 <div className='z-20'>
                     <button className="btn btn-ghost btn-circle">
-                        <div className="dropdown dropdown-top dropdown-end">
+                        <div className="dropdown dropdown-end">
                             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                                 <BsThreeDots></BsThreeDots>
                             </label>

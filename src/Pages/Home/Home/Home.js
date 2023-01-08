@@ -1,15 +1,13 @@
 import React from "react";
-import PageInfo from "../../../Components/PageInfo/PageInfo";
-import Search from "../../../Shared/Search/Search";
+import SportSearch from "../SportSearch/SportSearch";
 import SportInterests from "../SportsInteresets/SportInterests";
-import { sports } from "../../../Asset/Dummy/SportsInterestData";
 import "./Home.css";
 
 const Home = () => {
   return (
-    <div className="mb-96">
-      <PageInfo />
-      <SportInterests sports={sports} />
+    <div className="fixed">
+      <SportSearch></SportSearch>
+      <SportInterests/>
     </div>
   );
 };

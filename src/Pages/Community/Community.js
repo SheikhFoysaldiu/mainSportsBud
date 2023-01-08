@@ -116,8 +116,7 @@ const Community = () => {
                                 placeholder='Search your community'
                                 onFocus={placeholderToggle}
                                 onBlur={placeholder}
-                                className={`in input input-bordered w-full  placeholder:p-[-1px] ${active ? "placeholder:block" : "placeholder:invisible"
-                                    } `}
+                                className={`in input input-bordered w-full  placeholder:p-[-1px] ${active ? "placeholder:block" : "placeholder:invisible"} `}
                             />
                         </form>
                     </div>
