@@ -7,6 +7,7 @@ import ResetPassword from "../Pages/Auth/Reset-Password/ResetPassword";
 import WelcomeLayout from "../Layout/WelcomeLayout";
 import Welcome from "../Pages/Welcome/Welcome";
 import Home from "../Pages/Home/Home/Home";
+import SportChoice from "../Pages/SportChoice/SportChoice";
 import FilterChoice from "../Pages/SportChoice/FilterChoice";
 import Message from "../Pages/Message/Message";
 import ProfileUser from "../Pages/Profile/ProfileUser";
@@ -35,7 +36,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/main",
-        element: <Home></Home>,
+        element: <PrivateRoute> <Home></Home> </PrivateRoute>,
+      },
+      {
+        path: "/main/sportchoice/:id",
+        element: <SportChoice></SportChoice>,
       },
       {
         path: "/main/filterchoice",

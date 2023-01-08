@@ -3,20 +3,15 @@ import './CommunityPostModal.css'
 import { useForm } from 'react-hook-form';
 
 
-
-<<<<<<< Updated upstream
 const CommunityPost = () => {
-
-=======
-const CommunityPost = ({ modal }) => {
->>>>>>> Stashed changes
+    
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [active, setActive] = useState(true);
     const [isPhoto, setIsPhoto] = useState(true);
     var [selectedImages, setSelectedImages] = useState([]);
     var [imageName, setImageName] = useState([]);
     var [imgFile, setImgFile] = useState([]);
-
+    
     const onSelectFile = (event) => {
         const selectedFiles = event.target.files;
         const selectedFilesArray = Array.from(selectedFiles);
@@ -34,32 +29,23 @@ const CommunityPost = ({ modal }) => {
             return file;
         });
 
-<<<<<<< Updated upstream
-        setSelectedImages((previousImages) => {
+        setSelectedImages((previousImages) =>{ 
             return previousImages.concat(imagesArray)
-
+            
         });
         setImageName((previousImages) => {
             return previousImages.concat(imagesArray2)
-
+           
         });
         setImgFile((previousImages) => {
             return previousImages.concat(imagesArray3)
-
+            
         });
-=======
-        setSelectedImages((previousImages) => previousImages.concat(imagesArray));
-        setImageName((previousImages) => previousImages.concat(imagesArray2));
-        setImgFile((previousImages) => previousImages.concat(imagesArray3));
->>>>>>> Stashed changes
 
         // FOR BUG IN CHROME
         event.target.value = "";
+       
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
     };
 
     function deleteHandler(image) {
@@ -81,46 +67,23 @@ const CommunityPost = ({ modal }) => {
         setIsPhoto(q);
     }
 
-<<<<<<< Updated upstream
-    const handlePost = (data, e) => {
-        console.log(data.name);
-        console.log(selectedImages)
-        
-        if (imgFile) {
-            const formData = new FormData();
-            imgFile.forEach((file, i) => {
-                formData.append(`file-${i}`, file, file.name);
-            });
-            console.log(formData);
-        }
-
-
-        e.target.reset();
-        selectedImages.length = 0;
-        imgFile.length = 0;
-    }
-
-=======
     const handlePost = (data,e) => {
         console.log(data.name);
-        console.log(imgFile)
+        console.log(selectedImages)
         const formData = new FormData();
         imgFile.forEach((file, i) => {
             formData.append(`file-${i}`, file, file.name);
         });
         console.log(formData);
+        
         e.target.reset();
-        selectedImages.length=0
+        selectedImages.length=0;
+        imgFile.length =0;
     }
-
-
->>>>>>> Stashed changes
+   
     return (
         <div>
             <input type="checkbox" id="my-modal" className="modal-toggle" />
-            <div className="modal">
-                <div className="modal-box">
-                    <form onSubmit={handleSubmit(handlePost)}>
             <div className="modal">
                 <div className="modal-box">
                     <form onSubmit={handleSubmit(handlePost)}>
@@ -156,65 +119,6 @@ const CommunityPost = ({ modal }) => {
                                         accept="image/png , image/jpeg, image/webp"
                                         onChange={onSelectFile}
 
-
-                            <div className='cursor'>
-                                <textarea type="textarea" {...register("name")} className="textarea textarea-ghost resize-none w-full area rq-form-element text-lg" rows='8' placeholder="Write from here" onClick={() => blinkHandler(false)}></textarea>
-                                <i className={`${active ? 'block' : 'invisible'}`}></i>
-                            </div>
-                            <div className={`flex flex-col justify-center ${isPhoto ? 'block' : 'invisible'}`} >
-                                <label className='input-field-label'>
-                                    + Add Images
-                                    <br />
-                                    <span>up to 10 images</span>
-                                    <input
-                                        className='photo-input'
-                                        type="file"
-                                        multiple
-                                        accept="image/png , image/jpeg, image/webp"
-                                        onChange={onSelectFile}
-
-                                    />
-                                </label>
-                                <br />
-
-                                <input type="file" className='photo-input' multiple />
-
-                                {selectedImages.length > 0 &&
-                                    (selectedImages.length > 10 ? (
-                                        <p className="error">
-                                            You can't upload more than 10 images! <br />
-                                            <span>
-                                                please delete <b> {selectedImages.length - 10} </b> of them{" "}
-                                            </span>
-                                        </p>
-                                    ) : (
-                                        <button
-                                            className="upload-btn"
-                                            onClick={() => {
-                                                console.log(selectedImages);
-                                            }}
-                                        >
-                                            UPLOAD {selectedImages.length} IMAGE
-                                            {selectedImages.length === 1 ? "" : "S"}
-                                        </button>
-                                    ))}
-
-                                <div className="images">
-                                    {selectedImages &&
-                                        selectedImages.map((image, index) => {
-                                            return (
-                                                <div key={image} className="image">
-                                                    <img src={image} height="200" alt="upload" className='photo-img' />
-                                                    <button onClick={() => deleteHandler(image)}>
-                                                        delete image
-                                                    </button>
-                                                    <p>{index + 1}</p>
-                                                </div>
-                                            );
-                                        })}
-                                </div>
-                                <button onClick={() => photoHandler(false)} className={`btn bg-red-600 hover:bg-red-700 w-1/5 mx-auto ${selectedImages.length === 0 ? 'block' : 'invisible'}`}>Remove</button>
-                            </div>
                                     />
                                 </label>
                                 <br />
@@ -260,16 +164,12 @@ const CommunityPost = ({ modal }) => {
 
                         </div>
                         <div className="modal-action flex items-center">
-
-
-                            <label><input className="btn btn-accent mr-3" value="Post" type="submit" /></label>
-
+                           
+                            
+                                <label><input className="btn btn-accent mr-3" value="Post" type="submit" /></label>
+                            
                             <label htmlFor="my-modal" className="btn" onClick={() => blinkHandler2(true)}>Cancel</label>
                         </div>
-                    </form>
-                </div>
-            </div>
-
                     </form>
                 </div>
             </div>

@@ -12,9 +12,10 @@ const Signup = () => {
 
   const handleSignUp = (data) => {
     setSignUPError('');
-    console.log(data)
-    createUser(data.email, data.password)
+    // console.log(data)
+    createUser(data)
       .then(result => {
+        // console.log(result)
         const user = result.user;
         console.log(user);
         toast('User Created Successfully.');
@@ -159,9 +160,9 @@ const Signup = () => {
           {errors.confirmpassword && <p className='text-red-500'>{errors.confirmpassword.message}</p>}
         </div>
 
-        <div class="flex items-center justify-center">
+        <div className="flex items-center justify-center">
           <div
-            class="datepicker relative form-floating mb-3 xl:w-96"
+            className="datepicker relative form-floating mb-3 xl:w-96"
             data-mdb-toggle-button="false"
           >
             <input

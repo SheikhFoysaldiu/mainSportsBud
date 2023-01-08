@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 import React, { useState } from 'react';
 import communityBanner from '../../../Asset/communityBanner/football.jpg'
 import { BsThreeDots } from "react-icons/bs";
@@ -157,19 +156,4 @@ const CommunityPost = ({ post }) => {
     );
 };
 
-=======
-import React from 'react';
-import communityBanner from '../../../Asset/communityBanner/football.jpg'
-
-const CommunityPost = ({post}) => {
-
-    const {id, user, userName, postDetails}= post
-    return (
-        <div className='bg-white rounded-lg shadow-xl mx-20 pb-10 mt-5 pt-5'>
-           
-        </div>
-    );
-};
-
->>>>>>> Stashed changes
 export default CommunityPost;

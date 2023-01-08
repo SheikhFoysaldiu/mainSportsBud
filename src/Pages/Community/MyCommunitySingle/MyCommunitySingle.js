@@ -9,17 +9,10 @@ import Loading from '../../../Shared/Loading/Loading';
 import postProps from '../../../Asset/Dummy/communitypost.json';
 import CommunityPostModal from '../../../Shared/Modal/CommunityPost/CommunityPostModal'
 import CommunityPost from './CommunityPost';
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 import memberProps from '../../../Asset/Dummy/user.json'
 import CommunityMember from './CommunityMember';
 import { BsThreeDots } from "react-icons/bs";
-=======
 
->>>>>>> Stashed changes
-=======
-
->>>>>>> Stashed changes
 
 const MyCommunitySingle = () => {
     const [hasAccess, setHasAccess] = useState(true);
@@ -236,23 +229,17 @@ const MyCommunitySingle = () => {
                             </div>
                         </div>
                         <div >
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
                             {
                                 posts.length &&
                                 posts.map(post => <CommunityPost key={post.id} post={post} />)
                             }
-=======
-=======
->>>>>>> Stashed changes
+
                         {
                             posts.length &&
                             posts.map(post=><CommunityPost key={post.id} post={post}></CommunityPost>)
                         }
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
                         </div>
                     </div>
                     <div class="tab-pane fade h-auto" id="tabs-profile3" role="tabpanel" aria-labelledby="tabs-profile-tab3">
