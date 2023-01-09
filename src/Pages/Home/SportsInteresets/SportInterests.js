@@ -1,82 +1,47 @@
-import { PlusSquareOutlined, UserOutlined } from "@ant-design/icons";
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import tw from 'tailwind-styled-components'
-import tc from 'thousands-counter';
-const Container = tw.div`
-  w-full 
-  max-w-lg
-  bg-white 
-  rounded-lg 
-  dark:bg-gray-800 
-  dark:border-gray-700
-  my-2
-  shadow-2xl
- 
-`
-const GridContainer = tw.div`
-    grid 
-    sm:grid-cols-1 
-    md:grid-cols-2
-    xl:grid-cols-3
-    place-items-center
-    py-3
-`
+import { useLayoutEffect } from "react";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import allSports from '../../../Asset/Dummy/SportsInterestData.json'
+import Loading from "../../../Shared/Loading/Loading";
+import InfiniteScroll from 'react-infinite-scroll-component';
+import SingleSport from "./SingleSport";
 
-const
-  SportInterests = ({ sports }) => {
+const SportInterests = () => {
+  const [sports, setSports] = useState([]);
 
-    const navigate = useNavigate();
-    const handleFollow = () => {
-      console.log('followed')
-    }
+  const sportParams = useParams();
 
+  const getSports = async () => {
+      setSports(allSports);
+      return allSports;
+  };
 
-    return (
+  useLayoutEffect(() => {
+      getSports(sportParams.id);
+  }, []);
 
-      <GridContainer>
-        {
-
-
-          sports.map((sport, idx) => (
-            <button key={idx} onClick={() => navigate(`SportChoice/${sport.id}`)}>
-              <Container>
-                <img className="p-8 rounded-t-lg object-cover h-[240px] w-[240px]" src={sport.images[sport.images.length - 1]} alt="product image" />
-
-                <div className="px-5 pb-5">
-
-                  <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{sport.name}</h5>
-                  <p>
-                    {sport.description}
-                  </p>
-
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center justify-between  text-xl  text-gray-900 dark:text-white">
-                      <UserOutlined />
-                      <span>
-                        {tc(sport.users, {
-                          digits: 2,
-                          uppercase: true
-                        }
-                        )}
-                      </span>
-                    </div>
-                    <button onClick={handleFollow} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                      Follow
-                    </button>
-                  </div>
-                </div>
-              </Container>
-            </button>
-          ))
-        }
-      </GridContainer>
-
-
-    )
-
+  if (!sports) {
+      return <Loading></Loading>;
   }
+
+  console.log(sports)
+    return (
+    <div className="h-screen w-full overflow-auto lg:overflow-hidden lg:hover:overflow-auto" id="scrollableDiv">
+      <InfiniteScroll  dataLength={sports.length} scrollableTarget="scrollableDiv" loader={<Loading></Loading>}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 mb-48 lg:mb-56 mt-16 mx-0 lg:mx-28">
+      
+     
+        {
+          sports.map(sport =><SingleSport key={sport.id} sport={sport}></SingleSport>)
+        }
+      
+      </div>
+      </InfiniteScroll>
+    </div>
+
+
+)  }
 
 export default SportInterests;
 

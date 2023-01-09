@@ -23,6 +23,7 @@ import MyCommunitySingle from "../Pages/Community/MyCommunitySingle/MyCommunityS
 
 import CreateCommunity from "../Pages/Community/CreateCommunity";
 import AuthProvider from "../Context/AuthProvider";
+import Setting from "../Pages/Community/MyCommunitySingle/Setting";
 
 const router = createBrowserRouter([
   {
@@ -35,7 +36,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/main",
-        element: <PrivateRoute> <Home></Home> </PrivateRoute>,
+        element:  <Home></Home> ,
       },
       {
         path: "/main/sportchoice/:id",
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
         path: "/main/404",
         element: <PageNotFound></PageNotFound>,
       },
+      {
+        path: "/main/setting",
+        element: <Setting></Setting>
+      }
     ],
   },
 

@@ -172,7 +172,7 @@ export default function PrimarySearchAppBar() {
           ></div>
         </div>
         <div className="navbar-start">
-          <a className="normal-case text-sm lg:text-xl ml-10">Sportsbud</a>
+          <a className="normal-case text-sm lg:text-xl ml-2 lg:ml-5 font-bold">Sportzbud</a>
         </div>
         <div className="navbar-end flex">
 

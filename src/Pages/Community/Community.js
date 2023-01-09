@@ -93,7 +93,7 @@ const Community = () => {
                 </button>
                 <div>
                     <div>
-                        <h1 className='text-lg text-slate-500'>My Community</h1>
+                        <h1 className='text-lg text-slate-500 text-left'>My Community</h1>
                         <hr className='h-[4px] bg-slate-300 shadow-lg'></hr>
                     </div>
                     <div>
@@ -116,8 +116,7 @@ const Community = () => {
                                 placeholder='Search your community'
                                 onFocus={placeholderToggle}
                                 onBlur={placeholder}
-                                className={`in input input-bordered w-full  placeholder:p-[-1px] ${active ? "placeholder:block" : "placeholder:invisible"
-                                    } `}
+                                className={`in input input-bordered w-full  placeholder:p-[-1px] ${active ? "placeholder:block" : "placeholder:invisible"} `}
                             />
                         </form>
                     </div>
