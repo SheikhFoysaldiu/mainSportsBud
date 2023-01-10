@@ -15,7 +15,7 @@ const AuthProvider = ({ children }) => {
 
   const createUser = async (data) => {
     setLoading(true);
-    console.log("create user Data:", data)
+    // console.log("create user Data:", data)
     try {
       const user = await fetch(`${API_URL}/api/v1/auth/register`, {
         method: "POST",
