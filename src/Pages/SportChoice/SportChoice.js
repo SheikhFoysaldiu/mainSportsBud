@@ -14,7 +14,7 @@ const SportChoice = () => {
     const { data, refetch, isLoading, isError } = useQuery({
         queryKey: ['sportById'],
         queryFn: async () => {
-            const res = await fetch(`${API_URL}/api/v1/sport/sports/${parseInt(params.id)}`, {
+            const res = await fetch(`${API_URL}/api/v1/sport/sports/?skip=0&take=20}`, {
                 headers: {
                     method: 'GET',
                     authorization: `bearer ${localStorage.getItem('token')}`
