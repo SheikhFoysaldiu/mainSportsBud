@@ -5,6 +5,8 @@ import { useParams } from 'react-router-dom';
 import props2 from '../../Asset/Dummy/mycommunity.json';
 import Loading from '../../Shared/Loading/Loading';
 import MyCommunity from '../../Pages/Community/MyCommunity';
+import { useQuery } from '@tanstack/react-query';
+import { API_URL } from '../../API/config';
 const CommunityItem = ({ item }) => {
 
     return (
@@ -19,18 +21,23 @@ const CommunityItem = ({ item }) => {
 function Community() {
     const [mycommunities, setMyCommunities] = useState([])
 
-    const communityParams = useParams();
+    const { data, refetch, isLoading, isError } = useQuery({
+        queryKey: ['mycommunities'],
+        queryFn: async () => {
+            const res = await fetch(`${API_URL}/api/v1/community/comunites`, {
+                headers: {
+                    method: 'GET',
+                    authorization: `bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const data = await res.json();
+            console.log(data)
+            setMyCommunities(data.communities);
+            return data.communities;
+        }
+    });
 
-    useLayoutEffect(() => {
-        getMyCommunities(communityParams.id);
-    }, []);
-
-    const getMyCommunities = async () => {
-        setMyCommunities(props2)
-        return props2
-
-    }
-    if (!mycommunities) {
+    if (!mycommunities || isLoading) {
         return <Loading></Loading>
     }
 
@@ -54,7 +61,7 @@ function Community() {
                 <div>
                     <h1 className='mt-4 p-2 m-2'>My Community </h1>
                 </div>
-                <div class="text-center text-2xl">
+                <div className="text-center text-2xl">
                     {
                         mycommunities.length === 0 &&
                         <h1>Empty Community List</h1>

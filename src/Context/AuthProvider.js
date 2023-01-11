@@ -8,7 +8,7 @@ export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const router = useLocation();
-
+  const [skip = 0, setSkip] = useState(0);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -113,6 +113,8 @@ const AuthProvider = ({ children }) => {
     logOut,
     loading,
     token,
+    skip,
+    setSkip,
   };
 
   return (

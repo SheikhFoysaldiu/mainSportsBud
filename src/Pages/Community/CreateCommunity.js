@@ -8,7 +8,6 @@ function CreateCommunity() {
     return (
         <>
             <div className='my-16'>
-
                 <div className='text-bold-700   text-3xl text-center'>Create a Community</div>
                 <form >
                     <div className="shadow sm:overflow-hidden sm:rounded-md">

@@ -12,13 +12,20 @@ import Settings from "../../Components/About/About";
 import About from "../../Components/About/About";
 
 import { AuthContext } from "../../Context/AuthProvider";
-
+import { API_URL } from "../../API/config";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../Shared/Loading/Loading";
 
 const ProfileUser = () => {
     const [settings, setSettings] = React.useState(false);
 
     const { user } = useContext(AuthContext)
     console.log(user)
+
+
+    if (!user) {
+        return <Loading></Loading>;
+    }
 
 
     return (
@@ -62,10 +69,10 @@ const ProfileUser = () => {
                     <div className="flex flex-col items-center -mt-20">
                         <img src={profilePicture} className="w-40 border-4 border-white rounded-full" />
                         <div className="flex items-center space-x-2">
-                            <p className="text-2xl">{user.firstName}{" "}{user.lastName}</p>
+                            <p className="text-2xl">{user?.firstName}{" "}{user?.lastName}</p>
                         </div>
 
-                        <p className="text-sm text-gray-500">Interested in {user.sportsInterest}</p>
+                        {/* <p className="text-sm text-gray-500">Interested in {user.sportsInterest}</p> */}
                     </div>
 
                 </div>

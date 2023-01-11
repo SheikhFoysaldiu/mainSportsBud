@@ -7,27 +7,26 @@ import SingleSport from "./SingleSport";
 import { API_URL } from "../../../API/config";
 import { useInfiniteQuery } from '@tanstack/react-query'
 const SportInterests = () => {
-  const [sports, setSports] = useState([]);
-  const [skip, setSkip] = useState(0);
-  const take = 6;
-  const apiPath = `${API_URL}/api/v1/sport/sports`
 
-  const fetchSports = async () => {
-    const queryParam = "?skip=" + skip + "&take=" + take;
-    const url = apiPath + queryParam;
-    console.log(url)
-    const res = await fetch(url, {
+  // const apiPath = `${API_URL}/api/v1/sport/sports`
+  const fetchSports = async ({ pageParam = 1 }) => {
+    // const queryParam = "?page=" + page + "&limit=" + limit;
+    // const url = apiPath + queryParam
+    // console.log(url)
+
+    const res = await fetch(`${API_URL}/api/v1/sport/sports?page=${pageParam}&limit=${6}`, {
       headers: {
         method: 'GET',
         authorization: `bearer ${localStorage.getItem('token')}`
       }
-    })
+    });
     const data = await res.json();
+    console.log(data)
+    return {
+      data: data.sports,
 
-    setSports(sports => [...sports, data.sports]);
-    // setSkip(sports.length)
-    setSkip(skip + take);
-    return data.sports;
+    };
+
   }
 
 
@@ -45,25 +44,26 @@ const SportInterests = () => {
     getNextPageParam: (lastPage, pages) => {
       console.log("lastPage:", lastPage)
       console.log("pages:", pages)
-      if (lastPage.length < take) {
-        return undefined;
+      if (lastPage.data.length < 6) {
+        return undefined
       }
-      return skip;
+      return pages.length + 1
+
     }
   })
 
 
 
-  if (!sports) {
+  if (!data) {
     return <Loading></Loading>;
   }
-  console.log("sports:", sports)
+
 
   return (
     <div className="h-screen w-full overflow-auto lg:overflow-hidden lg:hover:overflow-auto" id="scrollableDiv">
       <InfiniteScroll
-        dataLength={sports.length}
-        next={fetchNextPage}
+        dataLength={data.pages.length}
+        next={() => fetchNextPage()}
         scrollableTarget="scrollableDiv"
         hasMore={hasNextPage}
         loader={<h4>Loading...</h4>}
@@ -75,7 +75,7 @@ const SportInterests = () => {
             data &&
             data.pages.map((page, i) => (
               <React.Fragment key={i}>
-                {page.map((sport) => (
+                {page.data.map((sport) => (
                   <SingleSport key={sport.id} sport={sport}></SingleSport>
                 ))}
               </React.Fragment>
@@ -91,6 +91,7 @@ const SportInterests = () => {
       </InfiniteScroll>
 
     </div >
+
     // <>
     //   <button
     //     onClick={() => fetchNextPage()}
@@ -114,7 +115,7 @@ const SportInterests = () => {
     //           data &&
     //           data.pages.map((page, i) => (
     //             <React.Fragment key={i}>
-    //               {page.map((sport) => (
+    //               {page.data.map((sport) => (
     //                 <SingleSport key={sport.id} sport={sport}></SingleSport>
     //               ))}
     //             </React.Fragment>
@@ -127,8 +128,8 @@ const SportInterests = () => {
     // </>
 
 
+
   )
 }
 
 export default SportInterests;
-
