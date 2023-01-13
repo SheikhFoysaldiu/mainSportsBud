@@ -12,6 +12,7 @@ import CommunityPost from './CommunityPost';
 import memberProps from '../../../Asset/Dummy/user.json'
 import CommunityMember from './CommunityMember';
 import { BsThreeDots } from "react-icons/bs";
+import CommunityConversion from './CommunityConversion';
 
 
 const MyCommunitySingle = () => {
@@ -27,7 +28,7 @@ const MyCommunitySingle = () => {
         'https://thumbs.dreamstime.com/b/environment-earth-day-hands-trees-growing-seedlings-bokeh-green-background-female-hand-holding-tree-nature-field-gra-130247647.jpg',
         'https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823__340.jpg',
         'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg'
-        ];
+    ];
 
 
     const getPosts = async () => {
@@ -206,6 +207,24 @@ const MyCommunitySingle = () => {
     " id="tabs-messages-tab3" data-bs-toggle="pill" data-bs-target="#tabs-messages3" role="tab"
                                     aria-controls="tabs-messages3" aria-selected="false">About</a>
                             </li>
+                            <li class="nav-item flex-grow text-center" role="presentation">
+                                <a href="#tab-groupMessage" class="
+      nav-link
+      w-full
+      block
+      font-medium
+      text-xs
+      leading-tight
+      uppercase
+      border-x-0 border-t-0 border-b-2 border-transparent
+      px-6
+      py-3
+      my-2
+      hover:border-transparent hover:bg-gray-100
+      focus:border-transparent
+    " id="tabs-groupMessage-tab3" data-bs-toggle="pill" data-bs-target="#tab-groupMessage" role="tab"
+                                    aria-controls="tab-groupMessage" aria-selected="false">Chat</a>
+                            </li>
                         </ul>
 
                     </div>
@@ -229,11 +248,11 @@ const MyCommunitySingle = () => {
                             </div>
                         </div>
                         <div >
-                    
-                        {
-                            posts.length &&
-                            posts.map(post=><CommunityPost key={post.id} post={post}></CommunityPost>)
-                        }
+
+                            {
+                                posts.length &&
+                                posts.map(post => <CommunityPost key={post.id} post={post}></CommunityPost>)
+                            }
 
                         </div>
                     </div>
@@ -255,6 +274,14 @@ const MyCommunitySingle = () => {
                         </div>
                         <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 mt-5 pt-5 px-5'>
                             <p className='text-lg'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati nobis iusto velit iste non iure alias consequatur error blanditiis nam consequuntur soluta quasi quisquam nisi beatae quos, deleniti vitae adipisci ea totam est cupiditate. Eligendi aspernatur praesentium pariatur illum dolores non, commodi possimus corporis quaerat repellat optio ducimus nesciunt ratione voluptas deleniti amet sequi aliquid repellendus maxime dolor eaque quisquam a! Pariatur, fugiat, molestiae quaerat est, id ipsam dicta illo mollitia vel exercitationem doloremque? Quae recusandae nobis dignissimos cupiditate, pariatur commodi nihil corporis voluptate reprehenderit. Amet repellat architecto ducimus, voluptatum dolor porro nesciunt optio laborum veniam totam soluta. Nisi dolorem, similique velit dolores voluptatibus, aspernatur quae odit in inventore nulla repellendus. Repudiandae doloremque magnam voluptas praesentium odit. Magnam itaque, placeat consequatur consequuntur error non vitae ab earum ad ipsam cumque dolore distinctio assumenda voluptas neque asperiores incidunt officiis corrupti, optio accusantium ullam iure sint? Libero, minus totam non illo nemo magni quos, eos praesentium sunt unde minima dolores atque voluptates soluta! At id tenetur, vitae suscipit exercitationem iure fuga, excepturi quas accusantium atque voluptatem non. Veniam odit tempora explicabo? Provident minima aliquid reprehenderit eaque fuga. Eius, neque, totam repellat dolorem aspernatur praesentium voluptatem numquam esse expedita corrupti voluptatum facere error.</p>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab-groupMessage" role="tabpanel" aria-labelledby="tabs-groupMessage-tab3">
+                        <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 mt-5 pt-5 flex justify-center items-center'>
+                        <h1 className='text-xl font-bold'>Group Conversation</h1>
+                        </div>
+                        <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 mt-5 pt-5 flex justify-center items-center'>
+                            <CommunityConversion></CommunityConversion>
                         </div>
                     </div>
                 </div>

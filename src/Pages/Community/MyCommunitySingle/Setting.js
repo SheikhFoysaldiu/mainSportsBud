@@ -69,7 +69,7 @@ const Setting = () => {
           px-6
           py-3
           my-2
-          hover:border-transparent hover:bg-gray-100
+          hover:border-transparent hover:bg-gray-100 hover:rounded-2xl
           focus:border-transparent
           active
         " id="tabs-home-tabVertical" data-bs-toggle="pill" data-bs-target="#tabs-groupSetting" role="tab"
@@ -90,7 +90,7 @@ const Setting = () => {
           px-6
           py-3
           my-2
-          hover:border-transparent hover:bg-gray-100
+          hover:border-transparent hover:bg-gray-100 hover:rounded-2xl
           focus:border-transparent
         " id="tabs-profile-tabVertical" data-bs-toggle="pill" data-bs-target="#tabs-memberSetting" role="tab"
                                 aria-controls="tabs-memberSetting" aria-selected="false">
