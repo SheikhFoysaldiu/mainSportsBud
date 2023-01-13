@@ -1,37 +1,63 @@
 import { Add } from '@material-ui/icons'
-
-import React from 'react'
+import { useForm } from 'react-hook-form';
+import React, { useLayoutEffect, useState } from 'react'
 import CreateCommunityFriendList from '../../Components/Friends/CreateCommunityFriendList'
+import { useParams } from 'react-router-dom';
+import friendProps from '../../Asset/Dummy/user.json';
+import Loading from '../../Shared/Loading/Loading';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 function CreateCommunity() {
-    console.log('Hello')
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const [uploadImage, setUploadImage] = useState(null)
+    const [imgFile, setImageFile] = useState(null)
+    const [friends, setFriends] = useState([])
+    const friendParams = useParams()
+
+    const getFriends = async () => {
+        setFriends(friendProps)
+        return friendProps;
+    }
+
+    useLayoutEffect(() => {
+        getFriends(friendParams.id)
+    }, [])
+
+    if (!friends) {
+        return <Loading></Loading>
+    }
+
+    const previewImage = (event) => {
+
+        const imageFiles = event.target.files;
+        console.log(imageFiles[0])
+        setImageFile(imageFiles[0])
+        const imageFilesLength = imageFiles.length;
+        if (imageFilesLength > 0) {
+            const imageSrc = URL.createObjectURL(imageFiles[0]);
+            setUploadImage(imageSrc)
+
+        }
+
+    };
+
+    const handleCommunity = (data) => {
+
+        if (imgFile) {
+            const formData = new FormData();
+            formData.append('image', imgFile)
+            console.log(formData)
+        }
+    }
     return (
         <>
             <div className='my-16'>
-                <div className='text-bold-700   text-3xl text-center'>Create a Community</div>
-                <form >
-                    <div className="shadow sm:overflow-hidden sm:rounded-md">
+
+                <div className='text-lg lg:text-2xl text-center mt-20 font-bold'>Create your Community</div>
+                <form onSubmit={handleSubmit(handleCommunity)}>
+                    <div className="shadow  overflow-y-auto sm:rounded-md">
                         <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Cover photo</label>
-                                <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
-                                    <div className="space-y-1 text-center">
-                                        <label for="dropzone-file" className="mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center rounded-xl border-2 border-dashed border-blue-400 bg-white p-6 text-center">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                            </svg>
 
-                                            <h2 className="mt-4 text-xl font-medium text-gray-700 tracking-wide">Upload File</h2>
-
-                                            <p className="mt-2 text-gray-500 tracking-wide">Upload or darg & drop your file PNG, JPG </p>
-
-                                            <input id="dropzone-file" type="file" accept="image/*" className="hidden" />
-                                        </label>
-
-                                        <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
-                                    </div>
-                                </div>
-                            </div>
                             <div className="form-floating mb-3 ">
 
                                 <input type="text" className="form-control
@@ -56,11 +82,11 @@ function CreateCommunity() {
                                 </p>
                             </div>
 
-                            <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 '>
+                            <div className='grid grid-cols-1 lg:grid-cols-2 gap-x-8 items-center '>
                                 <div>
-                                    <label for="description" className="block text-sm font-medium text-gray-700">Description</label>
-                                    <div className="mt-1">
-                                        <textarea id="description" name="Description" rows="14" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder=""></textarea>
+                                    <label for="description" className="block text-sm font-medium text-gray-700 mb-3">Description*</label>
+                                    <div className="">
+                                        <textarea id="description" name="Description" rows="14" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm resize-none" placeholder=""></textarea>
                                     </div>
                                     <p className="mt-2 text-sm text-gray-500">
                                         Brief description for your community.
@@ -69,16 +95,76 @@ function CreateCommunity() {
 
                                 {/* FrindList */}
 
-                                <div className="flex flex-col justify-center antialiased  text-gray-600">
+                                <div className='mt-8'>
+                                    <div className="flex flex-col justify-center text-gray-600">
+                                        <div className="w-full  mx-auto bg-white rounded-md border border-gray-200">
+                                            <header className="px-5 py-4 border-b border-gray-100">
+                                                <h2 className="font-semibold text-gray-800">Add Friend</h2>
+                                            </header>
+                                            <div className="p-4">
+                                                <div className=" h-[210px] overflow-hidden hover:overflow-y-scroll" id='scrollableDiv'>
+                                                <InfiniteScroll
+                                                                dataLength={friends.length}
+                                                                loader={<Loading></Loading>}
+                                                                scrollableTarget="scrollableDiv">
+                                                    <table className="table-auto w-full">
+                                                        <thead className="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
+                                                            <tr>
+                                                                <th className="p-2 whitespace-nowrap">
+                                                                    <div className="font-semibold text-left">Name</div>
+                                                                </th>
 
-                                    <CreateCommunityFriendList /> {/* Friend List */}
+                                                                <th className="p-2 whitespace-nowrap">
+                                                                    <div className="font-semibold text-left">Interested</div>
+                                                                </th>
+                                                                <th className="p-2 whitespace-nowrap">
+                                                                    <div className="font-semibold text-center">Status</div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody className="text-sm divide-y divide-gray-100" >
+                                                          
 
+                                                            
+                                                           
+                                                                {
+                                                                    friends.length &&
+                                                                    friends.map(friend => <CreateCommunityFriendList key={friend.id} friend={friend}></CreateCommunityFriendList>)
+                                                                }
+                                                           
+                                                           
+                                                        </tbody>
+                                                        
+                                                    </table>
+                                                    </InfiniteScroll>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <p className="mt-2 text-sm text-gray-500">
+                                        Add at least three of your friends
+                                    </p>
                                 </div>
-
-
                             </div>
 
+                            <div>
+                                <div className=''>
+                                    <h1 className='my-3'>Set a group banner</h1>
+                                    <div class="image-preview-container">
+                                        <div class="preview">
+                                            <img src={uploadImage} alt="upload" className={`${uploadImage ? 'block' : 'hidden'}`} id="preview-selected-image" />
+                                        </div>
+                                        <label>Upload Image
+                                            <input type="file" id="file-upload" accept="image/png , image/jpeg, image/webp" onChange={previewImage} />
+                                        </label>
+                                    </div>
+                                </div>
 
+                                <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
+
+                            </div>
 
                         </div>
 
