@@ -36,7 +36,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/main",
-        element:  <Home></Home> ,
+        element: <Home></Home>,
       },
       {
         path: "/main/sportchoice/:id",

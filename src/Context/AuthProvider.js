@@ -8,14 +8,14 @@ export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const router = useLocation();
-
+  const [skip = 0, setSkip] = useState(0);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const createUser = async (data) => {
     setLoading(true);
-    console.log("create user Data:", data)
+    // console.log("create user Data:", data)
     try {
       const user = await fetch(`${API_URL}/api/v1/auth/register`, {
         method: "POST",
@@ -113,6 +113,8 @@ const AuthProvider = ({ children }) => {
     logOut,
     loading,
     token,
+    skip,
+    setSkip,
   };
 
   return (

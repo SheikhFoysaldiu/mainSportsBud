@@ -9,12 +9,12 @@ import { useQuery } from '@tanstack/react-query';
 
 const SportChoice = () => {
     const params = useParams();
-
+    console.log(params.id)
     const [sport, setSport] = useState();
     const { data, refetch, isLoading, isError } = useQuery({
         queryKey: ['sportById'],
         queryFn: async () => {
-            const res = await fetch(`${API_URL}/api/v1/sport/sports/${parseInt(params.id)}`, {
+            const res = await fetch(`${API_URL}/api/v1/sport/sports/${params.id}`, {
                 headers: {
                     method: 'GET',
                     authorization: `bearer ${localStorage.getItem('token')}`
@@ -32,8 +32,8 @@ const SportChoice = () => {
 
     return (
         <div>
-            <div className='text-3xl font-bold text-center'>{sport.name} Page</div>
-            <div className='flex my-10 justify-end'>
+            <div className='text-3xl font-bold text-center my-16'>{sport.name} Page</div>
+            <div className='flex  justify-end'>
                 <Filter />
             </div>
             <UserCard />

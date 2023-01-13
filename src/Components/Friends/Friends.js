@@ -1,13 +1,16 @@
 
 import { SettingFilled, UserAddOutlined } from '@ant-design/icons';
 import { CalendarMonth, PinDrop, Place, Recommend, SearchRounded } from '@mui/icons-material';
+import { useQuery } from '@tanstack/react-query';
 
 import React from 'react'
 import { Link } from 'react-router-dom';
+import { API_URL } from '../../API/config';
 
 import ListFriends from '../../Asset/Dummy/Friends'
 
 import profile from '../../Asset/person/profile.png';
+import Loading from '../../Shared/Loading/Loading';
 
 const FriendItem = ({ item }) => {
 
@@ -51,10 +54,29 @@ const FriendItem = ({ item }) => {
 
 function Friends() {
     const [menu, setmenu] = React.useState(false);
+    const [friends, setFriends] = React.useState([]);
+
+    const { data, refetch, isLoading, isError } = useQuery({
+        queryKey: ['friends'],
+        queryFn: async () => {
+            const res = await fetch(`${API_URL}/api/v1/user/friends`, {
+                headers: {
+                    method: 'GET',
+                    authorization: `bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const data = await res.json();
+            console.log(data)
+            setFriends(data.friends);
+            return data.friends;
+        }
+    });
+
+    if (isLoading || !friends) return <Loading />
+
+
     return (
         <>
-
-
             <div className='h-full bg-white rounded-lg shadow-xl pb-10 '>
 
                 <div className='flex justify-center items-center px-6'>
@@ -71,17 +93,17 @@ function Friends() {
                 <div>
                     <h1 className='mt-4 p-2 m-2'>Friends </h1>
                 </div>
-                <div class="text-center text-2xl">
+                <div className="text-center text-2xl">
                     {
-                        ListFriends.length === 0 &&
+                        friends.length === 0 &&
                         <h1>Empty Friend List</h1>
                     }
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 overflow-y-scroll h-[650px]">
                     {
-                        ListFriends.length > 0 &&
-                        ListFriends.map((item, index) => (
+                        friends.length > 0 &&
+                        friends.map((item, index) => (
                             <FriendItem item={item} key={index} />
                         )
                         )
