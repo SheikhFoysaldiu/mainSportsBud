@@ -106,85 +106,14 @@ const UserCard = () => {
     // if (!isLoading) {
     //     return <Loading></Loading>;
     // }
-    const member = [
-        {
-            id: 1,
-            fname: "Foysal",
-            lname: "Sheikh",
-        },
-        {
-            id: 2,
-            fname: "Foysal",
-            lname: "Sheikh",
-        },
-        {
-            id: 3,
-            fname: "Foysal",
-            lname: "Sheikh",
-        },
-        {
-            id: 4,
-            fname: "Foysal",
-            lname: "Sheikh",
-        },
-
-        {
-            id: 5,
-            fname: "Foysal",
-            lname: "Sheikh",
-        },
-        {
-            id: 6,
-            fname: "Foysal",
-            lname: "Sheikh",
-        },
-
-        {
-            id: 7,
-            fname: "Foysal",
-            lname: "Sheikh",
-        },
-        {
-            id: 8,
-            fname: "Foysal",
-            lname: "Sheikh",
-        },
-
-        {
-            id: 9,
-            fname: "Foysal",
-            lname: "Sheikh",
-        },
-        {
-            id: 10,
-            fname: "Foysal",
-            lname: "Sheikh",
-        },
-
-        {
-            id: 11,
-            fname: "Foysal",
-            lname: "Sheikh",
-        },
-        {
-            id: 12,
-            fname: "Foysal",
-            lname: "Sheikh",
-        },
-
-
-
-
-    ]
-
     if (status === 'loading') {
         return <Loading></Loading>;
     }
     if (status === 'error') {
         return <span>Error: {error.message}</span>;
     }
-    if (data.pages.length === 0) {
-        return "No data";
+    if (data.pages.length === 1 && data.pages[0].data.length === 0) {
+        return <p className='text-center'>No User List Found!</p>;
     }
     return (
 
@@ -201,6 +130,7 @@ const UserCard = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-48 lg:mb-56 mt-16 mx-0 lg:mx-28 h-[350px]">
                     {
+                        data &&
                         data.pages.map((page, i) => {
                             return (
                                 page.data.map((user, i) => {

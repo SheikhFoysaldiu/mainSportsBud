@@ -67,6 +67,11 @@ const SportInterests = () => {
     )
   }
 
+  if (data.pages[0].data.length === 0 && data.pages.length == 1) {
+    return (
+      <p className="text-center">No Sports Found!!</p>)
+  }
+
 
   return (
     <div className="h-screen w-full overflow-auto lg:overflow-hidden lg:hover:overflow-auto" id="scrollableDiv">

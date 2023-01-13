@@ -1,9 +1,10 @@
 
 import { SettingFilled, UserAddOutlined } from '@ant-design/icons';
 import { CalendarMonth, PinDrop, Place, Recommend, SearchRounded } from '@mui/icons-material';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import React from 'react'
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 import { API_URL } from '../../API/config';
 
@@ -13,18 +14,19 @@ import profile from '../../Asset/person/profile.png';
 import Loading from '../../Shared/Loading/Loading';
 
 const FriendItem = ({ item }) => {
-
+    const { firstName, lastName, location, coverPicture, profilePicture, sportsInterestedId, dob } = item.friend
+    console.log(item)
     return (<Link to='/main/profileUser/1'>
         <div className="flex flex-row shadow-lg rounded-lg border border-gray-200/80 bg-white mx-2 my-4">
             <div className="relative">
-                <img className="w-40 h-40 rounded-md object-cover" src={profile}
+                <img className="w-40 h-40 rounded-md object-cover" src={profilePicture}
                     alt="User" />
                 {/* Active Icon */}
             </div>
 
             <div className="flex flex-col px-6 mt-5 ">
                 <div className="flex h-8 flex-row">
-                    <h2 className="text-lg font-semibold">{item.name}</h2>
+                    <h2 className="text-lg font-semibold">{firstName} {lastName}</h2>
                 </div>
 
                 <div className="my-2 flex flex-row space-x-8">
@@ -32,14 +34,14 @@ const FriendItem = ({ item }) => {
                     <div className="flex flex-row">
                         <Recommend fontSize='small' />
 
-                        <div className="text-xs text-gray-400/80 hover:text-gray-400">{item.interestedIn}</div>
+                        <div className="text-xs text-gray-400/80 hover:text-gray-400">{sportsInterestedId}</div>
                     </div>
 
 
                     <div className="flex flex-row">
                         <CalendarMonth fontSize='small' />
 
-                        <div className="text-xs text-gray-400/80 hover:text-gray-400">{item.age} Years</div>
+                        <div className="text-xs text-gray-400/80 hover:text-gray-400">Birth On {dob}</div>
                     </div>
                 </div>
 
@@ -53,31 +55,68 @@ const FriendItem = ({ item }) => {
 }
 
 function Friends() {
-    const [menu, setmenu] = React.useState(false);
-    const [friends, setFriends] = React.useState([]);
 
-    const { data, refetch, isLoading, isError } = useQuery({
-        queryKey: ['friends'],
-        queryFn: async () => {
-            const res = await fetch(`${API_URL}/api/v1/user/friends`, {
-                headers: {
-                    method: 'GET',
-                    authorization: `bearer ${localStorage.getItem('token')}`
-                }
-            });
-            const data = await res.json();
-            console.log(data)
-            setFriends(data.friends);
-            return data.friends;
+    const fetchFriends = async ({ pageParam = 1 }) => {
+        // const queryParam = "?page=" + page + "&limit=" + limit;
+        // const url = apiPath + queryParam
+
+        const url = `${API_URL}/api/v1/user/friends?page=${pageParam}&limit=${10}`
+        console.log(url)
+        const res = await fetch(url, {
+
+            headers: {
+                method: 'GET',
+                authorization: `bearer ${localStorage.getItem('token')}`
+            }
+        });
+        const data = await res.json();
+        console.log("data:", data)
+
+        return {
+            data: data.friends
         }
-    });
 
-    if (isLoading || !friends) return <Loading />
+    }
+
+
+    const {
+        data,
+        error,
+        fetchNextPage,
+        hasNextPage,
+        isFetching,
+        isFetchingNextPage,
+        status,
+    } = useInfiniteQuery({
+        queryKey: ['myfriendList'],
+        queryFn: fetchFriends,
+        getNextPageParam: (lastPage, pages) => {
+            console.log("lastPage:", lastPage)
+            console.log("pages:", pages)
+            if (lastPage.data.length < 10) {
+                return undefined
+            }
+            return pages.length + 1
+
+        }
+    })
+
+    if (status === 'loading') {
+        return <Loading></Loading>
+    }
+    if (status === 'error') {
+        return <div>Error: {error.message}</div>
+    }
+
+
+
 
 
     return (
+
+
         <>
-            <div className='h-full bg-white rounded-lg shadow-xl pb-10 '>
+            <div className='bg-white rounded-lg shadow-xl pb-10 '>
 
                 <div className='flex justify-center items-center px-6'>
                     <div className="pt-2 relative mx-auto text-gray-600">
@@ -89,29 +128,46 @@ function Friends() {
                     </div>
 
                 </div>
-                <div className="mt-4 h-0.5 w-full bg-gray-200"></div>
                 <div>
                     <h1 className='mt-4 p-2 m-2'>Friends </h1>
                 </div>
-                <div className="text-center text-2xl">
-                    {
-                        friends.length === 0 &&
-                        <h1>Empty Friend List</h1>
-                    }
+
+                {
+
+                    data.pages[0].data.length === 0 && data.pages.length === 1
+                    &&
+                    <div className='flex justify-center items-center'>
+                        <h1 className='text-gray-400'>No Friends</h1>
+                    </div>
+
+
+                }
+
+                <div className='overflow-y-scroll h-[450px]' id='scrollableDiv1'>
+
+                    <InfiniteScroll
+                        dataLength={data.pages.length}
+                        next={() => fetchNextPage()}
+                        hasMore={hasNextPage}
+                        loader={<h4>Loading...</h4>}
+                        scrollableTarget="scrollableDiv1"
+
+                    >
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 ">
+                            {
+                                data &&
+                                data.pages.map((page, id) => {
+                                    return page.data.map((item, id) => {
+                                        return <FriendItem item={item} key={id} />
+                                    })
+                                }
+                                )
+
+                            }
+
+                        </div>
+                    </InfiniteScroll>
                 </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 overflow-y-scroll h-[650px]">
-                    {
-                        friends.length > 0 &&
-                        friends.map((item, index) => (
-                            <FriendItem item={item} key={index} />
-                        )
-                        )
-
-                    }
-
-                </div>
-
 
             </div>
         </>

@@ -15,9 +15,9 @@ const Signup = () => {
     // console.log(data)
     createUser(data)
       .then(result => {
-        // console.log(result)
-        const user = result.user;
-        console.log(user);
+        console.log(result)
+        // const user = result.user;
+        // console.log(user);
         toast('User Created Successfully.');
         navigate('/main')
         // saveUser(data.name, data.email);
