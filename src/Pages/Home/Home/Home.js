@@ -30,7 +30,7 @@ const Home = () => {
   return (
     <div className="fixed">
       <SportSearch></SportSearch>
-      <SportInterests/>
+      <SportInterests />
     </div>
   );
 };

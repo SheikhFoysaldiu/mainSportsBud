@@ -8,9 +8,30 @@ import props2 from "../../Asset/Dummy/mycommunity.json";
 import SuggestedCommunities from "./SuggestedCommunities";
 import { FaPlusCircle } from "react-icons/fa";
 import MyCommunity from "./MyCommunity";
+import { API_URL } from "../../API/config";
+import { useQuery } from "@tanstack/react-query";
 
 const Community = () => {
-    const [mycommunities, setMyCommunities] = useState([]);
+
+    const [mycommunities, setMyCommunities] = useState([])
+
+    const { data, refetch, isLoading, isError } = useQuery({
+        queryKey: ['mycommunities'],
+        queryFn: async () => {
+            const res = await fetch(`${API_URL}/api/v1/community/comunites`, {
+                headers: {
+                    method: 'GET',
+                    authorization: `bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const data = await res.json();
+            console.log(data)
+            setMyCommunities(data.communities);
+            return data.communities;
+        }
+    });
+
+
 
     const communityParams = useParams();
 
@@ -69,7 +90,7 @@ const Community = () => {
 
     return (
         <div className='grid grid-cols-3 bg-slate-300 mt-16 fixed'>
-            
+
             <div className='bg-slate-200 shadow-lg hidden lg:block p-6  pb-20 s'>
                 <div className='flex items-center mb-6'>
                     <div className='w-14 mr-4'>

@@ -36,7 +36,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/main",
-        element: <PrivateRoute><Home></Home> </PrivateRoute>,
+        element: <Home></Home>,
       },
       {
         path: "/main/sportchoice/:id",

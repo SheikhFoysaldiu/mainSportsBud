@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom';
 
 const SingleSport = ({ sport }) => {
     const { id, name, image, users, description } = sport;
+
+    const handleFollow = () => {
+        console.log('Followed')
+    }
     return (
-        
         <div>
             <div className="card  bg-base-100 shadow-xl">
                 <figure><img src={image} alt="Sport" /></figure>
@@ -13,12 +16,12 @@ const SingleSport = ({ sport }) => {
                     <p>{description}</p>
                     <p>Total Followers: <span className='font-bold ml-0'>{users}</span></p>
                     <div className="card-actions justify-end">
-                      <button className="btn btn-primary">Follow Now</button> 
+                        <button onClick={() => handleFollow} className="btn btn-primary">Follow Now</button>
                     </div>
                 </div>
             </div>
         </div>
-        
+
     );
 };
 

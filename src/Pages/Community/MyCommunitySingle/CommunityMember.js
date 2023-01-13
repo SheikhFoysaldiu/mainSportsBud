@@ -26,35 +26,35 @@ const CommunityMember = ({ member }) => {
                 </div>
             </div>
             <div >
-                    <button className="btn btn-ghost btn-circle h-0">
-                        <div className="dropdown dropdown-top dropdown-end">
-                            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                                <BsThreeDotsVertical></BsThreeDotsVertical>
-                            </label>
-                            <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-                                <li>
-                                    <Link className="flex items-center">
-                                    
-                                        <p><MdPersonAddAlt1 className='text-lg'></MdPersonAddAlt1></p>
-                                        <p>Add Friend</p>
-                                   
-                                    </Link>
-                                   
+                <button className="btn btn-ghost btn-circle h-0">
+                    <div className="dropdown dropdown-top dropdown-end">
+                        <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                            <BsThreeDotsVertical></BsThreeDotsVertical>
+                        </label>
+                        <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                            <li>
+                                <Link className="flex items-center">
 
-                                </li>
-                                <li  ><Link>
-                                    <p><CgProfile className='text-lg'></CgProfile></p>
-                                    <p>View Profile</p>
+                                    <p><MdPersonAddAlt1 className='text-lg'></MdPersonAddAlt1></p>
+                                    <p>Add Friend</p>
 
-                                </Link></li>
-
-                            </ul>
-
-                        </div>
-                    </button>
+                                </Link>
 
 
-                </div>
+                            </li>
+                            <li  ><Link>
+                                <p><CgProfile className='text-lg'></CgProfile></p>
+                                <p>View Profile</p>
+
+                            </Link></li>
+
+                        </ul>
+
+                    </div>
+                </button>
+
+
+            </div>
         </div>
     );
 };
