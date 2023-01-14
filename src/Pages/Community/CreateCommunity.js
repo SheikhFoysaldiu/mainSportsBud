@@ -1,6 +1,6 @@
 import { Add } from '@material-ui/icons'
 import { useForm } from 'react-hook-form';
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import CreateCommunityFriendList from '../../Components/Friends/CreateCommunityFriendList'
 import { useParams } from 'react-router-dom';
 import friendProps from '../../Asset/Dummy/user.json';
@@ -13,6 +13,19 @@ function CreateCommunity() {
     const [imgFile, setImageFile] = useState(null)
     const [friends, setFriends] = useState([])
     const friendParams = useParams()
+    const [countFriends, setCountFriends] = useState(0);
+    const [addedFriendData, setAddedFriendData] = useState([]);
+    const [isTrue, setIsTrue] = useState(true)
+
+   
+   
+       useEffect(()=>{
+        if(addedFriendData.length===3){
+            setIsTrue(false)
+        }
+       
+       },[addedFriendData])
+   
 
     const getFriends = async () => {
         setFriends(friendProps)
@@ -30,7 +43,6 @@ function CreateCommunity() {
     const previewImage = (event) => {
 
         const imageFiles = event.target.files;
-        console.log(imageFiles[0])
         setImageFile(imageFiles[0])
         const imageFilesLength = imageFiles.length;
         if (imageFilesLength > 0) {
@@ -48,7 +60,10 @@ function CreateCommunity() {
             formData.append('image', imgFile)
             console.log(formData)
         }
+        console.log(data.communityName, data.description)
     }
+    
+   
     return (
         <>
             <div className='my-16'>
@@ -60,7 +75,9 @@ function CreateCommunity() {
 
                             <div className="form-floating mb-3 ">
 
-                                <input type="text" className="form-control
+                                <input type="text" {...register("communityName", {
+                            required: "Community name is required"
+                        })} className="form-control
       block
       w-full
       px-3
@@ -86,10 +103,12 @@ function CreateCommunity() {
                                 <div>
                                     <label for="description" className="block text-sm font-medium text-gray-700 mb-3">Description*</label>
                                     <div className="">
-                                        <textarea id="description" name="Description" rows="14" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm resize-none" placeholder=""></textarea>
+                                        <textarea id="description" {...register("description", {
+                            required: "Community description is required"
+                        })} rows="14" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm resize-none" placeholder=""></textarea>
                                     </div>
                                     <p className="mt-2 text-sm text-gray-500">
-                                        Brief description for your community.
+                                        Brief description for your community is required*.
                                     </p>
                                 </div>
 
@@ -103,39 +122,42 @@ function CreateCommunity() {
                                             </header>
                                             <div className="p-4">
                                                 <div className=" h-[210px] overflow-hidden hover:overflow-y-scroll" id='scrollableDiv'>
-                                                <InfiniteScroll
-                                                                dataLength={friends.length}
-                                                                loader={<Loading></Loading>}
-                                                                scrollableTarget="scrollableDiv">
-                                                    <table className="table-auto w-full">
-                                                        <thead className="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
-                                                            <tr>
-                                                                <th className="p-2 whitespace-nowrap">
-                                                                    <div className="font-semibold text-left">Name</div>
-                                                                </th>
+                                                    <InfiniteScroll
+                                                        dataLength={friends.length}
+                                                        loader={<Loading></Loading>}
+                                                        scrollableTarget="scrollableDiv">
+                                                        <table className="table-auto w-full">
+                                                            <thead className="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
+                                                                <tr>
+                                                                    <th className="p-2 whitespace-nowrap">
+                                                                        <div className="font-semibold text-left">Name</div>
+                                                                    </th>
 
-                                                                <th className="p-2 whitespace-nowrap">
-                                                                    <div className="font-semibold text-left">Interested</div>
-                                                                </th>
-                                                                <th className="p-2 whitespace-nowrap">
-                                                                    <div className="font-semibold text-center">Status</div>
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody className="text-sm divide-y divide-gray-100" >
-                                                          
+                                                                    <th className="p-2 whitespace-nowrap">
+                                                                        <div className="font-semibold text-left">Interested</div>
+                                                                    </th>
+                                                                    <th className="p-2 whitespace-nowrap">
+                                                                        <div className="font-semibold text-center">Status</div>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody className="text-sm divide-y divide-gray-100" >
 
-                                                            
-                                                           
+
+
+
                                                                 {
                                                                     friends.length &&
-                                                                    friends.map(friend => <CreateCommunityFriendList key={friend.id} friend={friend}></CreateCommunityFriendList>)
+                                                                    friends.map(friend => <CreateCommunityFriendList key={friend.id} friend={friend}
+                                                                        addedFriendData={addedFriendData}
+                                                                        setAddedFriendData={setAddedFriendData}
+                                                                        countFriends={countFriends} setCountFriends={setCountFriends}></CreateCommunityFriendList>)
                                                                 }
-                                                           
-                                                           
-                                                        </tbody>
-                                                        
-                                                    </table>
+
+
+                                                            </tbody>
+
+                                                        </table>
                                                     </InfiniteScroll>
                                                 </div>
 
@@ -143,9 +165,20 @@ function CreateCommunity() {
 
                                         </div>
                                     </div>
-                                    <p className="mt-2 text-sm text-gray-500">
-                                        Add at least three of your friends
-                                    </p>
+                                  
+                                        <p className={`mt-2 text-sm text-gray-500 ${countFriends=== 0 ? 'block' : 'hidden'}`}>
+                                            Add at least three of your friends
+                                        </p>
+                                
+                                        <p className={`mt-2 text-sm text-gray-500 ${countFriends=== 1 ? 'block' : 'hidden'}`}>
+                                            You have added {countFriends} friend
+                                        </p>
+                                    
+                                        <p className={`mt-2 text-sm text-gray-500 ${countFriends> 1 ? 'block' : 'hidden'}`}>
+                                            You have added {countFriends} friends
+                                        </p>
+                                    
+
                                 </div>
                             </div>
 
@@ -171,12 +204,12 @@ function CreateCommunity() {
 
 
                         <div className="bg-gray-50 px-10 py-8 sm:px-8 text-center">
-                            <button
-                                className="btn btn-outline btn-primary my-3 w-1/3 text-xl rounded-full text-black-600"
+                            <input type='submit'
+                                className="btn btn-outline btn-primary my-3 w-1/3 text-xl rounded-full text-black-600" disabled={isTrue} Value='Create Community'
 
-                            >
-                                Create
-                            </button>
+                            />
+                             
+                            
                         </div>
                     </div>
 
