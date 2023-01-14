@@ -15,8 +15,8 @@ function Community() {
     const fetchMyCommunity = async ({ pageParam = 1 }) => {
         const url = `${API_URL}/api/v1/community/communities?page=${pageParam}&limit=${10}`
         const res = await fetch(url, {
+            method: 'GET',
             headers: {
-                method: 'GET',
                 authorization: `bearer ${localStorage.getItem('token')}`
             }
         });

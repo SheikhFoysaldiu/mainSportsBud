@@ -5,7 +5,7 @@ import tw from "tailwind-styled-components"
 import { UserAddOutlined } from '@ant-design/icons';
 import { Link, useParams } from 'react-router-dom';
 import { API_URL } from '../../API/config';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import Loading from '../../Shared/Loading/Loading';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { MdOutlinePersonAddAlt1, MdPersonAddAlt1 } from 'react-icons/md';
@@ -24,25 +24,48 @@ const AddMeContiner = tw.div`
     items-center
 `
 
-const UserCardItem = ({ member }) => {
-    const { id, fname, lname } = member
+const UserCardItem = ({ user, sportId }) => {
+    const { id, firstName, lastName, profilePicture } = user
+    console.log("user:", user)
+
+    // console.log(user)
+    const { data, status, error } = useQuery({
+        queryKey: [sportId],
+        queryFn: async () => {
+            const url = `${API_URL}/api/v1/sport/sports/${sportId}`
+            const res = await fetch(url, {
+                headers: {
+                    method: 'GET',
+                    authorization: `bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const data = await res.json();
+            console.log(data.sport)
+            return {
+                data: data.sport
+            }
+        }
+
+    })
+
+    console.log("DATA----<>:", data)
     return (
-        <Link to={`main/profileUser/${id}`}>
+        <Link to={`/main/profileUser/${id}`}>
             <div className='flex justify-between '>
                 <div className='flex'>
                     <div className="avatar mr-3">
                         <div className="w-16 rounded">
-                            <img src={"https://i.pravatar.cc/150?img=" + id}
-                                alt="Tailwind-CSS-Avatar-component" />
+                            <img src={profilePicture}
+                                alt="user DP" />
                         </div>
                     </div>
                     <div>
                         <div>
-                            <span className='mx-0 mr-1 text-lg font-bold'>{fname}</span>
-                            <span className='mx-0 text-lg font-bold'>{lname}</span>
+                            <span className='mx-0 mr-1 text-lg font-bold'>{firstName}</span>
+                            <span className='mx-0 text-lg font-bold'>{lastName}</span>
                         </div>
                         <div>
-                            <span className='mx-0 text-sm'>Football</span>
+                            <span className='mx-0 text-sm'>{data?.data?.name}</span>
                         </div>
                     </div>
                 </div>
@@ -64,16 +87,16 @@ const UserCard = () => {
         const url = `${API_URL}/api/v1/sport/sports/users/${params.id}?page=${pageParam}&limit=${10}`
         console.log("url", url)
         const res = await fetch(url, {
+            method: 'GET',
             headers: {
-                method: 'GET',
                 authorization: `bearer ${localStorage.getItem('token')}`
             }
         });
         // console.log(res)
         const data = await res.json();
-        // console.log("data:", data)
+        console.log("UserCardData:", data)
         return {
-            data: data.users
+            data: data.sports
         };
 
     }
@@ -102,7 +125,7 @@ const UserCard = () => {
         }
     })
 
-    console.log("data:", data)
+    console.log("USERCARD data:", data)
     // if (!isLoading) {
     //     return <Loading></Loading>;
     // }
@@ -116,7 +139,6 @@ const UserCard = () => {
         return <p className='text-center'>No User List Found!</p>;
     }
     return (
-
         <div className="h-screen w-full overflow-auto lg:overflow-hidden lg:hover:overflow-auto" id="scrollableDiv">
             <InfiniteScroll
                 next={() => fetchNextPage()}
@@ -131,13 +153,14 @@ const UserCard = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-48 lg:mb-56 mt-16 mx-0 lg:mx-28 h-[350px]">
                     {
                         data &&
-                        data.pages.map((page, i) => {
+                        data.pages.map((page) => {
                             return (
-                                page.data.map((user, i) => {
+                                page.data.map((sport, index) => {
                                     return (
                                         <UserCardItem
-                                            key={i}
-                                            member={user}
+                                            key={index}
+                                            user={sport.user}
+                                            sportId={sport.sportId}
                                         />
                                     )
                                 })

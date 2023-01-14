@@ -19,8 +19,8 @@ const Community = () => {
         queryKey: ['mycommunities'],
         queryFn: async () => {
             const res = await fetch(`${API_URL}/api/v1/community/comunites`, {
+                method: 'GET',
                 headers: {
-                    method: 'GET',
                     authorization: `bearer ${localStorage.getItem('token')}`
                 }
             });
