@@ -97,7 +97,7 @@ const ProfileUser = () => {
                             aria-selected="true">About</a>
                     </li>
                     <li className="nav-item" role="presentation">
-                        <a href="#tabs-profile" className="
+                        <a href="#tabs-home" className="
       nav-link
       block
       font-medium
@@ -134,13 +134,13 @@ const ProfileUser = () => {
                 </ul>
                 < div className="tab-content" id="tabs-tabContent">
                     <div className="tab-pane fade show active " id="tabs-home" role="tabpanel" aria-labelledby="tabs-home-tab">
-                        <About />
+                        <About user={user} />
                     </div>
                     <div className="tab-pane fade  " id="tabs-profile" role="tabpanel" aria-labelledby="tabs-profile-tab">
-                        <Friends />
+                        <Friends userId={user.id} />
                     </div>
-                    <div className="tab-pane fade" id="tabs-messages" role="tabpanel" aria-labelledby="tabs-profile-tab">
-                        <Community />
+                    <div className="tab-pane fade" id="tabs-messages" role="tabpanel" aria-labelledby="tabs-messages-tab">
+                        <Community userId={user.id} />
                     </div>
 
                 </div>

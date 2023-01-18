@@ -65,7 +65,7 @@ const CommunityPost = ({ post }) => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [p, setP] = useState(1)
     const q = 1
-    const { id, user, userName, postDetails, img, comments, like, dislike } = post
+    const { id, author, content, images, comments, like, dislike } = post
     const [cmnt, setCmnt] = useState([])
     const [data, setData] = useState(null)
     const [remove, setRemove] = useState(false)
@@ -110,11 +110,11 @@ const CommunityPost = ({ post }) => {
         setP(comments.length)
     }
 
-    const handleDislikeCount = ()=>{
+    const handleDislikeCount = () => {
         setDislikeCount(dislikeCount + 1)
     }
 
-    const handleLikeCount = () =>{
+    const handleLikeCount = () => {
         setLikeCount(likeCount + 1)
     }
     console.log(cmnt)
@@ -172,7 +172,7 @@ const CommunityPost = ({ post }) => {
             <div className='px-10 lg:px-24 '>
                 <Slider {...settings} className="">
                     {
-                        img.map(image => <div className='my-5'><img src={image} className='mx-auto h-80' alt='' /></div>)
+                        images.map(image => <div className='my-5'><img src={image} className='mx-auto h-80' alt='' /></div>)
                     }
 
                 </Slider>
@@ -181,16 +181,16 @@ const CommunityPost = ({ post }) => {
             <div className='px-10 lg:px-20 my-8'>
                 <div className='grid grid-cols-3 gap-2 lg:gap-5 my-4'>
                     <div className='flex items-center ml-[42%]'>
-                    <p className='mr-1 lg:mr-2 text-sm lg:text-lg'><AiOutlineDislike></AiOutlineDislike></p>
-                    <p className='text-sm lg:text-lg'>{dislikeCount}</p>
+                        <p className='mr-1 lg:mr-2 text-sm lg:text-lg'><AiOutlineDislike></AiOutlineDislike></p>
+                        <p className='text-sm lg:text-lg'>{dislikeCount}</p>
                     </div>
                     <div className='flex items-center ml-[42%]'>
-                    <p className='mr-1 lg:mr-2 text-sm lg:text-lg'><FcLike></FcLike></p>
-                    <p className='text-sm lg:text-lg'>{likeCount}</p>
+                        <p className='mr-1 lg:mr-2 text-sm lg:text-lg'><FcLike></FcLike></p>
+                        <p className='text-sm lg:text-lg'>{likeCount}</p>
                     </div>
                     <div className='flex items-center ml-[42%]'>
-                    <p className='mr-1 lg:mr-2 text-sm lg:text-lg'><FaRegCommentAlt></FaRegCommentAlt></p>
-                    <p className='text-sm lg:text-lg'>{commentCount}</p>
+                        <p className='mr-1 lg:mr-2 text-sm lg:text-lg'><FaRegCommentAlt></FaRegCommentAlt></p>
+                        <p className='text-sm lg:text-lg'>{commentCount}</p>
                     </div>
                 </div>
                 <hr className='h-[1px] bg-slate-300 shadow-lg'></hr>
@@ -253,20 +253,20 @@ const CommunityPost = ({ post }) => {
                     </div>
                     {
                         p === 1 &&
-                        <button onClick={commentShow} className={`font-bold ${comments.length > 1 ? 'block': 'hidden'}`}>view More</button>
-                }
+                        <button onClick={commentShow} className={`font-bold ${comments.length > 1 ? 'block' : 'hidden'}`}>view More</button>
+                    }
+
+                </div>
 
             </div>
 
-        </div>
-           
 
             {
-        data &&
-            <CommunityPostModalUpdate data={data} ></CommunityPostModalUpdate>
+                data &&
+                <CommunityPostModalUpdate data={data} ></CommunityPostModalUpdate>
 
-    }
-    <Toaster />
+            }
+            <Toaster />
         </div >
     );
 };

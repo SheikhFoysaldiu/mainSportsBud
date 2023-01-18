@@ -41,7 +41,6 @@ function CreateCommunity() {
     }
 
     const previewImage = (event) => {
-
         const imageFiles = event.target.files;
         setImageFile(imageFiles[0])
         const imageFilesLength = imageFiles.length;
