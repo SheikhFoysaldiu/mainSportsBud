@@ -277,18 +277,16 @@ const MyCommunitySingle = () => {
 
                                 </div>
                             </div>
-                            <div id='scrollableDiv' className='h-full'>
+                            <InfiniteScroll
+                                dataLength={CommunityPostData.data?.pages?.length}
+                                next={() => CommunityPostData.fetchNextPage()}
+                                hasMore={CommunityPostData.hasNextPage}
+                                loader={<h4>Loading...</h4>}
+                                scrollableTarget="scrollableDiv"
 
 
-                                <InfiniteScroll
-                                    dataLength={CommunityPostData.data?.pages?.length}
-                                    next={() => CommunityPostData.fetchNextPage()}
-                                    hasMore={CommunityPostData.hasNextPage}
-                                    loader={<h4>Loading...</h4>}
-                                    scrollableTarget="scrollableDiv"
-
-
-                                >
+                            >
+                                <div>
 
                                     {
                                         CommunityPostData?.data &&
@@ -299,11 +297,12 @@ const MyCommunitySingle = () => {
                                         })
                                     }
 
+                                </div>
+                            </InfiniteScroll>
 
 
-                                </InfiniteScroll>
 
-                            </div>
+
                         </div>
                         <div className="tab-pane fade h-auto" id="tabs-profile3" role="tabpanel" aria-labelledby="tabs-profile-tab3">
                             <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 py-8 mt-5  text-center'>

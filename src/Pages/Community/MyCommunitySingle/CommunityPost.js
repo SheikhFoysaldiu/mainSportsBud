@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import communityBanner from '../../../Asset/communityBanner/football.jpg'
 import { BsThreeDots } from "react-icons/bs";
 import { FaRegEdit } from "react-icons/fa";
@@ -19,6 +19,7 @@ import './CommunityPost.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Loading from '../../../Shared/Loading/Loading';
 
+import { AuthContext } from '../../../Context/AuthProvider.js';
 
 const settings = {
     dots: true,
@@ -65,13 +66,15 @@ const CommunityPost = ({ post }) => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [p, setP] = useState(1)
     const q = 1
-    const { id, author, content, images, comments, like, dislike } = post
+    console.log(post)
+    const { user } = useContext(AuthContext)
+    const { id, author, content, images, comments, likes, dislikes } = post
     const [cmnt, setCmnt] = useState([])
     const [data, setData] = useState(null)
     const [remove, setRemove] = useState(false)
     const [comment, setComment] = useState(false)
-    const [dislikeCount, setDislikeCount] = useState(dislike);
-    const [likeCount, setLikeCount] = useState(like);
+    const [dislikeCount, setDislikeCount] = useState(dislikes.length);
+    const [likeCount, setLikeCount] = useState(likes.length);
     const [commentCount, setCommentCount] = useState(comments.length)
 
     useEffect(() => {
@@ -119,17 +122,18 @@ const CommunityPost = ({ post }) => {
     }
     console.log(cmnt)
     return (
+        // <></>
         <div className={`bg-white rounded-lg shadow-xl lg:mx-20 pb-5 mt-5 pt-5 ${remove ? "hidden" : "block"}`}>
             <div className='flex justify-between px-10 lg:px-20'>
                 <div className='flex items-center'>
                     <div className="avatar mr-2 lg:mr-5">
                         <div className="w-8 lg:w-12 rounded">
-                            <img src={user} alt="community Banner" />
+                            <img src={author.profilePicture} alt="community Banner" />
                         </div>
                     </div>
                     <div>
                         <div className='my-0 mx-0'>
-                            <h1 className='text-lg lg:text-xl my-0 ml-0'>{userName}</h1>
+                            <h1 className='text-lg lg:text-xl my-0 ml-0'>{author.firstName} {author.lastName}</h1>
                         </div>
                         <div className='mx-0 my-0'>
                             <span className='text-xs my-0 ml-0'>22m</span>
@@ -167,7 +171,7 @@ const CommunityPost = ({ post }) => {
             </div>
             <div className='px-10 lg:px-20 my-5'>
                 <hr className='h-[1px] bg-slate-300 shadow-lg'></hr>
-                <p className='my-3'>{postDetails}</p>
+                <p className='my-3'>{content}</p>
             </div>
             <div className='px-10 lg:px-24 '>
                 <Slider {...settings} className="">
@@ -214,7 +218,7 @@ const CommunityPost = ({ post }) => {
                     <form onSubmit={handleSubmit(handlePostComment)} className='flex items-center'>
                         <div className="avatar mr-2 lg:mr-5">
                             <div className="w-8 lg:w-12 rounded-full">
-                                <img src={user} alt="user" />
+                                <img src={author.profilePicture} alt="user" />
                             </div>
                         </div>
                         <div className='w-[80%]'>
@@ -223,11 +227,18 @@ const CommunityPost = ({ post }) => {
                     </form>
                 </div>
                 <div>
-                    <div className={` ${p > 1 ? 'h-full' : 'h-full'}`} id='scrollableDiv'>
+                    <div className={` ${p > 1 ? 'h-full' : 'h-full'}`} id='scrollableDiv1'>
+
+                        {
+                            cmnt.length === 0 && <div className='flex items-center justify-center'>
+                                <p className='text-lg'>No Comments</p>
+                            </div>
+                        }
+
                         <InfiniteScroll
                             dataLength={cmnt.length}
                             loader={<Loading></Loading>}
-                            scrollableTarget="scrollableDiv">
+                            scrollableTarget="scrollableDiv1">
                             {
                                 cmnt.length &&
                                 cmnt.map(comment => <div key={comment.id} className="my-5 w-full lg:w-1/2">
