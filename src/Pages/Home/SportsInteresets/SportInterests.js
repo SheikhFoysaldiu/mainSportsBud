@@ -109,6 +109,41 @@ const SportInterests = () => {
 
     </div >
 
+    // <>
+    //   <button
+    //     onClick={() => fetchNextPage()}
+    //     id="scrollableDiv"
+    //     disabled={!hasNextPage || isFetchingNextPage}
+    //   >
+    //     {isFetchingNextPage
+    //       ? 'Loading more...'
+    //       : hasNextPage
+    //         ? 'Load More'
+    //         : 'Nothing more to load'}
+    //   </button>
+    //   <div>{isFetching && !isFetchingNextPage ? 'Fetching...' : null}</div>
+    //   <div className="h-screen w-full overflow-auto lg:overflow-hidden lg:hover:overflow-auto" id="scrollableDiv">
+
+    //     <div className="h-screen w-full overflow-auto lg:overflow-hidden lg:hover:overflow-auto" id="scrollableDiv">
+
+    //       {/* className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 mb-48 lg:mb-56 mt-16 mx-0 lg:mx-28" */}
+    //       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 mb-48 lg:mb-56 mt-16 mx-0 lg:mx-28">
+    //         {
+    //           data &&
+    //           data.pages.map((page, i) => (
+    //             <React.Fragment key={i}>
+    //               {page.data.map((sport) => (
+    //                 <SingleSport key={sport.id} sport={sport}></SingleSport>
+    //               ))}
+    //             </React.Fragment>
+    //           ))}
+    //       </div>
+    //     </div>
+
+    //   </div>
+
+    // </>
+
 
 
   )
