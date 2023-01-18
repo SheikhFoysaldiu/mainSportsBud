@@ -167,8 +167,10 @@ const Community = () => {
                             {MyOwnedCommunity?.data &&
                                 MyOwnedCommunity?.data?.pages.map((page, id) => {
                                     return page.data.map((community, id) => {
-                                        console.log("community:", community)
+
                                         return <MyCommunity community={community} key={id} />
+
+
                                     })
                                 })}
 
@@ -202,13 +204,6 @@ const Community = () => {
                     </div>
                 </div>
 
-
-                {/* {communities.map((community) => (
-                        <SuggestedCommunities
-                            key={community.id}
-                            community={community}
-                        ></SuggestedCommunities>
-                    ))} */}
                 <div id="scrollableDiv" className='overflow-y-scroll h-screen'>
                     <InfiniteScroll
                         dataLength={AllCommunity.data.pages.length}
@@ -222,7 +217,11 @@ const Community = () => {
                             {AllCommunity?.data &&
                                 AllCommunity?.data?.pages.map((page, id) => {
                                     return page.data.map((community, id) => {
-                                        return <SuggestedCommunities community={community} key={id} />
+                                        if (community.isMember === false) {
+                                            return <SuggestedCommunities community={community} key={id} />
+
+                                        }
+
                                     })
                                 })}
 

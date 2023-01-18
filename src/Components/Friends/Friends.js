@@ -3,7 +3,7 @@ import { SettingFilled, UserAddOutlined } from '@ant-design/icons';
 import { CalendarMonth, PinDrop, Place, Recommend, SearchRounded } from '@mui/icons-material';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
-import React from 'react'
+import React, { useContext } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link, useParams } from 'react-router-dom';
 import { API_URL } from '../../API/config';
@@ -11,47 +11,55 @@ import { API_URL } from '../../API/config';
 import ListFriends from '../../Asset/Dummy/Friends'
 
 import profile from '../../Asset/person/profile.png';
+import { AuthContext } from '../../Context/AuthProvider';
 import Loading from '../../Shared/Loading/Loading';
+import { getAge } from '../../Shared/Utitily/Utility';
 
 const FriendItem = ({ item }) => {
-
-    const { id, firstName, lastName, location, coverPicture, profilePicture, sportsInterestedId, dob } = item.friend
+    const params = useParams();
+    const { user } = useContext(AuthContext)
+    const { id, firstName, lastName, location, coverPicture, profilePicture, sports, dob } = item.friend
     console.log(item)
-    return (<Link to={`/main/profileUser/${id}`}>
-        <div className="flex flex-row shadow-lg rounded-lg border border-gray-200/80 bg-white mx-2 my-4">
-            <div className="relative">
-                <img className="w-40 h-40 rounded-md object-cover" src={profilePicture}
-                    alt="User" />
-                {/* Active Icon */}
-            </div>
+    console.log(id)
+    console.log(params)
 
-            <div className="flex flex-col px-6 mt-5 ">
-                <div className="flex h-8 flex-row">
-                    <h2 className="text-lg font-semibold">{firstName} {lastName}</h2>
+    return (
+        <Link to={`/main/profileUser/${id !== user.id ? id : ""} `}>
+            <div className="flex flex-row shadow-lg rounded-lg border border-gray-200/80 bg-white mx-2 my-4">
+                <div className="relative">
+                    <img className="w-40 h-40 rounded-md object-cover" src={profilePicture}
+                        alt="User" />
+                    {/* Active Icon */}
                 </div>
 
-                <div className="my-2 flex flex-row space-x-8">
+                <div className="flex flex-col px-6 mt-5 ">
+                    <div className="flex h-8 flex-row">
+                        <h2 className="text-lg font-semibold">{firstName} {lastName}</h2>
+                    </div>
 
-                    <div className="flex flex-row">
-                        <Recommend fontSize='small' />
+                    <div className="my-2 flex flex-row space-x-8">
 
-                        <div className="text-xs text-gray-400/80 hover:text-gray-400">{sportsInterestedId}</div>
+                        <div className="flex flex-row">
+                            <Recommend fontSize='small' />
+
+                            <div className="text-xs text-gray-400/80 hover:text-gray-400">{sports.length === 0 ? "Empty Sport Choice" : sports[0].sport.name}</div>
+
+                        </div>
+
+
+                        <div className="flex flex-row">
+                            <CalendarMonth fontSize='small' />
+
+                            <div className="text-xs text-gray-400/80 hover:text-gray-400"> {getAge(dob)} Years</div>
+                        </div>
                     </div>
 
 
-                    <div className="flex flex-row">
-                        <CalendarMonth fontSize='small' />
 
-                        <div className="text-xs text-gray-400/80 hover:text-gray-400">Birth On {dob}</div>
-                    </div>
                 </div>
-
-
-
             </div>
-        </div>
 
-    </Link>
+        </Link>
     )
 }
 

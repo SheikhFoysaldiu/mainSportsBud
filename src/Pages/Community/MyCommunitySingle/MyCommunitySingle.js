@@ -13,7 +13,7 @@ import memberProps from '../../../Asset/Dummy/user.json'
 import CommunityMember from './CommunityMember';
 import { BsThreeDots } from "react-icons/bs";
 import CommunityConversion from './CommunityConversion';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { API_URL } from '../../../API/config';
 
@@ -47,6 +47,20 @@ const MyCommunitySingle = () => {
             data: data.posts
         }
     }
+    const fetchCommunityInfo = async ({ pageParam = 1 }) => {
+        const url = `${API_URL}/api/v1/community//communities/${params.id}`
+        const res = await fetch(url, {
+            method: 'GET',
+            headers: {
+                authorization: `bearer ${localStorage.getItem('token')}`
+            }
+        });
+        const data = await res.json();
+        console.log(data)
+        return data.community
+
+    }
+
 
 
 
@@ -65,6 +79,12 @@ const MyCommunitySingle = () => {
     })
 
 
+    const CommunityInfo = useQuery({
+        queryKey: ['communityInfo', params.id],
+        queryFn: fetchCommunityInfo
+    })
+
+
     const getMembers = async () => {
         setMembers(memberProps)
         return memberProps;
@@ -78,24 +98,24 @@ const MyCommunitySingle = () => {
         return <Loading></Loading>
     }
 
-    if (!CommunityPostData.data) {
+    if (!CommunityPostData.data || !CommunityInfo.data) {
         return <Loading></Loading>
     }
-    if (CommunityPostData.isLoading) {
+    if (CommunityPostData.isLoading || CommunityInfo.isLoading) {
         return <Loading></Loading>
     }
 
-
+    const { image: cImage, name: cName } = CommunityInfo.data
 
     return (
         <>
             <div className='mt-16 px-0 lg:px-20'>
                 <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-10'>
                     <div>
-                        <img src={communitycover} alt="cover" className="w-full h-[400px] rounded-tl-lg rounded-tr-lg  object-cover object-top" />
+                        <img src={cImage[cImage.length - 1]} alt="cover" className="w-full h-[400px] rounded-tl-lg rounded-tr-lg  object-cover object-top" />
                     </div>
                     <div className='my-4 mx-4'>
-                        <a href='#' className='text-2xl lg:text-3xl font-bold'>Football Club</a>
+                        <a href='#' className='text-2xl lg:text-3xl font-bold'>{cName}</a>
                     </div>
                     <div className='my-4 mx-4 flex justify-between items-center'>
                         <div>
@@ -148,7 +168,7 @@ const MyCommunitySingle = () => {
                                     </label>
                                     <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-20">
                                         <li>
-                                            <Link to='/main/setting' className={`flex items-center ${hasAccess ? 'block' : 'hidden'}`}>
+                                            <Link to='/main/setting/' className={`flex items-center ${hasAccess ? 'block' : 'hidden'}`}>
 
                                                 <h1 className='mr-1 ml-0'><AiFillSetting className='text-lg text-black font-bold'> </AiFillSetting></h1>
 
