@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { API_URL } from '../../API/config';
 
 function Button(props) {
-    const { userId, sportId } = props;
+    const { userId, sportId, } = props;
     const [follow, setFollow] = React.useState(undefined);
 
 

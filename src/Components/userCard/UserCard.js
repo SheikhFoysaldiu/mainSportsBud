@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Avatar, Col, Divider, List, Row, Skeleton } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import tw from "tailwind-styled-components"
@@ -11,31 +11,20 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { MdOutlinePersonAddAlt1, MdPersonAddAlt1 } from 'react-icons/md';
 import { CgProfile } from 'react-icons/cg';
 import CommunityMember from '../../Pages/Community/MyCommunitySingle/CommunityMember';
+import { AuthContext } from '../../Context/AuthProvider';
 
-const Container = tw.div`
-    px-0
-    py-4
-    shadow-lg
-    whitespace-nowrap overflow-auto scrollbar-hide md:scrollbar-default 
-`
-const AddMeContiner = tw.div`
-    flex
-    justify-between
-    items-center
-`
 
 const UserCardItem = ({ user, sportId }) => {
     const { id, firstName, lastName, profilePicture } = user
-    console.log("user:", user)
-
+    const { user: currentUser } = useContext(AuthContext)
     // console.log(user)
-    const { data, status, error } = useQuery({
-        queryKey: [sportId],
+    const { data, isLoading, error } = useQuery({
+        queryKey: ["findSports", sportId],
         queryFn: async () => {
             const url = `${API_URL}/api/v1/sport/sports/${sportId}`
             const res = await fetch(url, {
+                method: 'GET',
                 headers: {
-                    method: 'GET',
                     authorization: `bearer ${localStorage.getItem('token')}`
                 }
             });
@@ -48,9 +37,12 @@ const UserCardItem = ({ user, sportId }) => {
 
     })
 
-    console.log("DATA----<>:", data)
+    if (isLoading) {
+        return <Loading />
+    }
+
     return (
-        <Link to={`/main/profileUser/${id}`}>
+        <Link to={`/main/profileUser/${currentUser.id === id ? "" : id}`}>
             <div className='flex justify-between '>
                 <div className='flex'>
                     <div className="avatar mr-3">
@@ -79,6 +71,7 @@ const UserCardItem = ({ user, sportId }) => {
 
 const UserCard = () => {
     const params = useParams();
+
     // console.log("params:", params.id)
     const fetchSportsFollower = async ({ pageParam = 1 }) => {
         // const queryParam = "?page=" + page + "&limit=" + limit;
@@ -94,7 +87,7 @@ const UserCard = () => {
         });
         // console.log(res)
         const data = await res.json();
-        console.log("UserCardData:", data)
+
         return {
             data: data.sports
         };
@@ -112,7 +105,7 @@ const UserCard = () => {
         isFetchingNextPage,
         status,
     } = useInfiniteQuery({
-        queryKey: ['sportsFollower'],
+        queryKey: ['sportsFollower', params.id],
         queryFn: fetchSportsFollower,
         getNextPageParam: (lastPage, pages) => {
             console.log("lastPage:", lastPage)
@@ -125,76 +118,58 @@ const UserCard = () => {
         }
     })
 
-    console.log("USERCARD data:", data)
-    // if (!isLoading) {
-    //     return <Loading></Loading>;
-    // }
-    if (status === 'loading') {
-        return <Loading></Loading>;
+
+    if (isLoading) {
+        return <Loading />
     }
-    if (status === 'error') {
-        return <span>Error: {error.message}</span>;
-    }
-    if (data.pages.length === 1 && data.pages[0].data.length === 0) {
-        return <p className='text-center'>No User List Found!</p>;
-    }
+
+
     return (
-        <div className="h-screen w-full overflow-auto lg:overflow-hidden lg:hover:overflow-auto" id="scrollableDiv">
-            <InfiniteScroll
-                next={() => fetchNextPage()}
-                scrollableTarget="scrollableDiv"
-                hasMore={hasNextPage}
-                loader={<h4>Loading...</h4>}
-                // data?.pages?.reduce((acc, page) => acc + page.data.length, 0) || 0
-                // dataLength={data.pages.length === 0 ? 0 : data.pages.reduce((acc, page) => acc + page.data.length, 0) || 0}
-                dataLength={data.pages.length}
-            >
+        <>
+            <div className="h-screen w-full overflow-auto lg:overflow-hidden lg:hover:overflow-auto" id="scrollableDiv">
+                <InfiniteScroll
+                    next={() => fetchNextPage()}
+                    scrollableTarget="scrollableDiv"
+                    hasMore={hasNextPage}
+                    loader={<h4>Loading...</h4>}
+                    // data?.pages?.reduce((acc, page) => acc + page.data.length, 0) || 0
+                    // dataLength={data.pages.length === 0 ? 0 : data.pages.reduce((acc, page) => acc + page.data.length, 0) || 0}
+                    dataLength={data.pages.length}
+                >
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-48 lg:mb-56 mt-16 mx-0 lg:mx-28 h-[350px]">
-                    {
-                        data &&
-                        data.pages.map((page) => {
-                            return (
-                                page.data.map((sport, index) => {
-                                    return (
-                                        <UserCardItem
-                                            key={index}
-                                            user={sport.user}
-                                            sportId={sport.sportId}
-                                        />
-                                    )
-                                })
-                            )
-                        })
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-48 lg:mb-56 mt-16 mx-0 lg:mx-28 h-[350px]">
+                        {
+                            data &&
+                            data.pages.map((page) => {
+                                return (
+                                    page.data.map((sport, index) => {
+                                        return (
+                                            <UserCardItem
+                                                key={index}
+                                                user={sport.user}
+                                                sportId={sport.sportId}
 
-                    }
+                                            />
+                                        )
+                                    })
+                                )
+                            })
 
-                    {
-                        //if No data exits
-                        // data.length === 0 &&
-                        // <div className="flex justify-center items-center h-full w-full" >
-                        //     <div className="flex flex-col justify-center items-center">
-                        //         <h1 className="text-2xl font-bold text-gray-500">No Data Found</h1>
-                        //     </div>
-
-                        // </div>
-
-                    }
+                        }
 
 
-                    {error && <div>Something went wrong ...</div>}
-                    {isFetchingNextPage
-                        ? 'Loading more...' : <p style={{ textAlign: "center" }}>
-                            <b>No more User found!</b>
-                        </p>}
 
 
-                </div>
-            </InfiniteScroll>
+                    </div>
+                </InfiniteScroll>
+                {
+                    data.pages.length === 1 && data.pages[0].data.length === 0
+                    &&
+                    <h1 className="text-2xl font-bold text-gray-500 text-center">No user currently follow this sport</h1>
+                }
+            </div >
 
-
-        </div >
-
+        </>
     );
 };
 export default UserCard;

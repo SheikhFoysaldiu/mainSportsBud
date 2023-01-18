@@ -5,7 +5,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import React from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { API_URL } from '../../API/config';
 
 import ListFriends from '../../Asset/Dummy/Friends'
@@ -14,9 +14,10 @@ import profile from '../../Asset/person/profile.png';
 import Loading from '../../Shared/Loading/Loading';
 
 const FriendItem = ({ item }) => {
-    const { firstName, lastName, location, coverPicture, profilePicture, sportsInterestedId, dob } = item.friend
+
+    const { id, firstName, lastName, location, coverPicture, profilePicture, sportsInterestedId, dob } = item.friend
     console.log(item)
-    return (<Link to='/main/profileUser/1'>
+    return (<Link to={`/main/profileUser/${id}`}>
         <div className="flex flex-row shadow-lg rounded-lg border border-gray-200/80 bg-white mx-2 my-4">
             <div className="relative">
                 <img className="w-40 h-40 rounded-md object-cover" src={profilePicture}
@@ -54,23 +55,22 @@ const FriendItem = ({ item }) => {
     )
 }
 
-function Friends() {
-
+function Friends({ userId }) {
+    // console.log("Friends:", userId)
     const fetchFriends = async ({ pageParam = 1 }) => {
         // const queryParam = "?page=" + page + "&limit=" + limit;
         // const url = apiPath + queryParam
 
-        const url = `${API_URL}/api/v1/user/friends?page=${pageParam}&limit=${10}`
-        console.log(url)
+        const url = `${API_URL}/api/v1/user/friendslist?page=${pageParam}&limit=${10}&userId=${userId}`
+        console.log("url:", url)
         const res = await fetch(url, {
-
+            method: 'GET',
             headers: {
-                method: 'GET',
                 authorization: `bearer ${localStorage.getItem('token')}`
             }
         });
         const data = await res.json();
-        console.log("data:", data)
+        console.log("Friends data:", data)
 
         return {
             data: data.friends
@@ -88,7 +88,7 @@ function Friends() {
         isFetchingNextPage,
         status,
     } = useInfiniteQuery({
-        queryKey: ['myfriendList'],
+        queryKey: ['myfriendList', userId],
         queryFn: fetchFriends,
         getNextPageParam: (lastPage, pages) => {
             console.log("lastPage:", lastPage)
@@ -105,9 +105,8 @@ function Friends() {
         return <Loading></Loading>
     }
     if (status === 'error') {
-        return <div>Error: {error.message}</div>
+        return <div>Something went wrong</div>
     }
-
 
 
 
@@ -146,7 +145,7 @@ function Friends() {
                 <div className='overflow-y-scroll h-[450px]' id='scrollableDiv1'>
 
                     <InfiniteScroll
-                        dataLength={data.pages.length}
+                        dataLength={data?.pages.length}
                         next={() => fetchNextPage()}
                         hasMore={hasNextPage}
                         loader={<h4>Loading...</h4>}

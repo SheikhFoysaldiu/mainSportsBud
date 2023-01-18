@@ -24,7 +24,6 @@ const SingleSport = ({ sport }) => {
                 <div className="card-body">
                     <Link to={`/main/sportchoice/${id}`} >
                         <h2 className="card-title">{name}</h2>
-
                         <p>{description}</p>
                     </Link>
                     <div className="card-actions justify-end">

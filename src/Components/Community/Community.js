@@ -11,9 +11,9 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 
 
-function Community() {
+function Community({ userId }) {
     const fetchMyCommunity = async ({ pageParam = 1 }) => {
-        const url = `${API_URL}/api/v1/community/communities?page=${pageParam}&limit=${10}`
+        const url = `${API_URL}/api/v1/community/communities?page=${pageParam}&limit=${10}&userId=${userId}`
         const res = await fetch(url, {
             method: 'GET',
             headers: {
@@ -33,9 +33,10 @@ function Community() {
         data,
         fetchNextPage,
         hasNextPage,
-        status
+        isLoading,
+        isError
     } = useInfiniteQuery({
-        queryKey: ['myCommunities'],
+        queryKey: ['myCommunities', userId],
         queryFn: fetchMyCommunity,
         getNextPageParam: (lastPage, pages) => {
             console.log("lastPage:", lastPage)
@@ -48,13 +49,12 @@ function Community() {
         }
     })
 
-    if (status === 'loading') {
+    if (isLoading) {
         return <Loading></Loading>
     }
-    if (status === 'error') {
+    if (isError) {
         return <h1>Error Occurs!</h1>
     }
-
 
 
 
@@ -74,21 +74,23 @@ function Community() {
                 </div>
                 <div className="mt-4 h-0.5 w-full bg-gray-200"></div>
                 <div>
-                    <h1 className='mt-4 p-2 m-2'>My Community </h1>
+                    <h1 className='mt-4 p-2 m-2'>Community </h1>
                 </div>
                 <div className="text-center text-2xl">
                     {
-                        data.pages[0].length === 0 && data.pages.length === 1 &&
-                        <h1> Empty Community List</h1>
+                        data.pages[0].data.length === 0 && data.pages.length === 1
+                        &&
+                        <div className='flex justify-center items-center'>
+                            <h1 className='text-gray-400'>Empty Community List</h1>
+                        </div>
                     }
                 </div>
 
 
                 <div id="scrollableDiv" className='overflow-y-scroll h-[450px]'>
                     <InfiniteScroll
-                        dataLength={data.pages.length}
+                        dataLength={data?.pages.length}
                         next={() => fetchNextPage()}
-
                         hasMore={hasNextPage}
                         loader={<h4>Loading...</h4>}
 
@@ -99,7 +101,7 @@ function Community() {
                             {data &&
                                 data.pages.map((page, id) => {
                                     return page.data.map((community, id) => {
-                                        return <MyCommunity community={community} key={id} />
+                                        return <MyCommunity community={community.community} key={id} />
                                     })
                                 })}
 
