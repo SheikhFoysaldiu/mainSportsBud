@@ -28,7 +28,6 @@ function CreateCommunity() {
     }
 
     const previewImage = (event) => {
-
         const imageFiles = event.target.files;
         console.log(imageFiles[0])
         setImageFile(imageFiles[0])
@@ -103,39 +102,39 @@ function CreateCommunity() {
                                             </header>
                                             <div className="p-4">
                                                 <div className=" h-[210px] overflow-hidden hover:overflow-y-scroll" id='scrollableDiv'>
-                                                <InfiniteScroll
-                                                                dataLength={friends.length}
-                                                                loader={<Loading></Loading>}
-                                                                scrollableTarget="scrollableDiv">
-                                                    <table className="table-auto w-full">
-                                                        <thead className="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
-                                                            <tr>
-                                                                <th className="p-2 whitespace-nowrap">
-                                                                    <div className="font-semibold text-left">Name</div>
-                                                                </th>
+                                                    <InfiniteScroll
+                                                        dataLength={friends.length}
+                                                        loader={<Loading></Loading>}
+                                                        scrollableTarget="scrollableDiv">
+                                                        <table className="table-auto w-full">
+                                                            <thead className="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
+                                                                <tr>
+                                                                    <th className="p-2 whitespace-nowrap">
+                                                                        <div className="font-semibold text-left">Name</div>
+                                                                    </th>
 
-                                                                <th className="p-2 whitespace-nowrap">
-                                                                    <div className="font-semibold text-left">Interested</div>
-                                                                </th>
-                                                                <th className="p-2 whitespace-nowrap">
-                                                                    <div className="font-semibold text-center">Status</div>
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody className="text-sm divide-y divide-gray-100" >
-                                                          
+                                                                    <th className="p-2 whitespace-nowrap">
+                                                                        <div className="font-semibold text-left">Interested</div>
+                                                                    </th>
+                                                                    <th className="p-2 whitespace-nowrap">
+                                                                        <div className="font-semibold text-center">Status</div>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody className="text-sm divide-y divide-gray-100" >
 
-                                                            
-                                                           
+
+
+
                                                                 {
                                                                     friends.length &&
                                                                     friends.map(friend => <CreateCommunityFriendList key={friend.id} friend={friend}></CreateCommunityFriendList>)
                                                                 }
-                                                           
-                                                           
-                                                        </tbody>
-                                                        
-                                                    </table>
+
+
+                                                            </tbody>
+
+                                                        </table>
                                                     </InfiniteScroll>
                                                 </div>
 

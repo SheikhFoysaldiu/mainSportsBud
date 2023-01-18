@@ -6,13 +6,62 @@ import About from '../../Components/About/About';
 import Friends from '../../Components/Friends/Friends';
 import Community from '../../Components/Community/Community';
 import { Inbox, PersonRemove, Send } from '@mui/icons-material';
+import { useParams } from 'react-router-dom';
+import { AuthContext } from '../../Context/AuthProvider';
+import { useContext } from 'react';
+import { API_URL } from '../../API/config';
+import { useQuery } from '@tanstack/react-query';
+import Loading from '../../Shared/Loading/Loading';
 
-const friend = true;
 
 const Users = () => {
+    const params = useParams();
+    const [friend, setFriend] = React.useState(false);
+    const { user } = useContext(AuthContext)
+    const { data, isLoading, error } = useQuery({
+        queryKey: ['findAUser', params?.id],
+        queryFn: async () => {
+            const res = await fetch(`${API_URL}/api/v1/user/finduser/${params.id}`, {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: `bearer ${localStorage.getItem('token')}`
+                }
+            })
+            const data = await res.json();
+            return data;
+        }
+    })
+
+    const IsFriend = useQuery({
+        queryKey: ['findFriend', params?.id],
+        queryFn: async () => {
+            const res = await fetch(`${API_URL}/api/v1/user/isFriend/${params.id}`, {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: `bearer ${localStorage.getItem('token')}`
+                }
+            })
+            const data = await res.json();
+            setFriend(data.isFriend)
+            return data;
+        }
+    })
+
+    if (!data || !IsFriend || !data.user) {
+        return <Loading />
+    }
+    if (isLoading || IsFriend.isLoading) {
+        return <Loading />
+    }
+    if (error || IsFriend.error) {
+        return <div>Something went wrong</div>
+    }
+
     return (
         <>
-            <div className="h-screen bg-gray-200 mt-16 lg:px-20">
+            <div className="h-full bg-gray-200 mt-16 lg:px-20">
                 <div className="bg-white  ">
                     <div className="w-full h-[250px]">
                         <img src="https://vojislavd.com/ta-template-demo/assets/img/profile-background.jpg" className="w-full h-full rounded-tl-lg rounded-tr-lg" />
@@ -21,7 +70,7 @@ const Users = () => {
                     <div className="flex flex-col items-center -mt-20">
                         <img src={profilePicture} className="w-40 border-4 border-white rounded-full" />
                         <div className="flex items-center space-x-2">
-                            <p className="text-2xl">{profile.name}</p>
+                            <p className="text-2xl">{data.user?.firstName} {data.user?.lastName}</p>
                         </div>
 
                         <p className="text-sm text-gray-500">Interested in {profile.interestedIn}</p>
@@ -61,13 +110,11 @@ const Users = () => {
                 </div>
                 {/* Connections */}
 
-                {
-                    friend &&
-                    <>
-                        <ul className="bg-white py-4 nav nav-tabs flex justify-center items-center  md:flex-row flex-wrap list-none border-b-0  pl-0 mb-4 text-xl" id="tabs-tab"
-                            role="tablist">
-                            <li className="nav-item" role="presentation">
-                                <a href="#tabs-home" className="
+
+                <ul className="bg-white py-4 nav nav-tabs flex justify-center items-center  md:flex-row flex-wrap list-none border-b-0  pl-0 mb-4 text-xl" id="tabs-tab"
+                    role="tablist">
+                    <li className="nav-item" role="presentation">
+                        <a href="#tabs-home" className="
       nav-link
       block
       font-medium
@@ -82,10 +129,10 @@ const Users = () => {
       focus:border-transparent
       active
     " id="tabs-home-tab" data-bs-toggle="pill" data-bs-target="#tabs-home" role="tab" aria-controls="tabs-home"
-                                    aria-selected="true">About</a>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <a href="#tabs-profile" className="
+                            aria-selected="true">About</a>
+                    </li>
+                    <li className="nav-item" role="presentation">
+                        <a href="#tabs-home" className="
       nav-link
       block
       font-medium
@@ -99,10 +146,10 @@ const Users = () => {
       hover:border-transparent hover:bg-gray-100
       focus:border-transparent
     " id="tabs-profile-tab" data-bs-toggle="pill" data-bs-target="#tabs-profile" role="tab"
-                                    aria-controls="tabs-profile" aria-selected="false">Friends</a>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <a href="#tabs-messages" className="
+                            aria-controls="tabs-profile" aria-selected="false">Friends</a>
+                    </li>
+                    <li className="nav-item" role="presentation">
+                        <a href="#tabs-messages" className="
       nav-link
       block
       font-medium
@@ -116,24 +163,24 @@ const Users = () => {
       hover:border-transparent hover:bg-gray-100
       focus:border-transparent
     " id="tabs-messages-tab" data-bs-toggle="pill" data-bs-target="#tabs-messages" role="tab"
-                                    aria-controls="tabs-messages" aria-selected="false">Community</a>
-                            </li>
+                            aria-controls="tabs-messages" aria-selected="false">Community</a>
+                    </li>
 
-                        </ul>
-                        < div className="tab-content" id="tabs-tabContent">
-                            <div className="tab-pane fade show active" id="tabs-home" role="tabpanel" aria-labelledby="tabs-home-tab">
-                                <About />
-                            </div>
-                            <div className="tab-pane fade " id="tabs-profile" role="tabpanel" aria-labelledby="tabs-profile-tab">
-                                <Friends />
-                            </div>
-                            <div className="tab-pane fade" id="tabs-messages" role="tabpanel" aria-labelledby="tabs-profile-tab">
-                                <Community />
-                            </div>
+                </ul>
+                < div className="tab-content" id="tabs-tabContent">
+                    <div className="tab-pane fade show active" id="tabs-home" role="tabpanel" aria-labelledby="tabs-home-tab">
+                        <About user={data.user} />
+                    </div>
+                    <div className="tab-pane fade " id="tabs-profile" role="tabpanel" aria-labelledby="tabs-profile-tab">
+                        <Friends userId={data.user.id} />
+                    </div>
+                    <div className="tab-pane fade" id="tabs-messages" role="tabpanel" aria-labelledby="tabs-profile-tab">
+                        <Community userId={data.user.id} />
+                    </div>
 
-                        </div>
-                    </>
-                }
+                </div>
+
+
 
 
 

@@ -5,47 +5,62 @@ import { useParams } from 'react-router-dom';
 import props2 from '../../Asset/Dummy/mycommunity.json';
 import Loading from '../../Shared/Loading/Loading';
 import MyCommunity from '../../Pages/Community/MyCommunity';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { API_URL } from '../../API/config';
-const CommunityItem = ({ item }) => {
-
-    return (
-        <>
-            <MyCommunity mycommunity={item} />
-        </>
-    )
-}
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 
 
-function Community() {
-    const [mycommunities, setMyCommunities] = useState([])
+function Community({ userId }) {
+    const fetchMyCommunity = async ({ pageParam = 1 }) => {
+        const url = `${API_URL}/api/v1/community/communities?page=${pageParam}&limit=${10}&userId=${userId}`
+        const res = await fetch(url, {
+            method: 'GET',
+            headers: {
+                authorization: `bearer ${localStorage.getItem('token')}`
+            }
+        });
+        const data = await res.json();
 
-    const { data, refetch, isLoading, isError } = useQuery({
-        queryKey: ['mycommunities'],
-        queryFn: async () => {
-            const res = await fetch(`${API_URL}/api/v1/community/comunites`, {
-                headers: {
-                    method: 'GET',
-                    authorization: `bearer ${localStorage.getItem('token')}`
-                }
-            });
-            const data = await res.json();
-            console.log(data)
-            setMyCommunities(data.communities);
-            return data.communities;
+        return {
+            data: data.communities
         }
-    });
+    }
 
-    if (!mycommunities || isLoading) {
+
+
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isLoading,
+        isError
+    } = useInfiniteQuery({
+        queryKey: ['myCommunities', userId],
+        queryFn: fetchMyCommunity,
+        getNextPageParam: (lastPage, pages) => {
+            console.log("lastPage:", lastPage)
+            console.log("pages:", pages)
+            if (lastPage.data.length < 10) {
+                return undefined
+            }
+            return pages.length + 1
+
+        }
+    })
+
+    if (isLoading) {
         return <Loading></Loading>
+    }
+    if (isError) {
+        return <h1>Error Occurs!</h1>
     }
 
 
 
     return (
         <>
-            <div className='h-full bg-white rounded-lg shadow-xl pb-10 '>
+            <div className=' bg-white rounded-lg shadow-xl pb-10 '>
 
                 <div className='flex justify-center items-center px-6'>
                     <div className="pt-2 relative mx-auto text-gray-600">
@@ -59,26 +74,46 @@ function Community() {
                 </div>
                 <div className="mt-4 h-0.5 w-full bg-gray-200"></div>
                 <div>
-                    <h1 className='mt-4 p-2 m-2'>My Community </h1>
+                    <h1 className='mt-4 p-2 m-2'>Community </h1>
                 </div>
                 <div className="text-center text-2xl">
                     {
-                        mycommunities.length === 0 &&
-                        <h1>Empty Community List</h1>
+                        data.pages[0].data.length === 0 && data.pages.length === 1
+                        &&
+                        <div className='flex justify-center items-center'>
+                            <h1 className='text-gray-400'>Empty Community List</h1>
+                        </div>
                     }
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 overflow-y-scroll h-[650px] mx-4">
-                    {
-                        mycommunities.length > 0 &&
-                        mycommunities.map((item, index) => (
-                            <CommunityItem item={item} key={index} />
-                        )
-                        )
 
-                    }
+                <div id="scrollableDiv" className='overflow-y-scroll h-[450px]'>
+                    <InfiniteScroll
+                        dataLength={data?.pages.length}
+                        next={() => fetchNextPage()}
+                        hasMore={hasNextPage}
+                        loader={<h4>Loading...</h4>}
 
+                    >
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mx-4">
+
+                            {data &&
+                                data.pages.map((page, id) => {
+                                    return page.data.map((community, id) => {
+                                        return <MyCommunity community={community.community} key={id} />
+                                    })
+                                })}
+
+
+
+                        </div>
+                    </InfiniteScroll>
                 </div>
+
+
+
+
 
 
             </div>

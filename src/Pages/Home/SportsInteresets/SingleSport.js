@@ -1,26 +1,37 @@
+import { useQuery } from '@tanstack/react-query';
 import React from 'react';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { API_URL } from '../../../API/config';
+import Button from '../../../Components/UI/Button';
+import { AuthContext } from '../../../Context/AuthProvider';
+
+
+
 
 const SingleSport = ({ sport }) => {
-    const { id, name, image, users, description } = sport;
+    const { id, name, images, users, description } = sport;
+    const { user } = useContext(AuthContext)
+    // console.log(user)
 
-    const handleFollow = () => {
-        console.log('Followed')
-    }
+
     return (
         <div>
+
             <div className="card  bg-base-100 shadow-xl">
-                <figure><img src={image} alt="Sport" /></figure>
+                <figure><img src={images[images.length - 1]} alt="Sport" /></figure>
+
                 <div className="card-body">
-                    <h2 className="card-title">{name}</h2>
-                    <p>{description}</p>
-                    <p>Total Followers: <span className='font-bold ml-0'>{users}</span></p>
+                    <Link to={`/main/sportchoice/${id}`} >
+                        <h2 className="card-title">{name}</h2>
+                        <p>{description}</p>
+                    </Link>
                     <div className="card-actions justify-end">
-                        <button onClick={() => handleFollow} className="btn btn-primary">Follow Now</button>
+                        <Button userId={user?.id} sportId={id} />
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
 
     );
 };

@@ -15,9 +15,9 @@ const Signup = () => {
     // console.log(data)
     createUser(data)
       .then(result => {
-        // console.log(result)
-        const user = result.user;
-        console.log(user);
+
+        // const user = result.user;
+        // console.log(user);
         toast('User Created Successfully.');
         navigate('/main')
         // saveUser(data.name, data.email);
@@ -162,11 +162,12 @@ const Signup = () => {
 
         <div className="flex items-center justify-center">
           <div
-            className="datepicker relative form-floating mb-3 xl:w-96"
+            className="datepicker relative form-floating mb-2 xl:w-96"
             data-mdb-toggle-button="false"
           >
+            <span className="text-gray-700 text-base">Date of Birth</span>
             <input
-              type="date" {...register("date", {
+              type="date" {...register("dob", {
                 required: "Select a date"
               })}
               placeholder='dd/mm/yy'
