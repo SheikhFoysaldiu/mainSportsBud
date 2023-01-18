@@ -15,7 +15,7 @@ const Signup = () => {
     // console.log(data)
     createUser(data)
       .then(result => {
-
+        console.log(result)
         // const user = result.user;
         // console.log(user);
         toast('User Created Successfully.');
