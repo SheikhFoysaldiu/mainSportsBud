@@ -63,11 +63,11 @@ const ProfileUser = () => {
                     </div>
                     {/* Profile Section */}
                     <div className="w-full h-[250px]">
-                        <img src="https://vojislavd.com/ta-template-demo/assets/img/profile-background.jpg" className="w-full h-full rounded-tl-lg rounded-tr-lg" />
+                        <img src="https://vojislavd.com/ta-template-demo/assets/img/profile-background.jpg" alt="background" className="w-full h-full rounded-tl-lg rounded-tr-lg" />
                     </div>
 
                     <div className="flex flex-col items-center -mt-20">
-                        <img src={profilePicture} className="w-40 border-4 border-white rounded-full" />
+                        <img src={profilePicture} alt="profile" className="w-40 border-4 border-white rounded-full" />
                         <div className="flex items-center space-x-2">
                             <p className="text-2xl">{user?.firstName}{" "}{user?.lastName}</p>
                         </div>

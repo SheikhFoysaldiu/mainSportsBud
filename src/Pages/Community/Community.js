@@ -210,7 +210,9 @@ const Community = () => {
                         ></SuggestedCommunities>
                     ))} */}
                 <div id="scrollableDiv" className='overflow-y-scroll h-screen'>
-                    <InfiniteScroll
+                    
+                        <div className='grid gap-[34px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto px-6 my-5 pb-48 s'>
+                        <InfiniteScroll
                         dataLength={AllCommunity.data.pages.length}
                         next={() => AllCommunity?.fetchNextPage()}
                         hasMore={AllCommunity?.hasNextPage}
@@ -218,17 +220,17 @@ const Community = () => {
                         scrollableTarget="scrollableDiv"
 
                     >
-                        <div className='grid gap-[34px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto px-6 my-5 pb-48 s'>
                             {AllCommunity?.data &&
                                 AllCommunity?.data?.pages.map((page, id) => {
                                     return page.data.map((community, id) => {
                                         return <SuggestedCommunities community={community} key={id} />
                                     })
                                 })}
+                                </InfiniteScroll>
 
                         </div>
 
-                    </InfiniteScroll>
+                    
 
                 </div>
             </div>

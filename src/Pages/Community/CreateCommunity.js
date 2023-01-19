@@ -23,24 +23,36 @@ function CreateCommunity() {
     const [des, setDes] = useState('')
     const [select, setSelect] = useState('')
 
-   
+   console.log('name:', name)
+   console.log('des:', des)
+   console.log('select:', select)
     useEffect(() => {
-        if (addedFriendData.length === 3) {
-            if (name !== '' && des !== '' && select !== '') {
+        
+        if (addedFriendData.length >= 3) {
+            if (name !== '' && des.length >= 20 && select !== '') {
                 setIsTrue(false)
             }
 
+           
         }
 
     }, [addedFriendData, name, des, select])
 
+    useEffect(()=>{
+        if(name === '' || des.length < 20 || select === ''){
+            setIsTrue(true)
+        }
+    },[name,des,select])
+
     const comName = (e) => {
-        setName(e.target.Value)
+        
+        setName(e.target.value)
     }
     const comDes = (e) => {
-        if (e.target.value.length > 20) {
+        
+       
             setDes(e.target.value)
-        }
+       
 
     }
 
