@@ -8,21 +8,7 @@ import { AuthContext } from "../../Context/AuthProvider";
 import Loading from "../../Shared/Loading/Loading";
 import InfoEdit from "../../Shared/Modals/InfoEdit";
 
-function getAge(dateString) {
-    var today = new Date();
-    var birthDate = new Date(dateString);
-    var age = today.getFullYear() - birthDate.getFullYear();
-    var m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-    }
-
-
-
-
-
-    return age
-}
+import { getAge } from "../../Shared/Utitily/Utility";
 
 function About({ user }) {
     const { id, firstName, lastName, profilePicture, gender, dob, location } = user;

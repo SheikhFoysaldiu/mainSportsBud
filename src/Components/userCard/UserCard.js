@@ -5,7 +5,7 @@ import tw from "tailwind-styled-components"
 import { UserAddOutlined } from '@ant-design/icons';
 import { Link, useParams } from 'react-router-dom';
 import { API_URL } from '../../API/config';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { isError, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import Loading from '../../Shared/Loading/Loading';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { MdOutlinePersonAddAlt1, MdPersonAddAlt1 } from 'react-icons/md';
@@ -120,6 +120,12 @@ const UserCard = () => {
 
 
     if (isLoading) {
+        return <Loading />
+    }
+    if (isError) {
+        return <div> Something went wrong!</div>
+    }
+    if (!data) {
         return <Loading />
     }
 
