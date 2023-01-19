@@ -125,7 +125,7 @@ const Community = () => {
 
 
     return (
-        <div className='grid grid-cols-3 bg-slate-300 mt-16 fixed'>
+        <div className='grid grid-cols-3 bg-slate-300 mt-16 w-full fixed'>
 
             <div className='bg-slate-200 shadow-lg hidden lg:block p-6  pb-20 s'>
                 <div className='flex items-center mb-6'>
@@ -205,7 +205,9 @@ const Community = () => {
                 </div>
 
                 <div id="scrollableDiv" className='overflow-y-scroll h-screen'>
-                    <InfiniteScroll
+                    
+                        <div className='grid gap-[34px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto px-6 my-5 pb-48 s'>
+                        <InfiniteScroll
                         dataLength={AllCommunity.data.pages.length}
                         next={() => AllCommunity?.fetchNextPage()}
                         hasMore={AllCommunity?.hasNextPage}
@@ -213,7 +215,6 @@ const Community = () => {
                         scrollableTarget="scrollableDiv"
 
                     >
-                        <div className='grid gap-[34px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto px-6 my-5 pb-48 s'>
                             {AllCommunity?.data &&
                                 AllCommunity?.data?.pages.map((page, id) => {
                                     return page.data.map((community, id) => {
@@ -224,10 +225,11 @@ const Community = () => {
 
                                     })
                                 })}
+                                </InfiniteScroll>
 
                         </div>
 
-                    </InfiniteScroll>
+                    
 
                 </div>
             </div>

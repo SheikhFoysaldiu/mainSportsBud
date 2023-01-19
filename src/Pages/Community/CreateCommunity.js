@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom';
 import friendProps from '../../Asset/Dummy/user.json';
 import Loading from '../../Shared/Loading/Loading';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import toast, { Toaster } from 'react-hot-toast';
+import { set } from 'nprogress';
 
 function CreateCommunity() {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -16,17 +18,48 @@ function CreateCommunity() {
     const [countFriends, setCountFriends] = useState(0);
     const [addedFriendData, setAddedFriendData] = useState([]);
     const [isTrue, setIsTrue] = useState(true)
+    const [data1, setData1] = useState({})
+    const [name, setName] = useState('')
+    const [des, setDes] = useState('')
+    const [select, setSelect] = useState('')
 
-   
-   
-       useEffect(()=>{
-        if(addedFriendData.length===3){
-            setIsTrue(false)
+   console.log('name:', name)
+   console.log('des:', des)
+   console.log('select:', select)
+    useEffect(() => {
+        
+        if (addedFriendData.length >= 3) {
+            if (name !== '' && des.length >= 20 && select !== '') {
+                setIsTrue(false)
+            }
+
+           
         }
-       
-       },[addedFriendData])
-   
 
+    }, [addedFriendData, name, des, select])
+
+    useEffect(()=>{
+        if(name === '' || des.length < 20 || select === ''){
+            setIsTrue(true)
+        }
+    },[name,des,select])
+
+    const comName = (e) => {
+        
+        setName(e.target.value)
+    }
+    const comDes = (e) => {
+        
+       
+            setDes(e.target.value)
+       
+
+    }
+
+    const sportSelect = (e) =>{
+        
+        setSelect(e.target.value)
+    }
     const getFriends = async () => {
         setFriends(friendProps)
         return friendProps;
@@ -42,6 +75,40 @@ function CreateCommunity() {
 
     const previewImage = (event) => {
         const imageFiles = event.target.files;
+        const fileSize = event.target.files[0].size/1024/1024;
+        const fileType = event.target.files[0].type
+        console.log(fileType)
+        if(fileSize>2){
+            setUploadImage(null)
+            toast.success('File size greater than 2mb', {
+                style: {
+                  border: '1px solid blue',
+                  padding: '16px',
+                  color: 'black',
+                },
+                iconTheme: {
+                  primary: 'blue',
+                  secondary: 'yellow',
+                },
+              });
+              return;
+        }
+
+        if(fileType !== 'image/jpeg' && fileType !== 'image/jpg' && fileType !== 'image/png'){
+            setUploadImage(null)
+            toast.success('File type must be jpg, jpeg or png', {
+                style: {
+                  border: '1px solid blue',
+                  padding: '16px',
+                  color: 'black',
+                },
+                iconTheme: {
+                  primary: 'blue',
+                  secondary: 'yellow',
+                },
+              });
+              return;
+        }
         setImageFile(imageFiles[0])
         const imageFilesLength = imageFiles.length;
         if (imageFilesLength > 0) {
@@ -52,60 +119,105 @@ function CreateCommunity() {
 
     };
 
-    const handleCommunity = (data) => {
-
-        if (imgFile) {
-            const formData = new FormData();
-            formData.append('image', imgFile)
-            console.log(formData)
-        }
-        console.log(data.communityName, data.description)
+    const comData = (data) => {
+        console.log(data)
+        setData1(data)
+        
+        // console.log(data1)
     }
-    
-   
+
+    const handleCommunity = (data1) => {
+        const proceed = window.confirm(`Are you sure you want to create community`)
+        if (proceed) {
+            if (imgFile) {
+                const formData = new FormData();
+                formData.append('image', imgFile)
+                console.log(formData)
+            }
+            console.log(data1.communityName, data1.description, data1.sportSelect)
+        }
+
+    }
+
+    //    console.log(data1)
     return (
         <>
             <div className='my-16'>
 
                 <div className='text-lg lg:text-2xl text-center mt-20 font-bold'>Create your Community</div>
-                <form onSubmit={handleSubmit(handleCommunity)}>
+                <form onSubmit={handleSubmit(comData)}>
+                    <input type="text" {...register("communityRule", {
+                        required: "Community description is required"
+                    })} defaultValue="Rule" placeholder="Type here" className="input input-bordered input-primary w-full max-w-xs hidden" />
                     <div className="shadow  overflow-y-auto sm:rounded-md">
                         <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
 
-                            <div className="form-floating mb-3 ">
+                            <div className='grid grid-cols-1 lg:grid-cols-2 gap-x-8 items-center'>
+                                <div className="form-floating mb-3 ">
 
-                                <input type="text" {...register("communityName", {
-                            required: "Community name is required"
-                        })} className="form-control
-      block
-      w-full
-      px-3
-      py-1.5
-      text-base
-      font-normal
-      text-gray-700
-      bg-white bg-clip-padding
-      border border-solid border-gray-300
-      rounded
-      transition
-      ease-in-out
-      m-0
-      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="floatingInput" placeholder="name@example.com" />
-                                <label for="floatingInput" className="text-gray-700">Community Name*</label>
-
-                                <p className="mt-2 text-sm text-gray-500">
-                                    Give a name to your community which is required.
-                                </p>
+                                    <input type="text"  {...register("communityName", {
+                                        required: "Community description is required"
+                                    })} onChange={comName} className="form-control
+  block
+  w-full
+  px-3
+  py-1.5
+  text-base
+  font-normal
+  text-gray-700
+  bg-white bg-clip-padding
+  border border-solid border-gray-300
+  rounded
+  transition
+  ease-in-out
+  m-0
+  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" placeholder="name@example.com" />
+                                    <label for="floatingInput" className="text-gray-700">Community Name*</label>
+                                    {errors.communityName && <p className='text-red-500'>Community name is required</p>}
+                                    <p className="mt-2 text-sm text-gray-500">
+                                        Give a name to your community which is required.
+                                    </p>
+                                </div>
+                                <div className='mt-[-20px]'>
+                                    <select className="select select-bordered w-full px-3
+  py-1.5
+  text-base
+  font-normal
+  text-gray-700
+  bg-white bg-clip-padding
+  border border-solid border-gray-300
+  rounded
+  transition
+  ease-in-out
+  m-0
+  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" {...register("sportSelect", {
+                                        required: true
+                                    })} onChange={sportSelect}>
+                                        <option disabled selected value="">Community category</option>
+                                        <option value="Football">Football</option>
+                                        <option value="Cricket">Cricket</option>
+                                        <option value="Swimming">Swimming</option>
+                                        <option value="Basketball">Basketball</option>
+                                        <option value="Vollyball">Vollyball</option>
+                                        <option value="Table Tenis">Table Tenis</option>
+                                    </select>
+                                    {errors.sportSelect && <p className='text-red-500'>Community category is required</p>}
+                                    <p className="mt-2 text-sm text-gray-500">
+                                        Select sport's category and it is required
+                                    </p>
+                                </div>
                             </div>
 
                             <div className='grid grid-cols-1 lg:grid-cols-2 gap-x-8 items-center '>
                                 <div>
                                     <label for="description" className="block text-sm font-medium text-gray-700 mb-3">Description*</label>
                                     <div className="">
-                                        <textarea id="description" {...register("description", {
-                            required: "Community description is required"
-                        })} rows="14" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm resize-none" placeholder=""></textarea>
+                                        <textarea id="description"  {...register("description", {
+                                            required: "Community description is required"
+                                        })} onChange={comDes} rows="14" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm resize-none" placeholder=""></textarea>
+                                        {errors.description && <p className='text-red-500'>Write at least 20 characters</p>}
                                     </div>
+
                                     <p className="mt-2 text-sm text-gray-500">
                                         Brief description for your community is required*.
                                     </p>
@@ -164,21 +276,22 @@ function CreateCommunity() {
 
                                         </div>
                                     </div>
-                                  
-                                        <p className={`mt-2 text-sm text-gray-500 ${countFriends=== 0 ? 'block' : 'hidden'}`}>
-                                            Add at least three of your friends
-                                        </p>
-                                
-                                        <p className={`mt-2 text-sm text-gray-500 ${countFriends=== 1 ? 'block' : 'hidden'}`}>
-                                            You have added {countFriends} friend
-                                        </p>
-                                    
-                                        <p className={`mt-2 text-sm text-gray-500 ${countFriends> 1 ? 'block' : 'hidden'}`}>
-                                            You have added {countFriends} friends
-                                        </p>
-                                    
+
+                                    <p className={`mt-2 text-sm text-gray-500 ${countFriends === 0 ? 'block' : 'hidden'}`}>
+                                        Add at least three of your friends
+                                    </p>
+
+                                    <p className={`mt-2 text-sm text-gray-500 ${countFriends === 1 ? 'block' : 'hidden'}`}>
+                                        You have added {countFriends} friend
+                                    </p>
+
+                                    <p className={`mt-2 text-sm text-gray-500 ${countFriends > 1 ? 'block' : 'hidden'}`}>
+                                        You have added {countFriends} friends
+                                    </p>
+
 
                                 </div>
+
                             </div>
 
                             <div>
@@ -203,17 +316,18 @@ function CreateCommunity() {
 
 
                         <div className="bg-gray-50 px-10 py-8 sm:px-8 text-center">
-                            <input type='submit'
+
+                            <input type='submit' onClick={() => handleCommunity(data1)}
                                 className="btn btn-outline btn-primary my-3 w-1/3 text-xl rounded-full text-black-600" disabled={isTrue} Value='Create Community'
 
                             />
-                             
-                            
+
+
                         </div>
                     </div>
 
                 </form>
-
+                <Toaster  />
             </div >
         </>
     )

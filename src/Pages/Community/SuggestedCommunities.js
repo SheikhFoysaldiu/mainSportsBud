@@ -5,7 +5,7 @@ import { API_URL } from '../../API/config';
 import Loading from '../../Shared/Loading/Loading';
 
 const SuggestedCommunities = ({ community }) => {
-    const { name, image, sportId, id } = community;
+    const { name, image, sportId, id, description } = community;
 
     const { data, refetch, isLoading, isError } = useQuery({
         queryKey: ['community', id],
@@ -29,18 +29,20 @@ const SuggestedCommunities = ({ community }) => {
 
 
     return (
-        <div className="card card-compact  bg-base-100 shadow-xl">
+        <div className="card bg-base-100 shadow-x">
             <figure><img src={image[image.length - 1]} alt="community" /></figure>
             <div className="card-body">
                 <Link to={`/main/community/${id}`} >
                     <h2 className="card-title">{name}</h2>
                     <p>{data.name}</p>
+                    <p>{description}</p>
                 </Link>
                 <div className="card-actions justify-end">
                     <button className="btn btn-primary">Join</button>
                 </div>
             </div>
         </div>
+       
     );
 };
 
