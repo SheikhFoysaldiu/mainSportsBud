@@ -125,7 +125,7 @@ const Community = () => {
 
 
     return (
-        <div className='grid grid-cols-3 bg-slate-300 mt-16 fixed'>
+        <div className='grid grid-cols-3 bg-slate-300 mt-16 w-full fixed'>
 
             <div className='bg-slate-200 shadow-lg hidden lg:block p-6  pb-20 s'>
                 <div className='flex items-center mb-6'>

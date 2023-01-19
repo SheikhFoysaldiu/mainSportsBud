@@ -28,7 +28,7 @@ const Home = () => {
   // if (isError) return <div>Error</div>
 
   return (
-    <div className="fixed">
+    <div className="h-screen w-full fixed">
       <SportSearch></SportSearch>
       <SportInterests />
     </div>
