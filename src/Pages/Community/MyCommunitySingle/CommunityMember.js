@@ -1,32 +1,36 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { MdPersonAddAlt1 } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../../Context/AuthProvider';
 
 const CommunityMember = ({ member }) => {
-    const { id, fname, lname, img, interest, age } = member
+    console.log(member)
+    const { user } = member
+    const { user: currentUser } = useContext(AuthContext);
     return (
-        <div className='flex justify-between '>
-            <div className='flex'>
-                <div className="avatar mr-3">
-                    <div className="w-16 rounded">
-                        <img src={img}
-                            alt="Tailwind-CSS-Avatar-component" />
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <span className='mx-0 mr-1 text-lg font-bold'>{fname}</span>
-                        <span className='mx-0 text-lg font-bold'>{lname}</span>
+        <Link to={`/main/profileUser/${currentUser?.id !== user.id ? user.id : ""}`}>
+            <div className='flex justify-between '>
+                <div className='flex'>
+                    <div className="avatar mr-3">
+                        <div className="w-16 rounded">
+                            <img src={user.profilePicture}
+                                alt="Tailwind-CSS-Avatar-component" />
+                        </div>
                     </div>
                     <div>
-                        <span className='mx-0 text-sm'>{interest}</span>
+                        <div>
+                            <span className='mx-0 mr-1 text-lg font-bold'>{user.firstName}</span>
+                            <span className='mx-0 text-lg font-bold'>{user.lastName}</span>
+                        </div>
+                        <div>
+                            <span className='mx-0 text-sm'>{user.sports[0].sport.name}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div >
-                <button className="btn btn-ghost btn-circle h-0">
+                <div >
+                    {/* <button className="btn btn-ghost btn-circle h-0">
                     <div className="dropdown dropdown-top dropdown-end">
                         <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                             <BsThreeDotsVertical></BsThreeDotsVertical>
@@ -51,11 +55,12 @@ const CommunityMember = ({ member }) => {
                         </ul>
 
                     </div>
-                </button>
+                </button> */}
 
 
+                </div>
             </div>
-        </div>
+        </Link>
     );
 };
 

@@ -18,7 +18,7 @@ const UserCardItem = ({ user, sportId }) => {
     const { id, firstName, lastName, profilePicture } = user
     const { user: currentUser } = useContext(AuthContext)
     // console.log(user)
-    const { data, isLoading, error } = useQuery({
+    const { data, isLoading, isError } = useQuery({
         queryKey: ["findSports", sportId],
         queryFn: async () => {
             const url = `${API_URL}/api/v1/sport/sports/${sportId}`
@@ -38,6 +38,12 @@ const UserCardItem = ({ user, sportId }) => {
     })
 
     if (isLoading) {
+        return <Loading />
+    }
+    if (isError) {
+        return <h1>Error Occurs</h1>
+    }
+    if (!data) {
         return <Loading />
     }
 
@@ -97,13 +103,13 @@ const UserCard = () => {
 
     const {
         data,
-        error,
         fetchNextPage,
         hasNextPage,
         isFetching,
         isLoading,
         isFetchingNextPage,
         status,
+        isError
     } = useInfiniteQuery({
         queryKey: ['sportsFollower', params.id],
         queryFn: fetchSportsFollower,

@@ -3,7 +3,7 @@ import communityBanner from '../../../Asset/communityBanner/football.jpg'
 import { BsThreeDots } from "react-icons/bs";
 import { FaRegEdit } from "react-icons/fa";
 import { IoMdRemoveCircleOutline } from "react-icons/io";
-import { AiOutlineDoubleLeft } from "react-icons/ai";
+import { AiOutlineDoubleLeft, AiOutlineHeart, AiTwotoneDislike } from "react-icons/ai";
 import { AiOutlineDoubleRight } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
 import { FaRegCommentAlt } from "react-icons/fa";
@@ -18,8 +18,11 @@ import Slider from "react-slick";
 import './CommunityPost.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Loading from '../../../Shared/Loading/Loading';
-
+import ReactTimeAgo from 'react-time-ago'
 import { AuthContext } from '../../../Context/AuthProvider.js';
+import { API_URL } from '../../../API/config';
+import { async } from '@firebase/util';
+import { useQuery } from '@tanstack/react-query';
 
 const settings = {
     dots: true,
@@ -64,11 +67,15 @@ const settings = {
 
 const CommunityPost = ({ post }) => {
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const [dislike, setDislike] = useState(undefined)
+    const [like, setLike] = useState(undefined)
+    const [loading, setLoading] = useState(false)
     const [p, setP] = useState(1)
     const q = 1
     console.log(post)
     const { user } = useContext(AuthContext)
-    const { id, author, content, images, comments, likes, dislikes } = post
+    const { id, author, content, images, comments, likes, dislikes, createdAt } = post
+    console.log(post)
     const [cmnt, setCmnt] = useState([])
     const [data, setData] = useState(null)
     const [remove, setRemove] = useState(false)
@@ -113,22 +120,187 @@ const CommunityPost = ({ post }) => {
         setP(comments.length)
     }
 
-    const handleDislikeCount = () => {
-        setDislikeCount(dislikeCount + 1)
+    const checkIsLikedPost = async () => {
+        const res = await fetch(`${API_URL}/api/v1/post/isLiked/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `bearer ${localStorage.getItem('token')}`
+            }
+
+        })
+        const data = await res.json()
+        console.log("ISLiked", data)
+        setLike(data.isLiked)
+        return data
     }
 
-    const handleLikeCount = () => {
-        setLikeCount(likeCount + 1)
+
+    const IsLikedPost = useQuery({
+        queryKey: ['likedPost', id],
+        queryFn: checkIsLikedPost
+    })
+
+    const checkIsDisklikedPost = async () => {
+
+        const res = await fetch(`${API_URL}/api/v1/post/isDisliked/${id}`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `bearer ${localStorage.getItem('token')}`
+            }
+        })
+        const data = await res.json()
+        // console.log("ISDISLIKED", data.isDisliked)
+        setDislike(data.isDisliked)
+        return data
     }
+
+    const IsDisLikedPost = useQuery({
+        queryKey: ['dislikedPost', id],
+        queryFn: checkIsDisklikedPost
+
+    })
+
+    const handleDislike = async () => {
+
+        try {
+            setLoading(true)
+            const res = await fetch(`${API_URL}/api/v1/post/dislike/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `bearer ${localStorage.getItem('token')}`
+                }
+            })
+            setDislikeCount(dislikeCount + 1)
+            setDislike(true)
+            if (like) {
+                setLike(false)
+                setLikeCount(likeCount - 1)
+            }
+
+
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+
+        }
+
+    }
+
+    const handleLike = async () => {
+        try {
+            setLoading(true)
+            const res = await fetch(`${API_URL}/api/v1/post/like/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `bearer ${localStorage.getItem('token')}`
+                }
+            })
+
+            setLikeCount(likeCount + 1)
+            setLike(true)
+            if (dislike) {
+                setDislike(false)
+                setDislikeCount(dislikeCount - 1)
+            }
+
+
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+
+        }
+
+    }
+    const handleLikeRemove = async () => {
+        try {
+            setLoading(true)
+            const res = await fetch(`${API_URL}/api/v1/post/likeRemove`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    id: id
+                })
+            })
+
+            setLikeCount(likeCount - 1)
+            setLike(false)
+
+
+            setLoading(false)
+        }
+        catch (error) {
+            setLoading(false)
+            console.log(error)
+        }
+
+
+
+    }
+    const handleDislikeRemove = async () => {
+        try {
+            setLoading(true)
+            const res = await fetch(`${API_URL}/api/v1/post/dislikeRemove`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    id: id
+                })
+            })
+
+
+
+            setDislikeCount(dislikeCount - 1)
+            setDislike(false)
+
+
+            setLoading(false)
+        }
+        catch (error) {
+            setLoading(false)
+            console.log(error)
+        }
+
+    }
+    if (loading) {
+        return null
+    }
+    if (like === undefined || dislike === undefined) {
+        return null
+    }
+    if (!IsLikedPost.data || !IsDisLikedPost.data) {
+        return <Loading />
+    }
+    if (IsLikedPost.isLoading || IsDisLikedPost.isLoading) {
+        return <Loading />
+    }
+
+    if (IsLikedPost.isError || IsDisLikedPost.isError) {
+        return <h1>Something went wrong</h1>
+    }
+
+
     console.log(cmnt)
     return (
-        // <></>
         <div className={`bg-white rounded-lg shadow-xl lg:mx-20 pb-5 mt-5 pt-5 ${remove ? "hidden" : "block"}`}>
             <div className='flex justify-between px-10 lg:px-20'>
                 <div className='flex items-center'>
                     <div className="avatar mr-2 lg:mr-5">
                         <div className="w-8 lg:w-12 rounded">
-                            <img src={author.profilePicture} alt="community Banner" />
+                            <img src={author?.profilePicture} alt="community Banner" />
                         </div>
                     </div>
                     <div>
@@ -136,38 +308,42 @@ const CommunityPost = ({ post }) => {
                             <h1 className='text-lg lg:text-xl my-0 ml-0'>{author.firstName} {author.lastName}</h1>
                         </div>
                         <div className='mx-0 my-0'>
-                            <span className='text-xs my-0 ml-0'>22m</span>
+                            <span className='text-xs my-0 ml-0'><ReactTimeAgo date={createdAt} locale="en-US" timeStyle="facebook" /> </span>
                         </div>
                     </div>
                 </div>
-                <div className='z-20'>
-                    <button className="btn btn-ghost btn-circle">
-                        <div className="dropdown dropdown-end">
-                            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                                <BsThreeDots></BsThreeDots>
-                            </label>
-                            <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-20">
-                                <li>
+                {
+                    user.id === author.id &&
+                    <div className='z-20'>
+                        <button className="btn btn-ghost btn-circle">
+                            <div className="dropdown dropdown-end">
+                                <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                                    <BsThreeDots></BsThreeDots>
+                                </label>
+                                <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-20">
+                                    <li>
 
-                                    <label htmlFor="update-modal" onClick={() => setData(post)} className="flex items-center">
-                                        <p><FaRegEdit className='text-lg'></FaRegEdit></p>
-                                        <p>Edit Post</p>
-                                    </label>
+                                        <label htmlFor="update-modal" onClick={() => setData(post)} className="flex items-center">
+                                            <p><FaRegEdit className='text-lg'></FaRegEdit></p>
+                                            <p>Edit Post</p>
+                                        </label>
 
-                                </li>
-                                <li onClick={() => handlePostRemove()} ><Link>
-                                    <p><IoMdRemoveCircleOutline className='text-lg'></IoMdRemoveCircleOutline></p>
-                                    <p>Remove</p>
+                                    </li>
+                                    <li onClick={() => handlePostRemove()} ><Link>
+                                        <p><IoMdRemoveCircleOutline className='text-lg'></IoMdRemoveCircleOutline></p>
+                                        <p>Remove</p>
 
-                                </Link></li>
+                                    </Link></li>
 
-                            </ul>
+                                </ul>
 
-                        </div>
-                    </button>
+                            </div>
+                        </button>
 
 
-                </div>
+                    </div>
+                }
+
             </div>
             <div className='px-10 lg:px-20 my-5'>
                 <hr className='h-[1px] bg-slate-300 shadow-lg'></hr>
@@ -199,15 +375,29 @@ const CommunityPost = ({ post }) => {
                 </div>
                 <hr className='h-[1px] bg-slate-300 shadow-lg'></hr>
                 <div className='grid grid-cols-3 gap-2 lg:gap-5 my-4'>
-                    <button onClick={handleDislikeCount} className='flex items-center btn btn-ghost normal-case py-2 px-0 lg:px-2'>
-                        <p className='mr-1 lg:mr-2 text-sm lg:text-lg'><AiOutlineDislike></AiOutlineDislike></p>
-                        <p className='text-sm lg:text-lg text-slate-600'>Dislike</p>
+                    {
+                        dislike ?
+                            <button disabled={loading} onClick={handleDislikeRemove} className='flex items-center btn btn-ghost normal-case py-2 px-0 lg:px-2'>
+                                <p className='mr-1 lg:mr-2 text-sm lg:text-lg'><AiTwotoneDislike></AiTwotoneDislike></p>
+                                <p className='text-sm lg:text-lg text-slate-600'>Disliked</p>
 
-                    </button>
-                    <button onClick={handleLikeCount} className='flex items-center btn btn-ghost normal-case py-2 px-0 lg:px-2'>
-                        <p className='mr-1 lg:mr-2 text-sm lg:text-lg'><FcLike></FcLike></p>
-                        <p className='text-sm lg:text-lg text-slate-600'>Like</p>
-                    </button>
+                            </button> :
+                            <button disabled={loading} onClick={handleDislike} className='flex items-center btn btn-ghost normal-case py-2 px-0 lg:px-2'>
+                                <p className='mr-1 lg:mr-2 text-sm lg:text-lg'><AiOutlineDislike></AiOutlineDislike></p>
+                                <p className='text-sm lg:text-lg text-slate-600'>Dislike</p>
+
+                            </button>
+                    }
+                    {like ?
+                        <button disabled={loading} onClick={handleLikeRemove} className='flex items-center btn btn-ghost normal-case py-2 px-0 lg:px-2'>
+                            <p className='mr-1 lg:mr-2 text-sm lg:text-lg'><FcLike></FcLike></p>
+                            <p className='text-sm lg:text-lg text-slate-600'>Liked</p>
+                        </button> :
+                        <button disabled={loading} onClick={handleLike} className='flex items-center btn btn-ghost normal-case py-2 px-0 lg:px-2'>
+                            <p className='mr-1 lg:mr-2 text-sm lg:text-lg'><AiOutlineHeart /></p>
+                            <p className='text-sm lg:text-lg text-slate-600'>Like</p>
+                        </button>
+                    }
                     <button onClick={handleComment} className='flex items-center btn btn-ghost normal-case py-2 px-0 lg:px-2'>
                         <p className='mr-1 lg:mr-2 text-sm lg:text-lg'><FaRegCommentAlt></FaRegCommentAlt></p>
                         <p className='text-sm lg:text-lg text-slate-600'>Comment</p>
@@ -236,11 +426,11 @@ const CommunityPost = ({ post }) => {
                         }
 
                         <InfiniteScroll
-                            dataLength={cmnt.length}
+                            dataLength={cmnt?.length}
                             loader={<Loading></Loading>}
                             scrollableTarget="scrollableDiv1">
                             {
-                                cmnt.length &&
+                                cmnt?.length &&
                                 cmnt.map(comment => <div key={comment.id} className="my-5 w-full lg:w-1/2">
                                     <div className='flex items-start'>
                                         <div className="avatar mr-2 lg:mr-5">
@@ -270,8 +460,6 @@ const CommunityPost = ({ post }) => {
                 </div>
 
             </div>
-
-
             {
                 data &&
                 <CommunityPostModalUpdate data={data} ></CommunityPostModalUpdate>
