@@ -275,16 +275,14 @@ const CommunityPost = ({ post }) => {
         }
 
     }
-    if (loading) {
-        return null
-    }
+
     if (like === undefined || dislike === undefined) {
         return null
     }
     if (!IsLikedPost.data || !IsDisLikedPost.data) {
         return <Loading />
     }
-    if (IsLikedPost.isLoading || IsDisLikedPost.isLoading) {
+    if (IsLikedPost.isLoading || IsDisLikedPost.isLoading || loading) {
         return <Loading />
     }
 
@@ -308,7 +306,7 @@ const CommunityPost = ({ post }) => {
                             <h1 className='text-lg lg:text-xl my-0 ml-0'>{author.firstName} {author.lastName}</h1>
                         </div>
                         <div className='mx-0 my-0'>
-                            <span className='text-xs my-0 ml-0'><ReactTimeAgo date={createdAt} locale="en-US" timeStyle="facebook" /> </span>
+                            <span className='text-xs my-0 ml-0'><ReactTimeAgo date={(createdAt)} locale="en-US" timeStyle="facebook" /> </span>
                         </div>
                     </div>
                 </div>

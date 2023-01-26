@@ -16,6 +16,8 @@ import { AuthContext } from "../../Context/AuthProvider";
 const Community = () => {
     const { user } = useContext(AuthContext);
 
+    console.log("**USER**", user);
+
     const [active, setActive] = React.useState(true);
 
     const placeholderToggle = () => {
@@ -45,11 +47,12 @@ const Community = () => {
     }
 
     const fetchMyCommunity = async ({ pageParam = 1 }) => {
-        const url = `${API_URL}/api/v1/community/myCommunities?page=${pageParam}&limit=${10}&userId=${user._id}`
+        const url = `${API_URL}/api/v1/community/myCommunities?page=${pageParam}&limit=${10}&userId=${user.id}`
         const res = await fetch(url, {
             method: 'GET',
             headers: {
-                authorization: `bearer ${localStorage.getItem('token')}`
+                'Content-Type': 'application/json',
+                'Authorization': `bearer ${localStorage.getItem('token')}`
             }
         });
         const data = await res.json();
@@ -78,7 +81,7 @@ const Community = () => {
 
     const AllCommunity = useInfiniteQuery({
 
-        queryKey: ['allCommunityList'],
+        queryKey: ['allCommunityList', user?.id],
         queryFn: fetchAllCommunity,
         getNextPageParam: (lastPage, pages) => {
             console.log("lastPage:", lastPage)
@@ -205,16 +208,16 @@ const Community = () => {
                 </div>
 
                 <div id="scrollableDiv" className='overflow-y-scroll h-screen'>
-                    
-                        <div className='grid gap-[34px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto px-6 my-5 pb-48 s'>
-                        <InfiniteScroll
-                        dataLength={AllCommunity.data.pages.length}
-                        next={() => AllCommunity?.fetchNextPage()}
-                        hasMore={AllCommunity?.hasNextPage}
-                        loader={<h4>Loading...</h4>}
-                        scrollableTarget="scrollableDiv"
 
-                    >
+                    <div className='grid gap-[34px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto px-6 my-5 pb-48 s'>
+                        <InfiniteScroll
+                            dataLength={AllCommunity.data.pages.length}
+                            next={() => AllCommunity?.fetchNextPage()}
+                            hasMore={AllCommunity?.hasNextPage}
+                            loader={<h4>Loading...</h4>}
+                            scrollableTarget="scrollableDiv"
+
+                        >
                             {AllCommunity?.data &&
                                 AllCommunity?.data?.pages.map((page, id) => {
                                     return page.data.map((community, id) => {
@@ -225,11 +228,11 @@ const Community = () => {
 
                                     })
                                 })}
-                                </InfiniteScroll>
+                        </InfiniteScroll>
 
-                        </div>
+                    </div>
 
-                    
+
 
                 </div>
             </div>

@@ -30,9 +30,6 @@ const MyCommunitySingle = () => {
     const memberParams = useParams()
     const [active, setActive] = React.useState(true);
 
-
-
-
     const fetchCommunityInfo = async () => {
         const url = `${API_URL}/api/v1/community//communities/${params.id}`
         const res = await fetch(url, {

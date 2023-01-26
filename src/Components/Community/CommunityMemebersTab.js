@@ -25,12 +25,12 @@ const CommunityMemebersTab = () => {
     }
 
     const CommunityMembers = useInfiniteQuery({
-        queryKey: ['communityMembers', params.id],
+        queryKey: ['communityMembers', params?.id],
         queryFn: fetchCommunityMember,
         getNextPageParam: (lastPage, pages) => {
             console.log("lastPage:", lastPage)
             console.log("pages:", pages)
-            if (lastPage.data.length < 1) {
+            if (lastPage.data && lastPage.data.length < 1) {
                 return undefined
             }
             return pages.length + 1
@@ -58,17 +58,17 @@ const CommunityMemebersTab = () => {
 
 
             <InfiniteScroll
-                dataLength={CommunityMembers.data.pages.length}
-                next={() => CommunityMembers.fetchNextPage()}
-                hasMore={CommunityMembers.hasNextPage}
+                dataLength={CommunityMembers?.data?.pages?.length}
+                next={() => CommunityMembers?.fetchNextPage()}
+                hasMore={CommunityMembers?.hasNextPage}
             >
 
                 <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 pt-5 mt-5 grid grid-cols-1 lg:grid-cols-2 justify-around px-3 lg:px-5 gap-4 lg:gap-8 '>
 
                     {
-                        CommunityMembers.data &&
-                        CommunityMembers.data.pages.map((page, id) => {
-                            return page.data.members.map((member, id) => {
+                        CommunityMembers?.data &&
+                        CommunityMembers?.data?.pages?.map((page, id) => {
+                            return page?.data?.members?.map((member, id) => {
                                 return <CommunityMember member={member} key={id} />
                             })
                         })

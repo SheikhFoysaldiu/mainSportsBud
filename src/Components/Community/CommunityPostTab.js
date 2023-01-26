@@ -30,7 +30,7 @@ const CommunityPostTab = () => {
         }
     }
     const CommunityPostData = useInfiniteQuery({
-        queryKey: ['communityPost', params.id],
+        queryKey: ['communityPost', params?.id],
         queryFn: fetchCommunityPost,
         getNextPageParam: (lastPage, pages) => {
             console.log("lastPage:", lastPage)
@@ -42,12 +42,13 @@ const CommunityPostTab = () => {
         }
 
     })
-    if (CommunityPostData.isLoading) {
-        return <Loading />
-    }
     if (!CommunityPostData.data) {
         return <Loading />
     }
+    if (CommunityPostData.isLoading) {
+        return <Loading />
+    }
+
     if (CommunityPostData.isError) {
         return <h1>Error Occurs</h1>
     }
@@ -70,7 +71,7 @@ const CommunityPostTab = () => {
                 </div>
             </div>
             <InfiniteScroll
-                dataLength={CommunityPostData.data?.pages?.length}
+                dataLength={CommunityPostData?.data?.pages?.length}
                 next={() => CommunityPostData?.fetchNextPage()}
                 hasMore={CommunityPostData?.hasNextPage}
                 loader={<h4>Loading...</h4>}
