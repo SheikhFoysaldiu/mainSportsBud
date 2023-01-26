@@ -30,7 +30,9 @@ const router = createBrowserRouter([
     path: "/main",
     element: (
       <AuthProvider>
-        <Main></Main>
+        <PrivateRoute>
+          <Main></Main>
+        </PrivateRoute>
       </AuthProvider>
     ),
     children: [

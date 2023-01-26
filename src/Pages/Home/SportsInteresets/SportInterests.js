@@ -98,11 +98,6 @@ const SportInterests = () => {
               </React.Fragment>
             ))}
 
-          {error && <div>Something went wrong ...</div>}
-          {isFetchingNextPage
-            ? 'Loading more...' : <p style={{ textAlign: "center" }}>
-              <b>No more data left!</b>
-            </p>}
         </div>
 
       </InfiniteScroll>

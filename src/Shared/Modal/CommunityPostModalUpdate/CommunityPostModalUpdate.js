@@ -2,18 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 const CommunityPostModalUpdate = ({ data }) => {
-    const { id, user, userName, postDetails, img } = data
+    // console.log("DATA", data)
+    const { id, author, content, images } = data
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [active, setActive] = useState(true);
     const [isPhoto, setIsPhoto] = useState(true);
     const [selectedImages, setSelectedImages] = useState([]);
     const [imageName, setImageName] = useState([]);
     const [imgFile, setImgFile] = useState([]);
-    console.log(img)
+    console.log(images)
 
     useEffect(() => {
-        setSelectedImages(img)
-    }, [img])
+        setSelectedImages(images)
+    }, [images])
 
     const onSelectFile = (event) => {
         const selectedFiles = event.target.files;
@@ -93,7 +94,7 @@ const CommunityPostModalUpdate = ({ data }) => {
                         <div className='flex items-center'>
                             <div className="w-14 mr-4">
 
-                                <img src="https://placeimg.com/80/80/people" alt='User' className='rounded-full shadow-md' />
+                                <img src={author.profilePicture} alt='User' className='rounded-full shadow-md' />
 
                             </div>
                             <div>
@@ -107,7 +108,7 @@ const CommunityPostModalUpdate = ({ data }) => {
 
 
                             <div className='cursor'>
-                                <textarea type="textarea" {...register("name")} className="textarea textarea-ghost resize-none w-full area rq-form-element text-lg" rows='8' placeholder="Write from here" defaultValue={postDetails} onClick={() => blinkHandler(false)}></textarea>
+                                <textarea type="textarea" {...register("name")} className="textarea textarea-ghost resize-none w-full area rq-form-element text-lg" rows='8' placeholder="Write from here" defaultValue={content} onClick={() => blinkHandler(false)}></textarea>
                                 <i className={`${active ? 'block' : 'invisible'}`}></i>
                             </div>
                             <div className={`flex flex-col justify-center ${isPhoto ? 'block' : 'invisible'}`} >

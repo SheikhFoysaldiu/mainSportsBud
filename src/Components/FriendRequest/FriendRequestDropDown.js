@@ -101,15 +101,13 @@ function FriendRequestDropDown(props) {
 
 
     return (
-        <div className="absolute flex flex-col z-20 top-[70px]   w-full max-w-sm bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-800 dark:divide-gray-700 right-[0] overflow-y-scroll h-[300px]">
-            <div className='flex justify-center items-center'>
-                <div className="block py-2 px-4 font-medium text-center text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-white">
+        <div className="absolute p-1 flex items-end flex-col z-20 top-[65px]   w-full max-w-sm bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-800 dark:divide-gray-700 right-[0] ">
+            <div className='flex justify-between w-full'>
+                <div className="block py-2 px-4 font-medium text-center text-gray-700   dark:text-white">
                     Friend Requests
                 </div>
 
                 <button onClick={handleOption} type="button" className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                    <span className="sr-only">Close</span>
-
                     <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -120,43 +118,43 @@ function FriendRequestDropDown(props) {
                 &&
                 <h1 className="text-2xl font-bold text-gray-500 text-center">Empty Friend Request List!</h1>
             }
+            <div className='self-start w-full overflow-y-scroll h-[300px]'>
+                <InfiniteScroll
+                    next={() => fetchNextPage()}
 
-            <InfiniteScroll
-                next={() => fetchNextPage()}
+                    hasMore={hasNextPage}
+                    loader={<h4>Loading...</h4>}
+                    // data?.pages?.reduce((acc, page) => acc + page.data.length, 0) || 0
+                    // dataLength={data.pages.length === 0 ? 0 : data.pages.reduce((acc, page) => acc + page.data.length, 0) || 0}
+                    dataLength={data.pages.length}
+                >
 
-                hasMore={hasNextPage}
-                loader={<h4>Loading...</h4>}
-                // data?.pages?.reduce((acc, page) => acc + page.data.length, 0) || 0
-                // dataLength={data.pages.length === 0 ? 0 : data.pages.reduce((acc, page) => acc + page.data.length, 0) || 0}
-                dataLength={data.pages.length}
-            >
+                    {
+                        data &&
+                        data.pages.map((page) => {
+                            console.log("Console", page);
+                            return (
+                                page.data.map((request, index) => {
+                                    console.log("Console", request);
+                                    return (
 
-                {
-                    data &&
-                    data.pages.map((page) => {
-                        console.log("Console", page);
-                        return (
-                            page.data.map((request, index) => {
-                                console.log("Console", request);
-                                return (
+                                        < FriendRequest
 
-                                    < FriendRequest
+                                            request={request}
+                                            key={index}
+                                        />
+                                    )
+                                })
+                            )
+                        })
 
-                                        request={request}
-                                        key={index}
-                                    />
-                                )
-                            })
-                        )
-                    })
-
-                }
-
-
+                    }
 
 
-            </InfiniteScroll>
 
+
+                </InfiniteScroll>
+            </div>
 
         </div >
 

@@ -16,6 +16,9 @@ import CommunityConversion from './CommunityConversion';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { API_URL } from '../../../API/config';
+import CommunityMemebersTab from '../../../Components/Community/CommunityMemebersTab';
+import CommunityPostTab from '../../../Components/Community/CommunityPostTab';
+import MyCommunityPostTab from '../../../Components/Community/MyCommunityPostTab';
 
 
 const MyCommunitySingle = () => {
@@ -26,28 +29,8 @@ const MyCommunitySingle = () => {
     const postParams = useParams()
     const memberParams = useParams()
     const [active, setActive] = React.useState(true);
-    var images = [
-        'https://webneel.com/wallpaper/sites/default/files/images/08-2018/3-nature-wallpaper-mountain.jpg',
-        'https://thumbs.dreamstime.com/b/environment-earth-day-hands-trees-growing-seedlings-bokeh-green-background-female-hand-holding-tree-nature-field-gra-130247647.jpg',
-        'https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823__340.jpg',
-        'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg'
-    ];
 
-    const fetchCommunityPost = async ({ pageParam = 1 }) => {
-        const url = `${API_URL}/api/v1/community/posts/${params.id}?page=${pageParam}&limit=${10}`
-        const res = await fetch(url, {
-            method: 'GET',
-            headers: {
-                authorization: `bearer ${localStorage.getItem('token')}`
-            }
-        });
-        const data = await res.json();
-        console.log(data)
-        return {
-            data: data.posts
-        }
-    }
-    const fetchCommunityInfo = async ({ pageParam = 1 }) => {
+    const fetchCommunityInfo = async () => {
         const url = `${API_URL}/api/v1/community//communities/${params.id}`
         const res = await fetch(url, {
             method: 'GET',
@@ -61,51 +44,24 @@ const MyCommunitySingle = () => {
 
     }
 
-
-
-
-    const CommunityPostData = useInfiniteQuery({
-        queryKey: ['communityPost', params.id],
-        queryFn: fetchCommunityPost,
-        getNextPageParam: (lastPage, pages) => {
-            console.log("lastPage:", lastPage)
-            console.log("pages:", pages)
-            if (lastPage.data.length < 1) {
-                return undefined
-            }
-            return pages.length + 1
-        }
-
-    })
-
-
     const CommunityInfo = useQuery({
         queryKey: ['communityInfo', params.id],
         queryFn: fetchCommunityInfo
     })
 
 
-    const getMembers = async () => {
-        setMembers(memberProps)
-        return memberProps;
+
+
+
+
+    if (!CommunityInfo.data) {
+        return <Loading></Loading>
     }
-
-    useLayoutEffect(() => {
-        getMembers(memberParams.id)
-    }, [])
-
-    if (!members) {
+    if (CommunityInfo.isLoading) {
         return <Loading></Loading>
     }
 
-    if (!CommunityPostData.data || !CommunityInfo.data) {
-        return <Loading></Loading>
-    }
-    if (CommunityPostData.isLoading || CommunityInfo.isLoading) {
-        return <Loading></Loading>
-    }
-
-    const { image: cImage, name: cName } = CommunityInfo.data
+    const { image: cImage, name: cName, description: cDes } = CommunityInfo.data
 
     return (
         <>
@@ -219,7 +175,7 @@ const MyCommunitySingle = () => {
       focus:border-transparent
       active
     " id="tabs-home-tab3" data-bs-toggle="pill" data-bs-target="#tabs-home3" role="tab" aria-controls="tabs-home3"
-                                        aria-selected="true">Post</a>
+                                        aria-selected="true">Feed</a>
                                 </li>
                                 <li className="nav-item flex-grow text-center" role="presentation">
                                     <a href="#tabs-profile3" className="
@@ -273,7 +229,7 @@ const MyCommunitySingle = () => {
       hover:border-transparent hover:bg-gray-100
       focus:border-transparent
     " id="tabs-groupMessage-tab3" data-bs-toggle="pill" data-bs-target="#tab-groupMessage" role="tab"
-                                        aria-controls="tab-groupMessage" aria-selected="false">Chat</a>
+                                        aria-controls="tab-groupMessage" aria-selected="false">My Post</a>
                                 </li>
                             </ul>
 
@@ -283,73 +239,39 @@ const MyCommunitySingle = () => {
                 <div>
                     <div className="tab-content" id="tabs-tabContent3">
                         <div className="tab-pane fade show active" id="tabs-home3" role="tabpanel" aria-labelledby="tabs-home-tab3">
-                            <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 mt-5 pt-5 flex justify-center items-center'>
-                                <div className="w-10 lg:w-14 mr-4">
-
-                                    <img src="https://placeimg.com/80/80/people" alt='User' className='rounded-full shadow-md' />
-
-                                </div>
-                                <div className='w-1/2 cursor-pointer'>
-                                    <label htmlFor="my-modal" className="w-full btn btn-outline">Create your post</label>
-
-                                    <CommunityPostModal></CommunityPostModal>
-
-
-                                </div>
-                            </div>
-                            <InfiniteScroll
-                                dataLength={CommunityPostData.data?.pages?.length}
-                                next={() => CommunityPostData.fetchNextPage()}
-                                hasMore={CommunityPostData.hasNextPage}
-                                loader={<h4>Loading...</h4>}
-                                scrollableTarget="scrollableDiv"
-
-
-                            >
-                                <div>
-
-                                    {
-                                        CommunityPostData?.data &&
-                                        CommunityPostData?.data?.pages?.map((page, id) => {
-                                            return page.data.map((post, id) => {
-                                                return <CommunityPost post={post} key={id} />
-                                            })
-                                        })
-                                    }
-
-                                </div>
-                            </InfiniteScroll>
-
+                            <CommunityPostTab />
 
 
 
                         </div>
-                        <div className="tab-pane fade h-auto" id="tabs-profile3" role="tabpanel" aria-labelledby="tabs-profile-tab3">
-                            <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 py-8 mt-5  text-center'>
-                                <h1 className='text-xl font-bold'>All Members</h1>
-                            </div>
-                            <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 pt-5 mt-5 grid grid-cols-1 lg:grid-cols-2 justify-around px-3 lg:px-5 gap-4 lg:gap-8 '>
 
-                                {
-                                    members.map(member => <CommunityMember key={member.id} member={member}></CommunityMember>)
-                                }
+                        <CommunityMemebersTab />
 
-                            </div>
-                        </div>
                         <div className="tab-pane fade" id="tabs-messages3" role="tabpanel" aria-labelledby="tabs-profile-tab3">
                             <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 mt-5 pt-5 text-center'>
                                 <h1 className='text-xl font-bold'>About the Club</h1>
                             </div>
                             <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 mt-5 pt-5 px-5'>
-                                <p className='text-lg'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati nobis iusto velit iste non iure alias consequatur error blanditiis nam consequuntur soluta quasi quisquam nisi beatae quos, deleniti vitae adipisci ea totam est cupiditate. Eligendi aspernatur praesentium pariatur illum dolores non, commodi possimus corporis quaerat repellat optio ducimus nesciunt ratione voluptas deleniti amet sequi aliquid repellendus maxime dolor eaque quisquam a! Pariatur, fugiat, molestiae quaerat est, id ipsam dicta illo mollitia vel exercitationem doloremque? Quae recusandae nobis dignissimos cupiditate, pariatur commodi nihil corporis voluptate reprehenderit. Amet repellat architecto ducimus, voluptatum dolor porro nesciunt optio laborum veniam totam soluta. Nisi dolorem, similique velit dolores voluptatibus, aspernatur quae odit in inventore nulla repellendus. Repudiandae doloremque magnam voluptas praesentium odit. Magnam itaque, placeat consequatur consequuntur error non vitae ab earum ad ipsam cumque dolore distinctio assumenda voluptas neque asperiores incidunt officiis corrupti, optio accusantium ullam iure sint? Libero, minus totam non illo nemo magni quos, eos praesentium sunt unde minima dolores atque voluptates soluta! At id tenetur, vitae suscipit exercitationem iure fuga, excepturi quas accusantium atque voluptatem non. Veniam odit tempora explicabo? Provident minima aliquid reprehenderit eaque fuga. Eius, neque, totam repellat dolorem aspernatur praesentium voluptatem numquam esse expedita corrupti voluptatum facere error.</p>
+                                <p className='text-lg'>
+                                    {cDes}
+                                </p>
                             </div>
                         </div>
-                        <div className="tab-pane fade" id="tab-groupMessage" role="tabpanel" aria-labelledby="tabs-groupMessage-tab3">
+                        {/* <div className="tab-pane fade" id="tab-groupMessage" role="tabpanel" aria-labelledby="tabs-groupMessage-tab3">
                             <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 mt-5 pt-5 flex justify-center items-center'>
                                 <h1 className='text-xl font-bold'>Group Conversation</h1>
                             </div>
                             <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 mt-5 pt-5 flex justify-center items-center'>
                                 <CommunityConversion></CommunityConversion>
+                            </div>
+                        </div> */}
+                        <div className="tab-pane fade" id="tab-groupMessage" role="tabpanel" aria-labelledby="tabs-groupMessage-tab3">
+                            <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 mt-5 pt-5 flex justify-center items-center'>
+                                <h1 className='text-xl font-bold'>My Post List</h1>
+                            </div>
+                            <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 mt-5 pt-5 flex justify-center items-center'>
+                                {/* <MyCommunityPost></CommunityConversion> */}
+                                <MyCommunityPostTab />
                             </div>
                         </div>
                     </div>

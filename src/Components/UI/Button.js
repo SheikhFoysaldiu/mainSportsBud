@@ -62,7 +62,7 @@ function Button(props) {
                     method: 'DELETE',
                     headers: {
                         "Content-Type": "application/json",
-                        authorization: `bearer ${localStorage.getItem('token')}`
+                        'Authorization': `bearer ${localStorage.getItem('token')}`
                     }
                 }
             )
