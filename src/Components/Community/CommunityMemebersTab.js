@@ -20,7 +20,7 @@ const CommunityMemebersTab = () => {
         const data = await res.json();
         console.log(data)
         return {
-            data: data.members
+            data: data.members ? data.members : []
         }
     }
 
@@ -30,7 +30,7 @@ const CommunityMemebersTab = () => {
         getNextPageParam: (lastPage, pages) => {
             console.log("lastPage:", lastPage)
             console.log("pages:", pages)
-            if (lastPage.data && lastPage.data.length < 1) {
+            if (lastPage.data.length < 1) {
                 return undefined
             }
             return pages.length + 1

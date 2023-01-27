@@ -48,7 +48,7 @@ export default function PrimarySearchAppBar() {
   const [friendRequestDrowpDown, setFriendRequestDrowpDown] = React.useState(false)
   const [isOpen, setIsopen] = React.useState(false);
   const [sidebar, setSidebar] = React.useState(false);
-
+  const { user } = React.useContext(AuthContext)
   const showSidebar = () => {
 
 
@@ -207,7 +207,7 @@ export default function PrimarySearchAppBar() {
             <div className="dropdown dropdown-end">
               <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                 <div className="w-7 lg:w-8 rounded-full">
-                  <img src="https://placeimg.com/80/80/people" />
+                  <img src={user.profilePicture} />
                 </div>
               </label>
               <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 z-50">

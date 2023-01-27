@@ -1,6 +1,6 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import communitycover from '../../../Asset/communityBanner/football.jpg'
 import { AiFillSetting } from "react-icons/ai";
 import { BsPlusLg } from "react-icons/bs";
@@ -19,19 +19,41 @@ import { API_URL } from '../../../API/config';
 import CommunityMemebersTab from '../../../Components/Community/CommunityMemebersTab';
 import CommunityPostTab from '../../../Components/Community/CommunityPostTab';
 import MyCommunityPostTab from '../../../Components/Community/MyCommunityPostTab';
+import { useContext } from 'react';
+import { AuthContext } from '../../../Context/AuthProvider';
+import { Button } from 'antd';
 
 
 const MyCommunitySingle = () => {
     const params = useParams()
-    const [hasAccess, setHasAccess] = useState(true);
-    const [isAdmin, setAdmin] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [members, setMembers] = useState([])
     const postParams = useParams()
     const memberParams = useParams()
     const [active, setActive] = React.useState(true);
+    const { user } = useContext(AuthContext)
+    const navigate = useNavigate()
+
+    const IsAreadyMemeber = useQuery({
+        queryKey: ['IsAreadyMemeberCommunity', params?.id],
+        queryFn: async () => {
+            const url = `${API_URL}/api/v1/community/isAlreadyMemeber/${params.id}`
+            const res = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `bearer ${localStorage.getItem('token')}`
+                }
+            })
+            const data = await res.json()
+            return {
+                data: data.isMember
+            }
+        }
+    })
 
     const fetchCommunityInfo = async () => {
-        const url = `${API_URL}/api/v1/community//communities/${params.id}`
+        const url = `${API_URL}/api/v1/community/communities/${params.id}`
         const res = await fetch(url, {
             method: 'GET',
             headers: {
@@ -41,27 +63,55 @@ const MyCommunitySingle = () => {
         const data = await res.json();
         console.log(data)
         return data.community
-
     }
-
     const CommunityInfo = useQuery({
         queryKey: ['communityInfo', params.id],
         queryFn: fetchCommunityInfo
     })
 
+    const handleLeave = async () => {
+        setLoading(true)
+        try {
+            const url = `${API_URL}/api/v1/community/leaveCommunity/${params.id}`
+            const res = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const data = await res.json();
+            console.log(data)
+            setLoading(false)
+            navigate(`/main/community/${params.id}`)
+
+        }
+        catch (error) {
+            console.log(error)
+            setLoading(false)
+        }
+
+    }
+    useEffect(() => {
+        if (IsAreadyMemeber?.data?.data === false) {
+            navigate(`/main/community/${params.id}`)
+        }
+    }, [IsAreadyMemeber?.data?.data]);
 
 
-
-
-
-    if (!CommunityInfo.data) {
+    if (!CommunityInfo.data || !IsAreadyMemeber.data) {
         return <Loading></Loading>
     }
-    if (CommunityInfo.isLoading) {
+    if (CommunityInfo.isLoading || CommunityInfo.isLoading) {
         return <Loading></Loading>
     }
+    if (CommunityInfo.isError || IsAreadyMemeber.isError) {
+        return <h1>Someting went wrong!</h1>
+    }
 
-    const { image: cImage, name: cName, description: cDes } = CommunityInfo.data
+
+    const { id: cId, image: cImage, name: cName, description: cDes, owner: cOwner } = CommunityInfo.data
+
 
     return (
         <>
@@ -78,17 +128,17 @@ const MyCommunitySingle = () => {
                             <div className="avatar-group -space-x-6">
                                 <Link className="avatar">
                                     <div className="w-10 lg:w-12">
-                                        <img src="https://placeimg.com/192/192/people" />
+                                        <img src="https://placeimg.com/192/192/people" alt="" />
                                     </div>
                                 </Link>
                                 <Link className="avatar">
                                     <div className="w-10 lg:w-12">
-                                        <img src="https://placeimg.com/192/192/people" />
+                                        <img src="https://placeimg.com/192/192/people" alt="" />
                                     </div>
                                 </Link>
                                 <Link className="avatar">
                                     <div className="w-10 lg:w-12">
-                                        <img src="https://placeimg.com/192/192/people" />
+                                        <img src="https://placeimg.com/192/192/people" alt="" />
                                     </div>
                                 </Link>
                                 <Link className="avatar placeholder">
@@ -100,7 +150,7 @@ const MyCommunitySingle = () => {
                         </div>
                         <div className='hidden lg:block'>
                             <div className='flex items-center'>
-                                <Link to='/main/setting' className={`flex items-center mr-5 bg-primary p-1 px-2 rounded-lg hover:bg-blue-800 ${hasAccess ? 'block' : 'hidden'}`}>
+                                <Link to={`/main/setting/${params.id}`} className={`flex items-center mr-5 bg-primary p-1 px-2 rounded-lg hover:bg-blue-800 ${cOwner.id === user.id ? 'block' : 'hidden'}`}>
 
                                     <h1><AiFillSetting className='text-xl text-white font-bold mr-1 '> </AiFillSetting></h1>
 
@@ -110,10 +160,10 @@ const MyCommunitySingle = () => {
                                     <h1><BsPlusLg className='text-lg text-white font-bold mr-1 '></BsPlusLg></h1>
                                     <h1 className='text-lg text-white font-bold'>Invite</h1>
                                 </Link>
-                                <Link className={`flex items-center mr-5 bg-red-600 p-1 px-2 rounded-lg hover:bg-red-800 ${isAdmin ? 'hidden' : 'block'}`}>
+                                <Button disabled={loading} onClick={handleLeave} className={`flex items-center mr-5 bg-red-600 p-1 px-2 rounded-lg hover:bg-red-800  ${cOwner.id !== user.id ? 'block' : 'hidden'}`}>
                                     <h1><BsBoxArrowLeft className='text-lg text-white font-bold mr-1 '></BsBoxArrowLeft></h1>
                                     <h1 className='text-lg text-white font-bold'>Leave</h1>
-                                </Link>
+                                </Button>
                             </div>
                         </div>
                         <div className='block lg:hidden'>
@@ -124,7 +174,7 @@ const MyCommunitySingle = () => {
                                     </label>
                                     <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-20">
                                         <li>
-                                            <Link to='/main/setting/' className={`flex items-center ${hasAccess ? 'block' : 'hidden'}`}>
+                                            <Link to={`/main/setting/${params.id}`} className={`flex items-center  ${cOwner.id === user.id ? 'block' : 'hidden'}`}>
 
                                                 <h1 className='mr-1 ml-0'><AiFillSetting className='text-lg text-black font-bold'> </AiFillSetting></h1>
 
@@ -139,10 +189,10 @@ const MyCommunitySingle = () => {
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link className={`flex items-center ${isAdmin ? 'hidden' : 'block'}`}>
+                                            <Button disabled={loading} onClick={handleLeave} className={`flex items-center  ${cOwner.id !== user.id ? 'block' : 'hidden'}`}>
                                                 <h1 className='mr-1 ml-0'><BsBoxArrowLeft className='text-sm text-black font-bold'></BsBoxArrowLeft></h1>
                                                 <h1 className='text-sm text-black font-bold ml-0'>Leave</h1>
-                                            </Link>
+                                            </Button>
                                         </li>
 
                                     </ul>
@@ -213,7 +263,7 @@ const MyCommunitySingle = () => {
     " id="tabs-messages-tab3" data-bs-toggle="pill" data-bs-target="#tabs-messages3" role="tab"
                                         aria-controls="tabs-messages3" aria-selected="false">About</a>
                                 </li>
-                                <li className="nav-item flex-grow text-center" role="presentation">
+                                {/* <li className="nav-item flex-grow text-center" role="presentation">
                                     <a href="#tab-groupMessage" className="
       nav-link
       w-full
@@ -230,7 +280,7 @@ const MyCommunitySingle = () => {
       focus:border-transparent
     " id="tabs-groupMessage-tab3" data-bs-toggle="pill" data-bs-target="#tab-groupMessage" role="tab"
                                         aria-controls="tab-groupMessage" aria-selected="false">My Post</a>
-                                </li>
+                                </li> */}
                             </ul>
 
                         </div>
@@ -257,6 +307,7 @@ const MyCommunitySingle = () => {
                                 </p>
                             </div>
                         </div>
+
                         {/* <div className="tab-pane fade" id="tab-groupMessage" role="tabpanel" aria-labelledby="tabs-groupMessage-tab3">
                             <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 mt-5 pt-5 flex justify-center items-center'>
                                 <h1 className='text-xl font-bold'>Group Conversation</h1>
@@ -264,16 +315,19 @@ const MyCommunitySingle = () => {
                             <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 mt-5 pt-5 flex justify-center items-center'>
                                 <CommunityConversion></CommunityConversion>
                             </div>
-                        </div> */}
+                        </div>
+
                         <div className="tab-pane fade" id="tab-groupMessage" role="tabpanel" aria-labelledby="tabs-groupMessage-tab3">
                             <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 mt-5 pt-5 flex justify-center items-center'>
                                 <h1 className='text-xl font-bold'>My Post List</h1>
                             </div>
                             <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 mt-5 pt-5 flex justify-center items-center'>
-                                {/* <MyCommunityPost></CommunityConversion> */}
+
                                 <MyCommunityPostTab />
                             </div>
-                        </div>
+                        </div> */}
+
+
                     </div>
                 </div>
 

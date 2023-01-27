@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { FcSearch } from "react-icons/fc";
+import { SearchContext } from '../../../Context/SearchContext';
 import './SportSearch.css'
 
 const SportSearch = () => {
+    const { setSearch, search } = useContext(SearchContext)
+
     const [active, setActive] = React.useState(true);
 
     const placeholderToggle = () => {
@@ -18,6 +21,10 @@ const SportSearch = () => {
                 <form action=''>
                     <FcSearch className='absolute search'> </FcSearch>
                     <input
+                        value={search}
+                        onChange={(e) => {
+                            setSearch(e.target.value);
+                        }}
                         type='text'
                         placeholder='Search your sport'
                         onFocus={placeholderToggle}

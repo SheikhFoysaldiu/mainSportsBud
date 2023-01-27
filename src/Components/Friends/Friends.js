@@ -8,9 +8,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link, useParams } from 'react-router-dom';
 import { API_URL } from '../../API/config';
 
-import ListFriends from '../../Asset/Dummy/Friends'
 
-import profile from '../../Asset/person/profile.png';
 import { AuthContext } from '../../Context/AuthProvider';
 import Loading from '../../Shared/Loading/Loading';
 import { getAge } from '../../Shared/Utitily/Utility';
@@ -19,15 +17,14 @@ const FriendItem = ({ item }) => {
     const params = useParams();
     const { user } = useContext(AuthContext)
     const { id, firstName, lastName, location, coverPicture, profilePicture, sports, dob } = item.friend
-    console.log(item)
-    console.log(id)
-    console.log(params)
+    console.log(item.friend)
+
 
     return (
         <Link to={`/main/profileUser/${id !== user.id ? id : ""} `}>
             <div className="flex flex-row shadow-lg rounded-lg border border-gray-200/80 bg-white mx-2 my-4">
                 <div className="relative">
-                    <img className="w-40 h-40 rounded-md object-cover" src={profilePicture}
+                    <img className="w-40 h-40 rounded-md object-contain" src={profilePicture}
                         alt="User" />
                     {/* Active Icon */}
                 </div>
@@ -74,12 +71,11 @@ function Friends({ userId }) {
         const res = await fetch(url, {
             method: 'GET',
             headers: {
-                authorization: `bearer ${localStorage.getItem('token')}`
+                "Content-Type": "application/json",
+                "Authorization": `bearer ${localStorage.getItem('token')}`
             }
         });
         const data = await res.json();
-        console.log("Friends data:", data)
-
         return {
             data: data.friends
         }

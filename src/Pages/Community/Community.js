@@ -35,7 +35,8 @@ const Community = () => {
         const res = await fetch(url, {
             method: 'GET',
             headers: {
-                authorization: `bearer ${localStorage.getItem('token')}`
+                'Content-Type': 'application/json',
+                "Authorization": `bearer ${localStorage.getItem('token')}`
             }
         });
         const data = await res.json();
@@ -209,15 +210,15 @@ const Community = () => {
 
                 <div id="scrollableDiv" className='overflow-y-scroll h-screen'>
 
-                    <div className='grid gap-[34px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto px-6 my-5 pb-48 s'>
-                        <InfiniteScroll
-                            dataLength={AllCommunity.data.pages.length}
-                            next={() => AllCommunity?.fetchNextPage()}
-                            hasMore={AllCommunity?.hasNextPage}
-                            loader={<h4>Loading...</h4>}
-                            scrollableTarget="scrollableDiv"
 
-                        >
+                    <InfiniteScroll
+                        dataLength={AllCommunity.data.pages.length}
+                        next={() => AllCommunity?.fetchNextPage()}
+                        hasMore={AllCommunity?.hasNextPage}
+                        loader={<h4>Loading...</h4>}
+                        scrollableTarget="scrollableDiv"
+                    >
+                        <div className='grid gap-[34px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto px-6 my-5 pb-48 s'>
                             {AllCommunity?.data &&
                                 AllCommunity?.data?.pages.map((page, id) => {
                                     return page.data.map((community, id) => {
@@ -228,9 +229,10 @@ const Community = () => {
 
                                     })
                                 })}
-                        </InfiniteScroll>
+                        </div>
+                    </InfiniteScroll>
 
-                    </div>
+
 
 
 

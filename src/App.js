@@ -3,12 +3,13 @@ import "./App.css";
 import router from "./Routes/Routes";
 import { RouterProvider } from "react-router-dom";
 import { StyledEngineProvider } from '@mui/material/styles';
+import SerachProvider from './Context/SearchContext';
 function App() {
   return (
     <StyledEngineProvider injectFirst>
-      <div className="">
+      <SerachProvider>
         <RouterProvider router={router}></RouterProvider>
-      </div>
+      </SerachProvider>
     </StyledEngineProvider>
 
   );
