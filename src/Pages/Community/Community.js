@@ -129,9 +129,9 @@ const Community = () => {
 
 
     return (
-        <div className='grid grid-cols-3 bg-slate-300 mt-16 w-full fixed'>
+        <div className=' bg-slate-300 fixed w-full'>
 
-            <div className='bg-slate-200 shadow-lg hidden lg:block p-6  pb-20 s'>
+            <div className='bg-slate-200 shadow-lg hidden lg:block p-6  fixed  w-[400px] s'>
                 <div className='flex items-center mb-6'>
                     <div className='w-14 mr-2'>
                         <img
@@ -187,8 +187,9 @@ const Community = () => {
 
                 </div>
             </div>
-            <div className='col-span-3 lg:col-span-2'>
-                <div className='flex justify-center items-center'>
+            <div className='flex justify-center ml-0 lg:ml-[400px]'>
+                <div>
+                
                     <div className='w-3/4 my-6 z-49 relative mr-5 lg:mr-0'>
                         <form action=''>
                             <FcSearch className='absolute search'> </FcSearch>
@@ -206,7 +207,7 @@ const Community = () => {
                             <FaPlusCircle className='text-3xl w-7 text-blue-600'></FaPlusCircle>
                         </div>
                     </div>
-                </div>
+                    </div>
 
                 <div id="scrollableDiv" className='overflow-y-scroll h-screen'>
 
