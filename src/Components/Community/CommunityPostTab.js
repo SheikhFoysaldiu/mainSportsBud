@@ -20,6 +20,7 @@ const CommunityPostTab = () => {
         const res = await fetch(url, {
             method: 'GET',
             headers: {
+                "Content-Type": "application/json",
                 "Authorization": `bearer ${localStorage.getItem('token')}`
             }
         });

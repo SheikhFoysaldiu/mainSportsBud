@@ -22,7 +22,7 @@ const MyCommunity = ({ community }) => {
                 </div>
                 <div className='text-left'>
                     <h3 className='mb-0 text-xl'>{name}</h3>
-                    <p>{description}</p>
+                    <p>{description.length > 40 ? description.substr(0, 40) + "..." : description}</p>
                 </div>
             </Link>
         </div>

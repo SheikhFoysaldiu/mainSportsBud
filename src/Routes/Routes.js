@@ -90,7 +90,7 @@ const router = createBrowserRouter([
         element: <PageNotFound></PageNotFound>,
       },
       {
-        path: "/main/setting",
+        path: "/main/setting/:id",
         element: <Setting></Setting>
       }
     ],

@@ -10,9 +10,77 @@ import { isError, useInfiniteQuery } from '@tanstack/react-query'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Loading from '../../Shared/Loading/Loading'
 import { AuthContext } from '../../Context/AuthProvider'
+import { tuple } from 'antd/es/_util/type'
 
-const FriendRequest = ({ request }) => {
+const FriendRequest = ({ request, refetch }) => {
     const { sender } = request
+    const [loading, setLoading] = React.useState(false)
+    const handleAcceptFriendRequest = async () => {
+        setLoading(true)
+        try {
+            const url = `${API_URL}/api/v1/user/acceptFriendRequest/${sender.id}`
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const data = await res.json();
+            if (data.success) {
+                setLoading(false)
+                await refetch()
+                notification.success({
+                    message: 'Success',
+                    description: 'Friend Request Accepted',
+                    placement: 'bottomRight'
+                })
+            }
+
+
+        }
+        catch (error) {
+            console.log(error);
+            setLoading(false)
+        }
+    }
+
+    const handleDeclineFriendRequest = async () => {
+        setLoading(true)
+        try {
+            const url = `${API_URL}/api/v1/user/declineFriendRequest/${sender.id}`
+            const res = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const data = await res.json();
+            if (data.success) {
+                setLoading(false)
+                await refetch()
+                notification.success({
+                    message: 'Success',
+                    description: 'Friend Request Declined',
+                    placement: 'bottomRight'
+                })
+            }
+
+
+        }
+        catch (error) {
+            console.log(error);
+            setLoading(false)
+        }
+
+    }
+
+    if (loading) {
+        return null
+    }
+
+
     return (
         <>
             <div className="divide-y divide-gray-100 dark:divide-gray-700 p-1">
@@ -29,8 +97,8 @@ const FriendRequest = ({ request }) => {
                             <span className="text-gray-400">wants to be your friend</span>
                         </div>
                         <div className="font-semibold p-1">
-                            <button className="text-blue-600 mr-3 ">Accept</button>
-                            <button className="text-gray-400">Decline</button>
+                            <button disabled={loading} onClick={handleAcceptFriendRequest} className="text-blue-600 mr-3 ">Accept</button>
+                            <button disabled={loading} onClick={handleDeclineFriendRequest} className="text-gray-400">Decline</button>
                         </div>
                     </div>
                 </div>
@@ -57,8 +125,9 @@ function FriendRequestDropDown(props) {
         // console.log(res)
         const data = await res.json();
         console.log("data", data)
+
         return {
-            data: data.friendRequest
+            data: data.friendRequest ? data.friendRequest : [],
         }
     }
 
@@ -70,7 +139,9 @@ function FriendRequestDropDown(props) {
         isFetching,
         isLoading,
         isFetchingNextPage,
-        isError
+        isError,
+        refetch,
+
 
     } = useInfiniteQuery({
         queryKey: ['friendRequest', user.id],
@@ -83,7 +154,9 @@ function FriendRequestDropDown(props) {
             }
             return pages?.length + 1
 
-        }
+        },
+        refetchOnWindowFocus: true,
+        refetchIntervalInBackground: true
     })
 
     if (!data) {
@@ -118,7 +191,7 @@ function FriendRequestDropDown(props) {
                 &&
                 <h1 className="text-2xl font-bold text-gray-500 text-center">Empty Friend Request List!</h1>
             }
-            <div className='self-start w-full overflow-y-scroll h-[300px]'>
+            <div className='self-start w-full overflow-y-scroll h-[300px]' id='scrollableDiv'>
                 <InfiniteScroll
                     next={() => fetchNextPage()}
 
@@ -127,21 +200,23 @@ function FriendRequestDropDown(props) {
                     // data?.pages?.reduce((acc, page) => acc + page.data.length, 0) || 0
                     // dataLength={data.pages.length === 0 ? 0 : data.pages.reduce((acc, page) => acc + page.data.length, 0) || 0}
                     dataLength={data.pages.length}
+                    scrollableTarget="scrollableDiv"
                 >
 
                     {
                         data &&
                         data.pages.map((page) => {
-                            console.log("Console", page);
+
                             return (
                                 page.data.map((request, index) => {
-                                    console.log("Console", request);
+
                                     return (
 
-                                        < FriendRequest
+                                        <FriendRequest
 
                                             request={request}
                                             key={index}
+                                            refetch={refetch}
                                         />
                                     )
                                 })

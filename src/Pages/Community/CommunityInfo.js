@@ -1,45 +1,109 @@
 import { useQueries, useQuery } from '@tanstack/react-query'
-import React, { useContext } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from 'react'
+import { Link, redirect, useNavigate, useParams } from 'react-router-dom'
 import { API_URL } from '../../API/config.js'
 import CommunityDetails from "../../Asset/Dummy/CommunityInfo.js"
 import { AuthContext } from '../../Context/AuthProvider.js'
 import Loading from '../../Shared/Loading/Loading.js'
 function CommunityInfo() {
     const params = useParams()
+    const navigate = useNavigate();
     const { user } = useContext(AuthContext)
+    const [loading, setLoading] = useState(undefined)
 
-    const { data, isLoading, isError } = useQuery({
-
-        queryFn: ['SingleCommunityInfo', params?.id],
-        queryFn: async () => {
-            const url = `${API_URL}/api/v1/community/communities/${params.id}`
-            const res = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    authorization: `bearer ${localStorage.getItem('token')}`
+    const [IsAreadyMemeber, GetCommunityInfo] = useQueries({
+        queries: [
+            {
+                queryKey: ['isAreadyMemeberCommunity', params?.id],
+                queryFn: async () => {
+                    const url = `${API_URL}/api/v1/community/isAlreadyMemeber/${params.id}`
+                    const res = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `bearer ${localStorage.getItem('token')}`
+                        }
+                    })
+                    const data = await res.json()
+                    console.log(data)
+                    return {
+                        data: data.isMember
+                    }
                 }
-            });
-            const data = await res.json();
-            console.log(data)
-            return { data: data.community };
-        }
+            },
+            {
+                queryKey: ['getCommunityInfo', params?.id],
+                queryFn: async () => {
+                    const url = `${API_URL}/api/v1/community/communities/${params.id}`
+                    const res = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            "Content-Type": "application/json",
+                            "authorization": `bearer ${localStorage.getItem('token')}`
+                        }
+                    });
+                    const data = await res.json();
+                    console.log(data)
+                    return {
+                        data: data.community
+                    }
+                }
+            }
+        ]
+
     })
 
-    if (isLoading) {
-        return <Loading></Loading>
+
+
+    const handleJoin = async () => {
+        setLoading(true)
+        try {
+            const res = await fetch(`${API_URL}/api/v1/community/joinCommunity/${params.id}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `bearer ${localStorage.getItem('token')}`
+                    }
+                }
+            )
+            setLoading(false)
+            navigate(`/main/mycommunitysingle/${params.id}`)
+        }
+        catch (error) {
+            setLoading(false)
+            console.log(error)
+        }
     }
-    if (isError) {
-        return <h1>Error Occurs!</h1>
+    useEffect(() => {
+        if (IsAreadyMemeber?.data?.data) {
+            // console.log("Found", IsAreadyMemeber.data.data)
+            navigate(`/main/mycommunitysingle/${params.id}`)
+        }
+    }, [IsAreadyMemeber?.data?.data]);
+
+    if (GetCommunityInfo.isLoading || IsAreadyMemeber.isLoading) {
+        return <Loading />
     }
-    if (!data) {
+
+    if (loading) {
+        return null
+    }
+    if (!GetCommunityInfo.data || !IsAreadyMemeber.data) {
         return <h1>Not Found!</h1>
     }
 
-    const { name: cName, image: cImage, description: cDescription, members: cMember, owner: cOwner, sport: cSport } = data.data
+    if (GetCommunityInfo.isError || IsAreadyMemeber.isError) {
+        return <h1>Error Occurs!</h1>
+    }
+    // console.log(GetCommunityInfo.data.data)
+    const { name: cName, image: cImage, description: cDescription, members: cMember, owner: cOwner, sport: cSport } = GetCommunityInfo.data.data
     return (
         <>
             {/* Header Section */}
+
+
+
             <div className="h-full bg-gray-300">
                 <div className="bg-white rounded-lg shadow-xl pb-8">
                     <div className="w-full h-[450px] ">
@@ -48,7 +112,7 @@ function CommunityInfo() {
                     <div className='flex items-center justify-between p-3 mx-5'>
                         <div className='text-xl text-gray-900 font-bold '>{cName}</div>
 
-                        <button className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100">
+                        <button disabled={loading} onClick={handleJoin} className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path>
                             </svg>
@@ -109,6 +173,9 @@ function CommunityInfo() {
                     </div>
                 </div>
             </div>
+
+
+
 
 
 

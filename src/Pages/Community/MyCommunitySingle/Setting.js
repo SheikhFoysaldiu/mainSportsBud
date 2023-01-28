@@ -7,14 +7,16 @@ import Loading from '../../../Shared/Loading/Loading';
 import { useParams } from 'react-router-dom';
 import memberProps from '../../../Asset/Dummy/user.json'
 import MemberSetting from './MemberSetting';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { API_URL } from '../../../API/config';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 const Setting = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [uploadImage, setUploadImage] = useState(null)
     const [imgFile, setImageFile] = useState(null)
     const [members, setMembers] = useState([])
-    const memberParams = useParams()
-
+    const params = useParams()
     const previewImage = (event) => {
 
         const imageFiles = event.target.files;
@@ -29,17 +31,79 @@ const Setting = () => {
 
     };
 
-    const getMembers = async () => {
-        setMembers(memberProps)
-        return memberProps;
+    const fetchCommunityInfo = async () => {
+        const url = `${API_URL}/api/v1/community/communities/${params.id}`
+        const res = await fetch(url, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `bearer ${localStorage.getItem('token')}`
+            }
+        });
+        const data = await res.json();
+        console.log(data)
+        return data.community
+
     }
 
-    useLayoutEffect(() => {
-        getMembers(memberParams.id)
-    }, [])
+    const CommunityInfo = useQuery({
+        queryKey: ['communitySettingsInfo', params.id],
+        queryFn: fetchCommunityInfo
+    })
 
-    if (!members) {
+
+
+
+
+
+
+
+
+    const fetchCommunityMember = async ({ pageParam = 1 }) => {
+        const url = `${API_URL}/api/v1/community/members/${params.id}?page=${pageParam}&limit=${10}`
+        const res = await fetch(url, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `bearer ${localStorage.getItem('token')}`
+            }
+        });
+        const data = await res.json();
+        console.log(data)
+        return {
+            data: data.members ? data.members : []
+        }
+    }
+
+    const CommunityMembers = useInfiniteQuery({
+        queryKey: ['communitySettingsMembers', params?.id],
+        queryFn: fetchCommunityMember,
+        getNextPageParam: (lastPage, pages) => {
+            console.log("lastPage:", lastPage)
+            console.log("pages:", pages)
+            if (lastPage.data.length < 1) {
+                return undefined
+            }
+            return pages.length + 1
+        }
+
+    })
+
+    if (!CommunityInfo.data) {
         return <Loading></Loading>
+    }
+    if (CommunityInfo.isLoading) {
+        return <Loading></Loading>
+    }
+    if (!CommunityMembers.data) {
+        return <Loading />
+    }
+
+    if (CommunityMembers.isLoading) {
+        return <Loading />
+    }
+    if (CommunityMembers.isError) {
+        return <h1>Error Occurs</h1>
     }
 
     const handleSetting = (data) => {
@@ -51,9 +115,10 @@ const Setting = () => {
         }
 
     }
+    const { image: cImage, name: cName, description: cDes } = CommunityInfo.data
 
     return (
-        <div className='mt-14 w-full'>
+        <div className='mt-16 w-full'>
             <div className='h-full bg-white shadow-lg px-5 py-3 fixed w-[300px] hidden lg:block'>
                 <div class="flex items-start">
                     <ul class="nav nav-tabs flex flex-col flex-wrap list-none border-b-0 pl-0 mr-4 ver" id="tabs-tabVertical"
@@ -166,7 +231,7 @@ const Setting = () => {
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div>
                                         <label htmlFor="">Group Name</label>
-                                        <input type="text" {...register("name")} placeholder="Type here" className="input input-bordered input-primary w-full mt-2 " defaultValue="Football Club" />
+                                        <input type="text" {...register("name")} placeholder="Type here" className="input input-bordered input-primary w-full mt-2 " defaultValue={cName} />
                                     </div>
                                     <div>
                                         <label htmlFor="">Category</label>
@@ -178,7 +243,7 @@ const Setting = () => {
                                 </div>
                                 <div className='mt-4'>
                                     <label htmlFor="">Group Desc.</label>
-                                    <textarea {...register("desc")} className="textarea textarea-primary w-full resize-none mt-2" rows='10' placeholder="Type Here" defaultValue="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati nobis iusto velit iste non iure alias consequatur error blanditiis nam consequuntur soluta quasi quisquam nisi beatae quos, deleniti vitae adipisci ea totam est cupiditate. Eligendi aspernatur praesentium pariatur illum dolores non, commodi possimus corporis quaerat repellat optio ducimus nesciunt ratione voluptas deleniti amet sequi aliquid repellendus maxime dolor eaque quisquam a! Pariatur, fugiat, molestiae quaerat est, id ipsam dicta illo mollitia vel exercitationem doloremque? Quae recusandae nobis dignissimos cupiditate, pariatur commodi nihil corporis voluptate reprehenderit. Amet repellat architecto ducimus, voluptatum dolor porro nesciunt optio laborum veniam totam soluta. Nisi dolorem, similique velit dolores voluptatibus, aspernatur quae odit in inventore nulla repellendus. Repudiandae doloremque magnam voluptas praesentium odit. Magnam itaque, placeat consequatur consequuntur error non vitae ab earum ad ipsam cumque dolore distinctio assumenda voluptas neque asperiores incidunt officiis corrupti, optio accusantium ullam iure sint? Libero, minus totam non illo nemo magni quos, eos praesentium sunt unde minima dolores atque voluptates soluta! At id tenetur, vitae suscipit exercitationem iure fuga, excepturi quas accusantium atque voluptatem non. Veniam odit tempora explicabo? Provident minima aliquid reprehenderit eaque fuga. Eius, neque, totam repellat dolorem aspernatur praesentium voluptatem numquam esse expedita corrupti voluptatum facere error."></textarea>
+                                    <textarea {...register("desc")} className="textarea textarea-primary w-full resize-none mt-2" rows='10' placeholder="Type Here" defaultValue={cDes} ></textarea>
                                 </div>
                                 <div className='mt-4'>
 
@@ -195,13 +260,27 @@ const Setting = () => {
                             </form>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="tabs-memberSetting" role="tabpanel" aria-labelledby="tabs-profile-tabVertical">
-                        <div className='p-0 lg:p-5 grid grid-cols-1 lg:grid-cols-2 gap-x-0 gap-y-5 lg:gap-x-32 mt-5'>
-                            {
-                                members.length &&
-                                members.map(member => <MemberSetting key={member.id} member={member}></MemberSetting>)
-                            }
-                        </div>
+                    <div class="tab-pane fade h-[450px]" id="tabs-memberSetting" role="tabpanel" aria-labelledby="tabs-profile-tabVertical">
+
+                        <InfiniteScroll
+                            dataLength={CommunityMembers?.data?.pages?.length}
+                            next={() => CommunityMembers?.fetchNextPage()}
+                            hasMore={CommunityMembers?.hasNextPage}
+                            scrollableTarget="scrollableDiv"
+                        >
+
+                            <div className='p-0 lg:p-5 grid grid-cols-1 lg:grid-cols-2 gap-x-0 gap-y-5 lg:gap-x-32 mt-5'>
+                                {CommunityMembers?.data &&
+                                    CommunityMembers?.data?.pages?.map((page, id) => {
+                                        return page?.data?.members?.map((member, id) => {
+                                            return <MemberSetting member={member} key={id} />
+                                        })
+                                    })}
+
+                            </div>
+
+                        </InfiniteScroll>
+
                     </div>
                 </div>
             </div>
