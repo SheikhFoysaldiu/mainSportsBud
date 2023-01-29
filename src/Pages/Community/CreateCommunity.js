@@ -76,7 +76,6 @@ function CreateCommunity() {
       },
     });
     const data = await res.json();
-    console.log("Friends data:", data);
 
     return {
       data: data.friends,
