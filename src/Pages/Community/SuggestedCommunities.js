@@ -22,7 +22,7 @@ const SuggestedCommunities = ({ community }) => {
                 }
             )
             setLoading(false)
-            navigate(`/main/mycommunitysingle/${id}`)
+            navigate(`/main/mycommunitysingle/${id}`, { replace: true })
         }
         catch (error) {
             setLoading(false)
