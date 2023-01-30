@@ -187,57 +187,61 @@ const Community = () => {
 
                 </div>
             </div>
-            <div className='flex justify-center ml-0 lg:ml-[400px]'>
-                <div>
-                
-                    <div className='w-3/4 my-6 z-49 relative mr-5 lg:mr-0'>
-                        <form action=''>
-                            <FcSearch className='absolute search'> </FcSearch>
-                            <input
-                                type='text'
-                                placeholder='Search your community'
-                                onFocus={placeholderToggle}
-                                onBlur={placeholder}
-                                className={`in input input-bordered w-full  placeholder:p-[-1px] ${active ? "placeholder:block" : "placeholder:invisible"} `}
-                            />
-                        </form>
-                    </div>
-                    <div className='block lg:invisible'>
-                        <div className='w-7 mr-4'>
-                            <FaPlusCircle className='text-3xl w-7 text-blue-600'></FaPlusCircle>
+            <div className='flex justify-center  ml-0 lg:ml-[400px] '>
+                <div className="w-4/5">
+                    <div className="flex gap-3 w-full justify-center items-center">
+                        <div className=' my-6 z-49 relative mr-5 lg:mr-0 w-full'>
+                            <form action=''>
+                                <FcSearch className='absolute search'> </FcSearch>
+                                <input
+                                    type='text'
+                                    placeholder='Search your community'
+                                    onFocus={placeholderToggle}
+                                    onBlur={placeholder}
+                                    className={`in input input-bordered w-full  placeholder:p-[-1px] ${active ? "placeholder:block" : "placeholder:invisible"} `}
+                                />
+                            </form>
+                        </div>
+
+                        <div className='block lg:invisible'>
+                            <div className='w-7 mr-4'>
+                                <FaPlusCircle className='text-3xl w-7 text-blue-600'></FaPlusCircle>
+                            </div>
                         </div>
                     </div>
+
+
+                    <div id="scrollableDiv" className='overflow-y-scroll h-screen'>
+
+
+                        <InfiniteScroll
+                            dataLength={AllCommunity.data.pages.length}
+                            next={() => AllCommunity?.fetchNextPage()}
+                            hasMore={AllCommunity?.hasNextPage}
+                            loader={<h4>Loading...</h4>}
+                            scrollableTarget="scrollableDiv"
+                        >
+                            <div className='grid gap-[34px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto px-6 my-5 pb-48 s'>
+                                {AllCommunity?.data &&
+                                    AllCommunity?.data?.pages.map((page, id) => {
+                                        return page.data.map((community, id) => {
+                                            if (community.isMember === false) {
+                                                return <SuggestedCommunities community={community} key={id} />
+
+                                            }
+
+                                        })
+                                    })}
+                            </div>
+                        </InfiniteScroll>
+
+
+
+
+
                     </div>
-
-                <div id="scrollableDiv" className='overflow-y-scroll h-screen'>
-
-
-                    <InfiniteScroll
-                        dataLength={AllCommunity.data.pages.length}
-                        next={() => AllCommunity?.fetchNextPage()}
-                        hasMore={AllCommunity?.hasNextPage}
-                        loader={<h4>Loading...</h4>}
-                        scrollableTarget="scrollableDiv"
-                    >
-                        <div className='grid gap-[34px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto px-6 my-5 pb-48 s'>
-                            {AllCommunity?.data &&
-                                AllCommunity?.data?.pages.map((page, id) => {
-                                    return page.data.map((community, id) => {
-                                        if (community.isMember === false) {
-                                            return <SuggestedCommunities community={community} key={id} />
-
-                                        }
-
-                                    })
-                                })}
-                        </div>
-                    </InfiniteScroll>
-
-
-
-
-
                 </div>
+
             </div>
         </div >
     );

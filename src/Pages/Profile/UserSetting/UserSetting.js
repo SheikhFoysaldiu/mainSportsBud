@@ -102,6 +102,17 @@ const UserSetting = () => {
 
         }
     }
+
+    const handleUserSetting = (data) =>{
+        const userUpdateData = {
+            fname: data.fname,
+            lname: data.lname,
+            birthDate: data.birthDate,
+            address: data.address
+        }
+
+        console.log(userUpdateData);
+    }
     
     return (
         <div className='w-full'>
@@ -208,7 +219,7 @@ const UserSetting = () => {
                     <div className="tab-pane fade show active" id="tabs-profileEdit" role="tabpanel"
                         aria-labelledby="tabs-home-tabVertical">
                         <div className=' py-10'>
-                            <form action="">
+                            <form onSubmit={handleSubmit(handleUserSetting)}>
                                 <div>
                                     <div class="img-container">
                                         <h1>Profile Image Upload
@@ -230,29 +241,29 @@ const UserSetting = () => {
                                     <div className='flex gap-3'>
                                         <div className="w-full">
                                             <label htmlFor="">Change your first name</label>
-                                            <input type="text" placeholder="Type here" className="input input-bordered input-secondary w-full my-3" />
+                                            <input type="text" {...register("fname")} placeholder="Type here" className="input input-bordered input-secondary w-full my-3" />
                                         </div>
                                         <div className="w-full">
                                             <label htmlFor="">Change your last name</label>
-                                            <input type="text" placeholder="Type here" className="input input-bordered input-secondary w-full my-3" />
+                                            <input type="text" {...register("lname")} placeholder="Type here" className="input input-bordered input-secondary w-full my-3" />
                                         </div>
                                         
                                     </div>
                                     <div className='flex gap-3'>
                                     <div className='w-full'>
                                             <label htmlFor="">Change birth date</label>
-                                            <input type="date" placeholder="Type here" className="input input-bordered input-secondary w-full my-3" />
+                                            <input type="date" {...register("birthDate")} placeholder="Type here" className="input input-bordered input-secondary w-full my-3" />
 
                                         </div>
                                         <div className='w-full'>
                                         <label htmlFor="">Change your address</label>
-                                        <input type="text" placeholder="Type here" className="input input-bordered input-secondary w-full my-3" />
+                                        <input type="text" {...register("address")} placeholder="Type here" className="input input-bordered input-secondary w-full my-3" />
                                     </div>
                                     </div>
                                    
                                 </div>
                                 <div>
-                                    <h1 className='my-3'>Set a group banner</h1>
+                                    <h1 className='my-3'>Set a cover photo</h1>
                                     <div class="image-preview-container">
                                         <div class="preview">
                                             <img src={uploadImage} alt="upload" className={`${uploadImage ? 'block' : 'hidden'}`} id="preview-selected-image" />
@@ -261,6 +272,10 @@ const UserSetting = () => {
                                             <input type="file" id="file-upload" accept="image/png , image/jpeg, image/webp" onChange={previewImage}/>
                                         </label>
                                     </div>
+                                </div>
+                                <div className='flex items-center justify-center my-5'>
+                                    <label><input className="btn bg-primary hover:bg-blue-700 mr-3" value="Save" type="submit" /></label>
+                                    <label><input className="btn bg-red-700 hover:bg-red-800 mr-3" value="Cancel" type="reset" /></label>
                                 </div>
                             </form>
                         </div>
