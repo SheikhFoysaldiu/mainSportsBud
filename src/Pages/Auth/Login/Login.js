@@ -18,8 +18,8 @@ const Login = () => {
     setLoginError("");
     signIn(data.email, data.password)
       .then((result) => {
-        toast("Login Successfully.");
-        navigate("/main");
+        console.log(result)
+        navigate("/main")
       })
       .catch((error) => {
         console.log(error.message);
