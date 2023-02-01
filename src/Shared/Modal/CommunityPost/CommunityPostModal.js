@@ -4,13 +4,14 @@ import { useForm } from 'react-hook-form';
 import { AuthContext } from '../../../Context/AuthProvider';
 import { API_URL } from '../../../API/config';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 
-const CommunityPost = () => {
+const CommunityPost = ({ refetch }) => {
     const { user } = useContext(AuthContext)
     const params = useParams()
     const [loading, setLoading] = useState(false)
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, setValue, handleSubmit, formState: { errors } } = useForm();
     const [active, setActive] = useState(true);
     const [isPhoto, setIsPhoto] = useState(true);
     var [selectedImages, setSelectedImages] = useState([]);
@@ -71,36 +72,69 @@ const CommunityPost = () => {
     const photoHandler = (q) => {
         setIsPhoto(q);
     }
+    const resetValue = () => {
+        setSelectedImages([]);
+        setImageName([]);
+        setImgFile([]);
+        setValue("name", "");
+
+
+
+
+
+    }
 
     const handlePost = async (data, e) => {
+        if (data.name === '' && selectedImages.length === 0) {
+            toast.error('Please write something or add an image', {
+                style: {
+                    borderRadius: '10px',
+                    background: '#333',
+                    color: '#fff',
+                },
+            })
+            return;
+
+        }
+
         console.log(data.name);
         console.log(selectedImages)
         const formData = new FormData();
         imgFile.forEach((file, i) => {
-            formData.append(`file-${i}`, file, file.name);
+            formData.append("image", file, file.name);
         });
-
+        formData.append("content", data.name);
+        setLoading(true)
         try {
-            setLoading(true)
-            const res = await fetch(`${API_URL}/api/v1/post/createPost?communityId=${params.id}`, {
 
+            const res = await fetch(`${API_URL}/api/v1/post/createPost?communityId=${params.id}`, {
                 method: "POST",
                 headers: {
                     'Authorization': `bearer ${localStorage.getItem('token')}`
                 },
                 body: formData
             })
-            const data = await res.json()
+            const x = await res.json()
             setLoading(false);
+            refetch()
+            e.target.reset();
+            selectedImages.length = 0;
+            imgFile.length = 0;
+            resetValue();
+            (document.getElementById("my-modal")).checked = false;
+
         }
         catch (error) {
             console.log(error)
             setLoading(false)
+            e.target.reset();
+            selectedImages.length = 0;
+            imgFile.length = 0;
+            (document.getElementById("my-modal")).checked = false;
+
         }
-        setLoading(false)
-        e.target.reset();
-        selectedImages.length = 0;
-        imgFile.length = 0;
+
+
     }
 
     return (
