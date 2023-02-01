@@ -54,6 +54,7 @@ const AuthProvider = ({ children }) => {
         }),
       });
       const res = await user.json();
+      console.log(res)
       setToken(res.token);
       localStorage.setItem("token", res.token);
       setLoading(false);
@@ -100,11 +101,11 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     localStorage.getItem("token") && setToken(localStorage.getItem("token"));
-
     if (token) {
       getCurrentUser(token);
     }
   }, [router.pathname, token, localStorage.getItem("token")]);
+
 
   const authInfo = {
     user,

@@ -18,7 +18,7 @@ const CommunityMemebersTab = () => {
             }
         });
         const data = await res.json();
-        console.log(data)
+        console.log("DATAL", data)
         return {
             data: data.members ? data.members : []
         }
@@ -56,28 +56,33 @@ const CommunityMemebersTab = () => {
                 <h1 className='text-xl font-bold'>All Members</h1>
             </div>
 
+            <div id="scrollableDiv" className=' bg-white rounded-lg shadow-xl mx-0 lg:mx-20 py-8 mt-5  overflow-y-scroll h-[450px]'>
+                <InfiniteScroll
+                    dataLength={CommunityMembers.data?.pages.length}
+                    next={() => CommunityMembers.fetchNextPage()}
+                    hasMore={CommunityMembers.hasNextPage}
+                    scrollableTarget="scrollableDiv"
 
-            <InfiniteScroll
-                dataLength={CommunityMembers?.data?.pages?.length}
-                next={() => CommunityMembers?.fetchNextPage()}
-                hasMore={CommunityMembers?.hasNextPage}
-            >
+                >
 
-                <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 pt-5 mt-5 grid grid-cols-1 lg:grid-cols-2 justify-around px-3 lg:px-5 gap-4 lg:gap-8 '>
+                    <div className='grid grid-cols-1 lg:grid-cols-2 justify-around px-3 lg:px-5 gap-4 lg:gap-8 '>
 
-                    {
-                        CommunityMembers?.data &&
-                        CommunityMembers?.data?.pages?.map((page, id) => {
-                            return page?.data?.members?.map((member, id) => {
-                                return <CommunityMember member={member} key={id} />
+                        {
+                            CommunityMembers?.data &&
+                            CommunityMembers?.data?.pages?.map((page, id) => {
+                                return page?.data?.map((member, id) => {
+                                    return <CommunityMember member={member} key={id} />
+                                })
                             })
-                        })
-                    }
+                        }
 
-                </div>
-            </InfiniteScroll>
+                    </div>
+                </InfiniteScroll>
+            </div>
+
+
+
         </div>
-
 
     );
 }

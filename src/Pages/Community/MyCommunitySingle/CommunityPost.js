@@ -350,7 +350,7 @@ const CommunityPost = ({ post }) => {
             <div className='px-10 lg:px-24 '>
                 <Slider {...settings} className="">
                     {
-                        images.map(image => <div className='my-5'><img src={image} className='mx-auto h-80' alt='' /></div>)
+                        images.map(image => <div className='my-5'><img src={`${API_URL}/${image.path}`} className='mx-auto h-80' alt='' /></div>)
                     }
 
                 </Slider>

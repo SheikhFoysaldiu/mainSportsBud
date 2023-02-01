@@ -34,7 +34,7 @@ const ProfileUser = () => {
         <>
             {/* --------Profile Section------- */}
 
-            <div className="h-full bg-gray-200 mt-16 lg:px-20">
+            <div className="h-full bg-white mt-16 lg:px-20">
                 <div className="bg-white">
                     {/* Profile Section */}
                     <div className="w-full h-[250px]">

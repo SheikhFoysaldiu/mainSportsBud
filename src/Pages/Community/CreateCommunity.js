@@ -65,14 +65,14 @@ function CreateCommunity() {
     // const queryParam = "?page=" + page + "&limit=" + limit;
     // const url = apiPath + queryParam
 
-    const url = `${API_URL}/api/v1/user/friendslist?page=${pageParam}&limit=${10}&userId=${
-      user.id
-    }`;
+    const url = `${API_URL}/api/v1/user/friendslist?page=${pageParam}&limit=${10}&userId=${user.id
+      }`;
     console.log("url:", url);
     const res = await fetch(url, {
       method: "GET",
       headers: {
-        authorization: `bearer ${localStorage.getItem("token")}`,
+        'Content-Type': 'application/json',
+        "authorization": `bearer ${localStorage.getItem("token")}`,
       },
     });
     const data = await res.json();
@@ -82,21 +82,13 @@ function CreateCommunity() {
     };
   };
 
-  const {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-    isFetchingNextPage,
-    status,
-  } = useInfiniteQuery({
+  const AddToFriend = useInfiniteQuery({
     queryKey: ["myfriendList", user.id],
     queryFn: fetchFriends,
     getNextPageParam: (lastPage, pages) => {
       console.log("lastPage:", lastPage);
       console.log("pages:", pages);
-      if (lastPage.data.length < 10) {
+      if (lastPage.data.length < 1) {
         return undefined;
       }
       return pages.length + 1;
@@ -108,7 +100,7 @@ function CreateCommunity() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("token"),
+        "Authorization": "Bearer " + localStorage.getItem("token"),
       },
     });
 
@@ -179,21 +171,31 @@ function CreateCommunity() {
   };
 
   const handleCommunity = (data1) => {
+    console.log("DATA!", data1)
     const proceed = window.confirm(`Are you sure you want to create community`);
     if (proceed) {
+      const formData = new FormData();
       if (imgFile) {
-        const formData = new FormData();
         formData.append("image", imgFile);
-        formData.append("communityName", data1.communityName);
-        formData.append("description", data1.description);
-        formData.append("sportSelect", data1.sportSelect);
-        console.log(formData);
       }
-      console.log(data1.communityName, data1.description, data1.sportSelect);
+      formData.append("communityName", data1.communityName);
+      formData.append("description", data1.description);
+      formData.append("sportSelect", data1.sportSelect);
+      console.log("Console", formData);
+
+      console.log("OOOOK", data1.communityName, data1.description, data1.sportSelect, addedFriendData);
     }
   };
+  if (!AddToFriend.data) {
+    return <Loading />
+  }
+  if (AddToFriend.isLoading) {
+    return <Loading />
+  }
+  if (AddToFriend.isError) {
+    return <h1>Something went Wrong!</h1>
+  }
 
-  //    console.log(data1)
   return (
     <>
       <div className="my-16">
@@ -334,8 +336,9 @@ function CreateCommunity() {
                           id="scrollableDiv"
                         >
                           <InfiniteScroll
-                            dataLength={friends.length}
-                            loader={<Loading></Loading>}
+                            dataLength={AddToFriend.data?.pages.length}
+                            next={() => AddToFriend.fetchNextPage()}
+                            hasMore={AddToFriend.hasNextPage}
                             scrollableTarget="scrollableDiv"
                           >
                             <table className="table-auto w-full">
@@ -360,16 +363,16 @@ function CreateCommunity() {
                                 </tr>
                               </thead>
                               <tbody className="text-sm divide-y divide-gray-100">
-                                {friends.length &&
-                                  friends.map((friend) => (
-                                    <CreateCommunityFriendList
+                                {AddToFriend.data &&
+                                  AddToFriend.data.pages.map((page) => (
+                                    page.data.map((friend) => (<CreateCommunityFriendList
                                       key={friend.id}
                                       friend={friend}
                                       addedFriendData={addedFriendData}
                                       setAddedFriendData={setAddedFriendData}
                                       countFriends={countFriends}
                                       setCountFriends={setCountFriends}
-                                    ></CreateCommunityFriendList>
+                                    ></CreateCommunityFriendList>))
                                   ))}
                               </tbody>
                             </table>
@@ -380,25 +383,22 @@ function CreateCommunity() {
                   </div>
 
                   <p
-                    className={`mt-2 text-sm text-gray-500 ${
-                      countFriends === 0 ? "block" : "hidden"
-                    }`}
+                    className={`mt-2 text-sm text-gray-500 ${countFriends === 0 ? "block" : "hidden"
+                      }`}
                   >
                     Add at least three of your friends
                   </p>
 
                   <p
-                    className={`mt-2 text-sm text-gray-500 ${
-                      countFriends === 1 ? "block" : "hidden"
-                    }`}
+                    className={`mt-2 text-sm text-gray-500 ${countFriends === 1 ? "block" : "hidden"
+                      }`}
                   >
                     You have added {countFriends} friend
                   </p>
 
                   <p
-                    className={`mt-2 text-sm text-gray-500 ${
-                      countFriends > 1 ? "block" : "hidden"
-                    }`}
+                    className={`mt-2 text-sm text-gray-500 ${countFriends > 1 ? "block" : "hidden"
+                      }`}
                   >
                     You have added {countFriends} friends
                   </p>

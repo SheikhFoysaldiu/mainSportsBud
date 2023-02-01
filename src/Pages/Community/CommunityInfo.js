@@ -5,11 +5,14 @@ import { API_URL } from '../../API/config.js'
 import CommunityDetails from "../../Asset/Dummy/CommunityInfo.js"
 import { AuthContext } from '../../Context/AuthProvider.js'
 import Loading from '../../Shared/Loading/Loading.js'
+import MyCommunitySingle from './MyCommunitySingle/MyCommunitySingle.js'
 function CommunityInfo() {
     const params = useParams()
     const navigate = useNavigate();
     const { user } = useContext(AuthContext)
     const [loading, setLoading] = useState(undefined)
+    const [hasAccess, setHasAccess] = useState(false)
+
 
     const [IsAreadyMemeber, GetCommunityInfo] = useQueries({
         queries: [
@@ -68,7 +71,7 @@ function CommunityInfo() {
                 }
             )
             setLoading(false)
-            navigate(`/main/mycommunitysingle/${params.id}`)
+            setHasAccess(true)
         }
         catch (error) {
             setLoading(false)
@@ -78,9 +81,9 @@ function CommunityInfo() {
     useEffect(() => {
         if (IsAreadyMemeber?.data?.data) {
             // console.log("Found", IsAreadyMemeber.data.data)
-            navigate(`/main/mycommunitysingle/${params.id}`)
+            setHasAccess(true)
         }
-    }, [IsAreadyMemeber?.data?.data]);
+    }, [IsAreadyMemeber?.data?.data, hasAccess]);
 
     if (GetCommunityInfo.isLoading || IsAreadyMemeber.isLoading) {
         return <Loading />
@@ -96,13 +99,15 @@ function CommunityInfo() {
     if (GetCommunityInfo.isError || IsAreadyMemeber.isError) {
         return <h1>Error Occurs!</h1>
     }
+    if (hasAccess === true) {
+        return <MyCommunitySingle />
+    }
+
     // console.log(GetCommunityInfo.data.data)
     const { name: cName, image: cImage, description: cDescription, members: cMember, owner: cOwner, sport: cSport } = GetCommunityInfo.data.data
     return (
         <>
             {/* Header Section */}
-
-
 
             <div className="h-full bg-gray-300">
                 <div className="bg-white rounded-lg shadow-xl pb-8">
@@ -173,6 +178,8 @@ function CommunityInfo() {
                     </div>
                 </div>
             </div>
+
+
 
 
 

@@ -18,7 +18,8 @@ const SportInterests = () => {
     const res = await fetch(`${API_URL}/api/v1/sport/sports?page=${pageParam}&limit=${10}&searchQuery=${search}`, {
       method: 'GET',
       headers: {
-        authorization: `bearer ${localStorage.getItem('token')}`
+        'Content-Type': 'application/json',
+        'authorization': `bearer ${localStorage.getItem('token')}`
       }
     });
     const data = await res.json();
@@ -39,6 +40,7 @@ const SportInterests = () => {
     isFetching,
     isFetchingNextPage,
     status,
+    isLoading,
   } = useInfiniteQuery({
     queryKey: ['sports', search],
     queryFn: fetchSports,
@@ -48,16 +50,18 @@ const SportInterests = () => {
       if (lastPage.data?.length < 10) {
         return undefined
       }
-      return pages?.length + 1
+      return pages.length + 1
 
     }
   })
 
 
-  if (!data) {
-    return (
-      <Loading />
-    )
+  if (!data || isLoading) {
+    return <Loading />
+
+  }
+  if (error) {
+    return <h1>Something went wrong!</h1>
   }
 
   if (data.pages[0].data.length === 0 && data.pages.length == 1) {
@@ -73,8 +77,6 @@ const SportInterests = () => {
         next={() => fetchNextPage()}
         scrollableTarget="scrollableDiv"
         hasMore={hasNextPage}
-        loader={<h4>Loading...</h4>}
-
       >
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 mb-48 lg:mb-56 mt-16 mx-0 lg:mx-28">

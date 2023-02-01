@@ -12,7 +12,7 @@ const MyCommunity = ({ community }) => {
 
     return (
         <div>
-            <Link to={`/main/mycommunitysingle/${id}`} className='my-2 flex items-center hover:bg-slate-100 w-full py-5 px-2 rounded-lg'>
+            <Link to={`/main/community/${id}`} className='my-2 flex items-center hover:bg-slate-100 w-full py-5 px-2 rounded-lg'>
                 <div className='mr-3'>
                     <div className="avatar">
                         <div className="w-12 rounded">

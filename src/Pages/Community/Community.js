@@ -158,13 +158,13 @@ const Community = () => {
                         <hr className='h-[4px] bg-slate-300 shadow-lg'></hr>
                     </div>
 
-                    <div id="scrollableDiv1" className='overflow-y-scroll h-screen'>
+                    <div id="scrollableDiv2" className='overflow-y-scroll h-screen'>
                         <InfiniteScroll
                             dataLength={MyOwnedCommunity?.data?.pages?.length}
                             next={() => MyOwnedCommunity?.fetchNextPage()}
                             hasMore={MyOwnedCommunity?.hasNextPage}
-                            loader={<h4>Loading...</h4>}
-                            scrollableTarget="scrollableDiv1"
+                            loader={<Loading />}
+                            scrollableTarget="scrollableDiv2"
 
                         >
 
@@ -211,17 +211,14 @@ const Community = () => {
                     </div>
 
 
-                    <div id="scrollableDiv" className='overflow-y-scroll h-screen'>
-
-
+                    <div id="scrollableDiv1" className='overflow-y-scroll h-screen'>
                         <InfiniteScroll
                             dataLength={AllCommunity.data.pages.length}
                             next={() => AllCommunity?.fetchNextPage()}
                             hasMore={AllCommunity?.hasNextPage}
-                            loader={<h4>Loading...</h4>}
-                            scrollableTarget="scrollableDiv"
+                            scrollableTarget="scrollableDiv1"
                         >
-                            <div className='grid gap-[34px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto px-6 my-5 pb-48 s'>
+                            <div className='grid gap-[34px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto px-6 my-5 pb-48'>
                                 {AllCommunity?.data &&
                                     AllCommunity?.data?.pages.map((page, id) => {
                                         return page.data.map((community, id) => {

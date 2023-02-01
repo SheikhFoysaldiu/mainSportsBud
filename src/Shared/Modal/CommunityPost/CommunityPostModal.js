@@ -1,17 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './CommunityPostModal.css'
 import { useForm } from 'react-hook-form';
+import { AuthContext } from '../../../Context/AuthProvider';
+import { API_URL } from '../../../API/config';
+import { useParams } from 'react-router-dom';
 
 
 const CommunityPost = () => {
-    
+    const { user } = useContext(AuthContext)
+    const params = useParams()
+    const [loading, setLoading] = useState(false)
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [active, setActive] = useState(true);
     const [isPhoto, setIsPhoto] = useState(true);
     var [selectedImages, setSelectedImages] = useState([]);
     var [imageName, setImageName] = useState([]);
     var [imgFile, setImgFile] = useState([]);
-    
+
     const onSelectFile = (event) => {
         const selectedFiles = event.target.files;
         const selectedFilesArray = Array.from(selectedFiles);
@@ -29,22 +34,22 @@ const CommunityPost = () => {
             return file;
         });
 
-        setSelectedImages((previousImages) =>{ 
+        setSelectedImages((previousImages) => {
             return previousImages.concat(imagesArray)
-            
+
         });
         setImageName((previousImages) => {
             return previousImages.concat(imagesArray2)
-           
+
         });
         setImgFile((previousImages) => {
             return previousImages.concat(imagesArray3)
-            
+
         });
 
         // FOR BUG IN CHROME
         event.target.value = "";
-       
+
 
     };
 
@@ -67,20 +72,37 @@ const CommunityPost = () => {
         setIsPhoto(q);
     }
 
-    const handlePost = (data,e) => {
+    const handlePost = async (data, e) => {
         console.log(data.name);
         console.log(selectedImages)
         const formData = new FormData();
         imgFile.forEach((file, i) => {
             formData.append(`file-${i}`, file, file.name);
         });
-        console.log(formData);
-        
+
+        try {
+            setLoading(true)
+            const res = await fetch(`${API_URL}/api/v1/post/createPost?communityId=${params.id}`, {
+
+                method: "POST",
+                headers: {
+                    'Authorization': `bearer ${localStorage.getItem('token')}`
+                },
+                body: formData
+            })
+            const data = await res.json()
+            setLoading(false);
+        }
+        catch (error) {
+            console.log(error)
+            setLoading(false)
+        }
+        setLoading(false)
         e.target.reset();
-        selectedImages.length=0;
-        imgFile.length =0;
+        selectedImages.length = 0;
+        imgFile.length = 0;
     }
-   
+
     return (
         <div>
             <input type="checkbox" id="my-modal" className="modal-toggle" />
@@ -90,7 +112,7 @@ const CommunityPost = () => {
                         <div className='flex items-center'>
                             <div className="w-14 mr-4">
 
-                                <img src="https://placeimg.com/80/80/people" alt='User' className='rounded-full shadow-md' />
+                                <img src={user.profilePicture} alt='User' className='rounded-full shadow-md' />
 
                             </div>
                             <div>
@@ -164,10 +186,10 @@ const CommunityPost = () => {
 
                         </div>
                         <div className="modal-action flex items-center">
-                           
-                            
-                                <label><input className="btn btn-accent mr-3" value="Post" type="submit" /></label>
-                            
+
+
+                            <label><input className="btn btn-accent mr-3" value="Post" type="submit" /></label>
+
                             <label htmlFor="my-modal" className="btn" onClick={() => blinkHandler2(true)}>Cancel</label>
                         </div>
                     </form>

@@ -79,10 +79,6 @@ const router = createBrowserRouter([
         element: <CreateCommunity></CreateCommunity>
       },
       {
-        path: '/main/mycommunitysingle/:id',
-        element: <MyCommunitySingle></MyCommunitySingle>
-      },
-      {
         path: "/main/feedback",
         element: <Feedback></Feedback>,
       },

@@ -83,7 +83,7 @@ const MyCommunitySingle = () => {
             const data = await res.json();
             console.log(data)
             setLoading(false)
-            navigate(`/main/community/${params.id}`)
+            navigate(`/main/community/`)
 
         }
         catch (error) {
@@ -94,7 +94,7 @@ const MyCommunitySingle = () => {
     }
     useEffect(() => {
         if (IsAreadyMemeber?.data?.data === false) {
-            navigate(`/main/community/${params.id}`)
+            navigate(-1)
         }
     }, [IsAreadyMemeber?.data?.data]);
 
