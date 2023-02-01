@@ -74,17 +74,8 @@ function About({ user }) {
                         </div>
                     </div> :
                     <div className=' bg-white rounded-lg shadow-xl  '>
-                        <div className='text-center flex justify-center items-center'>
+                        <div className='text-center'>
                             <h1 className='text-2xl my-2 border-b-2'>Personal Info </h1>
-
-                            <button
-                                onClick={() => setEdit((prev) => !prev)}
-                                className='flex justify-start items-center ml-4 text-sm'
-                            >
-                                Edit <EditOutlined />
-                            </button>
-
-                            {edit && <>{/* modals */}</>}
                         </div>
 
                         <div className='flex justify-center items-center'>

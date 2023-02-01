@@ -24,6 +24,7 @@ import MyCommunitySingle from "../Pages/Community/MyCommunitySingle/MyCommunityS
 import CreateCommunity from "../Pages/Community/CreateCommunity";
 import AuthProvider from "../Context/AuthProvider";
 import Setting from "../Pages/Community/MyCommunitySingle/Setting";
+import UserSetting from "../Pages/Profile/UserSetting/UserSetting";
 
 const router = createBrowserRouter([
   {
@@ -92,6 +93,10 @@ const router = createBrowserRouter([
       {
         path: "/main/setting/:id",
         element: <Setting></Setting>
+      },
+      {
+        path: "/main/usersetting",
+        element: <UserSetting></UserSetting>
       }
     ],
   },

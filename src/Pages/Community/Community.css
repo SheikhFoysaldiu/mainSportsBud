@@ -7,13 +7,10 @@
     padding-left: 40px;
 }
 
-.s{
-    height: 100vh;
-    overflow: hidden;
-}
+
 
 .s:hover{
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 

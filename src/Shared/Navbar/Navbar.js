@@ -118,7 +118,7 @@ export default function PrimarySearchAppBar() {
   return (
     <>
 
-      <div className="navbar bg-base-100 shadow-md fixed top-0 w-full z-50">
+      <div  className="navbar bg-base-100 shadow-md sticky top-0  w-full z-50">
         <div className="navbar-start w-[5%]">
           <div className="">
             <Link to="#" className="menu-bars1">
@@ -215,7 +215,7 @@ export default function PrimarySearchAppBar() {
                   <Link to='/main/profileuser' className='justify-between'>Profile</Link>
 
                 </li>
-                <li><Link>Settings</Link></li>
+                <li><Link to="/main/usersetting">Settings</Link></li>
                 <li><Link onClick={handleLogOut}>Logout</Link></li>
               </ul>
             </div>

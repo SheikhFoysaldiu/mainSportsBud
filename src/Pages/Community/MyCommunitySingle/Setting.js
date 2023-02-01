@@ -118,7 +118,7 @@ const Setting = () => {
     const { image: cImage, name: cName, description: cDes } = CommunityInfo.data
 
     return (
-        <div className='mt-16 w-full'>
+        <div className='w-full'>
             <div className='h-full bg-white shadow-lg px-5 py-3 fixed w-[300px] hidden lg:block'>
                 <div class="flex items-start">
                     <ul class="nav nav-tabs flex flex-col flex-wrap list-none border-b-0 pl-0 mr-4 ver" id="tabs-tabVertical"
