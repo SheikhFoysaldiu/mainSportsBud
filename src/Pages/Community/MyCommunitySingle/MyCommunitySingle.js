@@ -115,7 +115,7 @@ const MyCommunitySingle = () => {
 
     return (
         <>
-            <div className='mt-16 px-0 lg:px-20'>
+            <div className='px-0 lg:px-20'>
                 <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-10'>
                     <div>
                         <img src={cImage[cImage.length - 1]} alt="cover" className="w-full h-[400px] rounded-tl-lg rounded-tr-lg  object-cover object-top" />

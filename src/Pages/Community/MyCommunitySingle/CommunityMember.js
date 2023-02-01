@@ -9,6 +9,7 @@ const CommunityMember = ({ member }) => {
     console.log(member)
     const { user } = member
     const { user: currentUser } = useContext(AuthContext);
+    console.log(user)
     return (
         <Link to={`/main/profileUser/${currentUser?.id !== user.id ? user.id : ""}`}>
             <div className='flex justify-between '>
@@ -25,7 +26,7 @@ const CommunityMember = ({ member }) => {
                             <span className='mx-0 text-lg font-bold'>{user.lastName}</span>
                         </div>
                         <div>
-                            <span className='mx-0 text-sm'>{user.sports[0].sport.name}</span>
+                            <span className='mx-0 text-sm'>{user?.sports[0]?.sport.name}</span>
                         </div>
                     </div>
                 </div>

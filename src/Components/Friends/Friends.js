@@ -97,7 +97,7 @@ function Friends({ userId }) {
         getNextPageParam: (lastPage, pages) => {
             console.log("lastPage:", lastPage)
             console.log("pages:", pages)
-            if (lastPage.data.length < 10) {
+            if (lastPage.data.length < 1) {
                 return undefined
             }
             return pages.length + 1

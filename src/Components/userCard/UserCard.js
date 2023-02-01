@@ -25,7 +25,8 @@ const UserCardItem = ({ user, sportId }) => {
             const res = await fetch(url, {
                 method: 'GET',
                 headers: {
-                    authorization: `bearer ${localStorage.getItem('token')}`
+                    'Content-Type': 'application/json',
+                    'authorization': `bearer ${localStorage.getItem('token')}`
                 }
             });
             const data = await res.json();
@@ -36,16 +37,13 @@ const UserCardItem = ({ user, sportId }) => {
         }
 
     })
-
-    if (isLoading) {
+    if (!data || isLoading) {
         return <Loading />
     }
     if (isError) {
         return <h1>Error Occurs</h1>
     }
-    if (!data) {
-        return <Loading />
-    }
+
 
     return (
         <Link to={`/main/profileUser/${currentUser.id === id ? "" : id}`}>
@@ -116,7 +114,7 @@ const UserCard = () => {
         getNextPageParam: (lastPage, pages) => {
             console.log("lastPage:", lastPage)
             console.log("pages:", pages)
-            if (lastPage.data?.length < 10) {
+            if (lastPage.data.length < 1) {
                 return undefined
             }
             return pages?.length + 1
@@ -124,16 +122,13 @@ const UserCard = () => {
         }
     })
 
-
-    if (isLoading) {
+    if (!data || isLoading) {
         return <Loading />
     }
     if (isError) {
         return <div> Something went wrong!</div>
     }
-    if (!data) {
-        return <Loading />
-    }
+
 
 
     return (
@@ -143,7 +138,7 @@ const UserCard = () => {
                     next={() => fetchNextPage()}
                     scrollableTarget="scrollableDiv"
                     hasMore={hasNextPage}
-                    loader={<h4>Loading...</h4>}
+
                     // data?.pages?.reduce((acc, page) => acc + page.data.length, 0) || 0
                     // dataLength={data.pages.length === 0 ? 0 : data.pages.reduce((acc, page) => acc + page.data.length, 0) || 0}
                     dataLength={data.pages.length}

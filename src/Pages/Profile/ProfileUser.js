@@ -36,33 +36,6 @@ const ProfileUser = () => {
 
             <div className="h-full bg-white mt-16 lg:px-20">
                 <div className="bg-white">
-                    {/* Settings Menu  */}
-                    <div className="absolute right-10 lg:right-24 mt-4 rounded">
-                        <button onClick={() => setSettings(prev => !prev)} className="border border-gray-400 p-2 rounded text-gray-300 hover:text-gray-300 bg-gray-100 bg-opacity-10 hover:bg-opacity-20">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
-                            </svg>
-                        </button>
-                        {/* Settings Menu */}
-                        {
-                            settings && <div className="bg-white absolute right-0 w-40 py-2 mt-1 border border-gray-200 shadow-2xl" >
-                                <div className="py-2">
-                                    <p className="text-gray-400 text-xs px-6 uppercase mb-1">Change</p>
-                                    <button className="w-full flex items-center px-6 py-1.5  space-x-2 hover:bg-gray-200">
-                                        <PictureOutlined />
-                                        <span className="text-sm text-gray-700">Profile </span>
-                                    </button>
-                                    <button className="w-full flex items-center py-1.5 px-6 space-x-2 hover:bg-gray-200">
-                                        <FileImageOutlined />
-                                        <span className="text-sm text-gray-700">Cover</span>
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-                        }
-                    </div>
                     {/* Profile Section */}
                     <div className="w-full h-[250px]">
                         <img src={user.coverPicture} alt="background" className="w-full h-full rounded-tl-lg rounded-tr-lg" />
