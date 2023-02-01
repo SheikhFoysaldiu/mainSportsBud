@@ -87,21 +87,28 @@ const CommunityPost = ({ post }) => {
     useEffect(() => {
         setCmnt(comments.slice(0, p))
     }, [p])
-    const handlePostRemove = () => {
-        const proceed = window.confirm(`Are you sure you want to delete`)
-        if (proceed) {
+
+    const handlePostRemove = async () => {
+        setLoading(true)
+        try {
+            const res = await fetch(`${API_URL}/api/v1/post/deletePost/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    authorId: author.id
+                })
+
+            })
+            const data = await res.json()
+            console.log(data)
+            setLoading(false)
             setRemove(true)
-            toast.success('Post Deleted Successfully', {
-                style: {
-                    border: '1px solid blue',
-                    padding: '16px',
-                    color: 'black',
-                },
-                iconTheme: {
-                    primary: 'blue',
-                    secondary: 'yellow',
-                },
-            });
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
         }
 
     }

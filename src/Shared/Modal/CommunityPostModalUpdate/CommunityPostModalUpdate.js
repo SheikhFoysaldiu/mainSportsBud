@@ -2,19 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 const CommunityPostModalUpdate = ({ data }) => {
-    // console.log("DATA", data)
     const { id, author, content, images } = data
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    console.log("BIGDATA", data)
+    const { register, handleSubmit, formState: { errors } } = useForm(
+        {
+            defaultValues: {
+                name: content
+            }
+        }
+    );
+
     const [active, setActive] = useState(true);
     const [isPhoto, setIsPhoto] = useState(true);
-    const [selectedImages, setSelectedImages] = useState([]);
+    const [selectedImages, setSelectedImages] = useState(images);
     const [imageName, setImageName] = useState([]);
     const [imgFile, setImgFile] = useState([]);
     console.log(images)
 
-    useEffect(() => {
-        setSelectedImages(images)
-    }, [images])
+
 
     const onSelectFile = (event) => {
         const selectedFiles = event.target.files;
@@ -85,6 +90,7 @@ const CommunityPostModalUpdate = ({ data }) => {
 
     }
 
+
     return (
         <div>
             <input type="checkbox" id="update-modal" className="modal-toggle" />
@@ -108,7 +114,7 @@ const CommunityPostModalUpdate = ({ data }) => {
 
 
                             <div className='cursor'>
-                                <textarea type="textarea" {...register("name")} className="textarea textarea-ghost resize-none w-full area rq-form-element text-lg" rows='8' placeholder="Write from here" defaultValue={content} onClick={() => blinkHandler(false)}></textarea>
+                                <textarea type="textarea" {...register("name")} className="textarea textarea-ghost resize-none w-full area rq-form-element text-lg" rows='8' placeholder="Write from here" onClick={() => blinkHandler(false)}></textarea>
                                 <i className={`${active ? 'block' : 'invisible'}`}></i>
                             </div>
                             <div className={`flex flex-col justify-center ${isPhoto ? 'block' : 'invisible'}`} >

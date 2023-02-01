@@ -66,7 +66,7 @@ const CommunityPostTab = () => {
                 <div className='w-1/2 cursor-pointer'>
                     <label htmlFor="my-modal" className="w-full btn btn-outline">Create your post</label>
 
-                    <CommunityPostModal />
+                    <CommunityPostModal refetch={CommunityPostData.refetch} />
 
 
                 </div>
