@@ -19,7 +19,7 @@ import { SearchContext } from "../../Context/SearchContext";
 
 const ProfileUser = () => {
     const [settings, setSettings] = React.useState(false);
-    const { setCommunitySearch, communitySearch } = useContext(SearchContext)
+    const { setCommunitySearch, communitySearch, friendsSearch, setFriendsSearch } = useContext(SearchContext)
     const { user } = useContext(AuthContext)
     console.log(user)
 
@@ -113,6 +113,18 @@ const ProfileUser = () => {
                         <About user={user} />
                     </div>
                     <div className="tab-pane fade  " id="tabs-profile" role="tabpanel" aria-labelledby="tabs-profile-tab">
+                        <div className='flex justify-center items-center px-6'>
+                            <div className="pt-2 relative mx-auto text-gray-600">
+                                <input className="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                                    type="search" name="search" placeholder="Search"
+                                    value={friendsSearch}
+                                    onChange={(e) => setFriendsSearch(e.target.value)}
+
+                                />
+
+                            </div>
+
+                        </div>
                         <Friends userId={user.id} />
                     </div>
                     <div className="tab-pane fade" id="tabs-messages" role="tabpanel" aria-labelledby="tabs-messages-tab">
@@ -125,9 +137,6 @@ const ProfileUser = () => {
                                         setCommunitySearch(e.target.value);
                                     }}
                                 />
-                                <button type="submit" className="absolute right-0 top-0 mt-5 mr-4">
-                                    <SearchRounded />
-                                </button>
                             </div>
 
                         </div>

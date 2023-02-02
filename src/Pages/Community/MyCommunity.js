@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Loading from '../../Shared/Loading/Loading';
 
 const MyCommunity = ({ community }) => {
-    console.log(community)
+    // console.log(community)
     const { name, description, id, image, category } = community;
 
     if (!community) {

@@ -31,7 +31,7 @@ const UserCardItem = ({ user, sportId }) => {
                 }
             });
             const data = await res.json();
-            console.log(data.sport)
+            //console.log(data.sport)
             return {
                 data: data.sport
             }
@@ -81,15 +81,15 @@ const UserCardItem = ({ user, sportId }) => {
 const UserCard = () => {
     const params = useParams();
     const { sportUserSearch, gender, location, ageGt, ageLt } = useContext(SearchContext)
-    console.log(sportUserSearch, gender, location, ageGt, ageLt)
+    //console.log(sportUserSearch, gender, location, ageGt, ageLt)
     // console.log("params:", params.id)
     const fetchSportsFollower = async ({ pageParam = 1 }) => {
-        console.log("pageParam:", pageParam)
+        //console.log("pageParam:", pageParam)
         // const queryParam = "?page=" + page + "&limit=" + limit;
         // const url = apiPath + queryParam
 
         const url = `${API_URL}/api/v1/sport/sports/users/${params.id}?page=${pageParam}&limit=${10}&sportUserSearch=${sportUserSearch}&gender=${gender}&location=${location}&ageGt=${ageGt}&ageLt=${ageLt}`
-        console.log("url", url)
+        //console.log("url", url)
         const res = await fetch(url, {
             method: 'GET',
             headers: {
@@ -119,8 +119,8 @@ const UserCard = () => {
         queryKey: ['sportsFollower', params?.id, sportUserSearch, gender, location, ageGt, ageLt],
         queryFn: fetchSportsFollower,
         getNextPageParam: (lastPage, pages) => {
-            console.log("lastPage:", lastPage)
-            console.log("pages:", pages)
+            // console.log("lastPage:", lastPage)
+            // console.log("pages:", pages)
             if (lastPage?.data?.length < 1) {
                 return undefined
             }

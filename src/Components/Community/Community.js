@@ -43,8 +43,8 @@ function Community({ userId }) {
         queryKey: ['myCommunities', userId, communitySearch],
         queryFn: fetchMyCommunity,
         getNextPageParam: (lastPage, pages) => {
-            console.log("lastPage:", lastPage)
-            console.log("pages:", pages)
+            // console.log("lastPage:", lastPage)
+            // console.log("pages:", pages)
             if (lastPage.data.length < 10) {
                 return undefined
             }
