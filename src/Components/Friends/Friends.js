@@ -91,6 +91,8 @@ function Friends({ userId }) {
         isFetching,
         isFetchingNextPage,
         status,
+        isLoading,
+        isError
     } = useInfiniteQuery({
         queryKey: ['myfriendList', userId],
         queryFn: fetchFriends,
@@ -105,11 +107,14 @@ function Friends({ userId }) {
         }
     })
 
-    if (status === 'loading') {
+    if (isLoading) {
         return <Loading></Loading>
     }
-    if (status === 'error') {
+    if (isError) {
         return <div>Something went wrong</div>
+    }
+    if (!data) {
+        return <Loading></Loading>
     }
 
 
@@ -146,21 +151,20 @@ function Friends({ userId }) {
 
                 }
 
-                <div className='overflow-y-scroll h-[450px]' id='scrollableDiv1'>
+                <div>
 
                     <InfiniteScroll
-                        dataLength={data?.pages.length}
+                        dataLength={data?.pages?.length}
                         next={() => fetchNextPage()}
                         hasMore={hasNextPage}
-                        loader={<h4>Loading...</h4>}
-                        scrollableTarget="scrollableDiv1"
+
 
                     >
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 ">
                             {
                                 data &&
-                                data.pages.map((page, id) => {
-                                    return page.data.map((item, id) => {
+                                data?.pages?.map((page, id) => {
+                                    return page?.data?.map((item, id) => {
                                         return <FriendItem item={item} key={id} />
                                     })
                                 }

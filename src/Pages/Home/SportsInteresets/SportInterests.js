@@ -13,7 +13,7 @@ const SportInterests = () => {
   const fetchSports = async ({ pageParam = 1 }) => {
     // const queryParam = "?page=" + page + "&limit=" + limit;
     // const url = apiPath + queryParam
-    console.log(pageParam)
+
 
     const res = await fetch(`${API_URL}/api/v1/sport/sports?page=${pageParam}&limit=${10}&searchQuery=${search}`, {
       method: 'GET',
