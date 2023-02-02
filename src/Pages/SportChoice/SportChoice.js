@@ -32,7 +32,8 @@ const SportChoice = () => {
 
     return (
         <div>
-            <div className='text-3xl font-bold text-center my-16'>{sport.name} Page</div>
+            <div className='text-3xl font-bold text-center'>{sport.name} Page</div>
+            
             <div className='flex  justify-end'>
                 <Filter />
             </div>
