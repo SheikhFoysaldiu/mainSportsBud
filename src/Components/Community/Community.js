@@ -43,8 +43,8 @@ function Community({ userId }) {
         queryKey: ['myCommunities', userId, communitySearch],
         queryFn: fetchMyCommunity,
         getNextPageParam: (lastPage, pages) => {
-            console.log("lastPage:", lastPage)
-            console.log("pages:", pages)
+            // console.log("lastPage:", lastPage)
+            // console.log("pages:", pages)
             if (lastPage.data.length < 10) {
                 return undefined
             }
@@ -58,6 +58,9 @@ function Community({ userId }) {
     }
     if (isError) {
         return <h1>Error Occurs!</h1>
+    }
+    if (!data) {
+        return <Loading></Loading>
     }
 
 
@@ -82,13 +85,11 @@ function Community({ userId }) {
                 </div>
 
 
-                <div id="scrollableDiv" className='overflow-y-scroll h-[450px]'>
+                <div>
                     <InfiniteScroll
                         dataLength={data?.pages.length}
                         next={() => fetchNextPage()}
                         hasMore={hasNextPage}
-                        loader={<h4>Loading...</h4>}
-
                     >
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mx-4">

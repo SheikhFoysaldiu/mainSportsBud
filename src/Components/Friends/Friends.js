@@ -10,6 +10,7 @@ import { API_URL } from '../../API/config';
 
 
 import { AuthContext } from '../../Context/AuthProvider';
+import { SearchContext } from '../../Context/SearchContext';
 import Loading from '../../Shared/Loading/Loading';
 import { getAge } from '../../Shared/Utitily/Utility';
 
@@ -17,7 +18,7 @@ const FriendItem = ({ item }) => {
     const params = useParams();
     const { user } = useContext(AuthContext)
     const { id, firstName, lastName, location, coverPicture, profilePicture, sports, dob } = item.friend
-    console.log(item.friend)
+    console.log("Item", item.friend)
 
 
     return (
@@ -39,7 +40,7 @@ const FriendItem = ({ item }) => {
                         <div className="flex flex-row">
                             <Recommend fontSize='small' />
 
-                            <div className="text-xs text-gray-400/80 hover:text-gray-400">{sports.length === 0 ? "Empty Sport Choice" : sports[0].sport.name}</div>
+                            {/* <div className="text-xs text-gray-400/80 hover:text-gray-400">{sports?.length === 0 ? "Empty Sport Choice" : sports[0]?.sport?.name}</div> */}
 
                         </div>
 
@@ -61,12 +62,13 @@ const FriendItem = ({ item }) => {
 }
 
 function Friends({ userId }) {
+    const { friendsSearch, setFriendsSearch } = useContext(SearchContext)
     // console.log("Friends:", userId)
     const fetchFriends = async ({ pageParam = 1 }) => {
         // const queryParam = "?page=" + page + "&limit=" + limit;
         // const url = apiPath + queryParam
 
-        const url = `${API_URL}/api/v1/user/friendslist?page=${pageParam}&limit=${10}&userId=${userId}`
+        const url = `${API_URL}/api/v1/user/friendslist?page=${pageParam}&limit=${10}&userId=${userId}&friendsSearch=${friendsSearch}`
         console.log("url:", url)
         const res = await fetch(url, {
             method: 'GET',
@@ -91,8 +93,10 @@ function Friends({ userId }) {
         isFetching,
         isFetchingNextPage,
         status,
+        isLoading,
+        isError
     } = useInfiniteQuery({
-        queryKey: ['myfriendList', userId],
+        queryKey: ['myfriendList', userId, friendsSearch],
         queryFn: fetchFriends,
         getNextPageParam: (lastPage, pages) => {
             console.log("lastPage:", lastPage)
@@ -105,11 +109,14 @@ function Friends({ userId }) {
         }
     })
 
-    if (status === 'loading') {
+    if (isLoading) {
         return <Loading></Loading>
     }
-    if (status === 'error') {
+    if (isError) {
         return <div>Something went wrong</div>
+    }
+    if (!data) {
+        return <Loading></Loading>
     }
 
 
@@ -120,17 +127,6 @@ function Friends({ userId }) {
 
         <>
             <div className='bg-white rounded-lg shadow-xl pb-10 '>
-
-                <div className='flex justify-center items-center px-6'>
-                    <div className="pt-2 relative mx-auto text-gray-600">
-                        <input className="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-                            type="search" name="search" placeholder="Search" />
-                        <button type="submit" className="absolute right-0 top-0 mt-5 mr-4">
-                            <SearchRounded />
-                        </button>
-                    </div>
-
-                </div>
                 <div>
                     <h1 className='mt-4 p-2 m-2'>Friends </h1>
                 </div>
@@ -146,21 +142,20 @@ function Friends({ userId }) {
 
                 }
 
-                <div className='overflow-y-scroll h-[450px]' id='scrollableDiv1'>
+                <div>
 
                     <InfiniteScroll
-                        dataLength={data?.pages.length}
+                        dataLength={data?.pages?.length}
                         next={() => fetchNextPage()}
                         hasMore={hasNextPage}
-                        loader={<h4>Loading...</h4>}
-                        scrollableTarget="scrollableDiv1"
+
 
                     >
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 ">
                             {
                                 data &&
-                                data.pages.map((page, id) => {
-                                    return page.data.map((item, id) => {
+                                data?.pages?.map((page, id) => {
+                                    return page?.data?.map((item, id) => {
                                         return <FriendItem item={item} key={id} />
                                     })
                                 }

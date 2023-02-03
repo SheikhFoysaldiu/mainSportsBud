@@ -11,6 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import Loading from '../../Shared/Loading/Loading';
 import { Cancel } from '@material-ui/icons';
 import { BsPersonCheckFill } from 'react-icons/bs';
+import { SearchContext } from '../../Context/SearchContext';
 
 
 const Users = () => {
@@ -20,6 +21,7 @@ const Users = () => {
     const [loading, setLoading] = React.useState(false);
     const [wait, setWait] = React.useState(undefined);
     const { user } = useContext(AuthContext)
+    const { setCommunitySearch, communitySearch, friendsSearch, setFriendsSearch } = useContext(SearchContext)
     // Get the user
     const { data, isLoading, error } = useQuery({
         queryKey: ['findAUser', params?.id],
@@ -208,7 +210,7 @@ const Users = () => {
 
     return (
         <>
-            <div className="h-full bg-gray-200 mt-16 lg:px-20">
+            <div className="h-full   lg:px-20">
                 <div className="bg-white  ">
                     <div className="w-full h-[250px]">
                         <img src="https://vojislavd.com/ta-template-demo/assets/img/profile-background.jpg" className="w-full h-full rounded-tl-lg rounded-tr-lg" />
@@ -338,9 +340,33 @@ const Users = () => {
                         <About user={data.user} />
                     </div>
                     <div className="tab-pane fade " id="tabs-profile" role="tabpanel" aria-labelledby="tabs-profile-tab">
+                        <div className='flex justify-center items-center px-6'>
+                            <div className="pt-2 relative mx-auto text-gray-600">
+                                <input className="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                                    type="search" name="search" placeholder="Search"
+                                    value={friendsSearch}
+                                    onChange={(e) => setFriendsSearch(e.target.value)}
+
+                                />
+
+                            </div>
+
+                        </div>
                         <Friends userId={data.user.id} />
                     </div>
                     <div className="tab-pane fade" id="tabs-messages" role="tabpanel" aria-labelledby="tabs-profile-tab">
+                        <div className='bg-white  flex justify-center items-center px-6'>
+                            <div className="p-2 relative mx-auto text-gray-600">
+                                <input className="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                                    type="text" name="search" placeholder="Search"
+                                    value={communitySearch}
+                                    onChange={(e) => {
+                                        setCommunitySearch(e.target.value);
+                                    }}
+                                />
+                            </div>
+
+                        </div>
                         <Community userId={data.user.id} />
                     </div>
 

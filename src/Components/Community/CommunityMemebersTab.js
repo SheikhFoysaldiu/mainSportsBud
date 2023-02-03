@@ -56,12 +56,12 @@ const CommunityMemebersTab = () => {
                 <h1 className='text-xl font-bold'>All Members</h1>
             </div>
 
-            <div id="scrollableDiv" className=' bg-white rounded-lg shadow-xl mx-0 lg:mx-20 py-8 mt-5  overflow-y-scroll h-[450px]'>
+            <div className=' bg-white rounded-lg shadow-xl mx-0 lg:mx-20 py-8 mt-5'>
                 <InfiniteScroll
                     dataLength={CommunityMembers.data?.pages.length}
                     next={() => CommunityMembers.fetchNextPage()}
                     hasMore={CommunityMembers.hasNextPage}
-                    scrollableTarget="scrollableDiv"
+
 
                 >
 

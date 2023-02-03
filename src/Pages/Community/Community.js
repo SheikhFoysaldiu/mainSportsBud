@@ -12,26 +12,19 @@ import { API_URL } from "../../API/config";
 import { useInfiniteQuery, useQueries, useQuery } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { AuthContext } from "../../Context/AuthProvider";
+import { SearchContext } from "../../Context/SearchContext";
+import SuggestedCommunitySearch from "../../Components/Community/SuggestedCommunitySearch";
 
-const Community = () => {
+const SuggestedCommunity = () => {
     const { user } = useContext(AuthContext);
+    const { suggestCommunitySearch } = useContext(SearchContext)
+    //console.log("**USER**", user);
 
-    console.log("**USER**", user);
-
-    const [active, setActive] = React.useState(true);
-
-    const placeholderToggle = () => {
-        setActive(false);
-    };
-
-    const placeholder = () => {
-        setActive(true);
-    };
 
 
 
     const fetchAllCommunity = async ({ pageParam = 1 }) => {
-        const url = `${API_URL}/api/v1/community/communitiesList?page=${pageParam}&limit=${10}`
+        const url = `${API_URL}/api/v1/community/communitiesList?page=${pageParam}&limit=${10}&suggestCommunitySearch=${suggestCommunitySearch}`
         const res = await fetch(url, {
             method: 'GET',
             headers: {
@@ -40,13 +33,78 @@ const Community = () => {
             }
         });
         const data = await res.json();
-        console.log("ALLCOMMUNITY:", data)
+        //console.log("ALLCOMMUNITY:", data)
         return {
             data: data.communities
         }
 
     }
 
+
+
+
+
+    const AllCommunity = useInfiniteQuery({
+
+        queryKey: ['allCommunityList', user?.id, suggestCommunitySearch],
+        queryFn: fetchAllCommunity,
+        getNextPageParam: (lastPage, pages) => {
+            // console.log("lastPage:", lastPage)
+            // console.log("pages:", pages)
+            if (lastPage?.data?.length < 1) {
+                return undefined
+            }
+            return pages.length + 1
+
+        }
+
+    })
+
+
+
+
+    // console.log(MyOwnedCommunity.data)
+    // console.log(AllCommunity.data)
+    if (AllCommunity.isLoading) {
+        return <Loading />;
+    }
+    if (AllCommunity.isError) {
+        return <div>Error</div>
+    }
+
+    if (!AllCommunity.data) {
+        return <Loading />
+    }
+
+
+    return (
+        <div className='overflow-y-scroll h-screen' id='scrollableDiv1'>
+            <InfiniteScroll
+                dataLength={AllCommunity?.data?.pages?.length}
+                next={() => AllCommunity?.fetchNextPage()}
+                hasMore={AllCommunity?.hasNextPage}
+                scrollableTarget="scrollableDiv1"
+
+            >
+                <div className='grid gap-[34px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto px-6 my-5 pb-48'>
+                    {AllCommunity?.data &&
+                        AllCommunity?.data?.pages?.map((page, id) => {
+                            return page?.data?.map((community, id) => {
+                                if (community?.isMember === false) {
+                                    return <SuggestedCommunities community={community} key={id} />
+
+                                }
+
+                            })
+                        })}
+                </div>
+            </InfiniteScroll>
+
+        </div>)
+}
+
+const MyCommunitySidebar = () => {
+    const { user } = useContext(AuthContext);
     const fetchMyCommunity = async ({ pageParam = 1 }) => {
         const url = `${API_URL}/api/v1/community/myCommunities?page=${pageParam}&limit=${10}&userId=${user.id}`
         const res = await fetch(url, {
@@ -62,17 +120,14 @@ const Community = () => {
             data: data.communities
         }
     }
-
-
-
     const MyOwnedCommunity = useInfiniteQuery({
 
         queryKey: ['myOwnedCommunities', user?.id],
         queryFn: fetchMyCommunity,
         getNextPageParam: (lastPage, pages) => {
-            console.log("lastPage:", lastPage)
-            console.log("pages:", pages)
-            if (lastPage.data.length < 10) {
+            //console.log("lastPage:", lastPage)
+            //console.log("pages:", pages)
+            if (lastPage?.data?.length < 10) {
                 return undefined
             }
             return pages.length + 1
@@ -80,38 +135,80 @@ const Community = () => {
         }
     })
 
-    const AllCommunity = useInfiniteQuery({
-
-        queryKey: ['allCommunityList', user?.id],
-        queryFn: fetchAllCommunity,
-        getNextPageParam: (lastPage, pages) => {
-            console.log("lastPage:", lastPage)
-            console.log("pages:", pages)
-            if (lastPage.data.length < 1) {
-                return undefined
-            }
-            return pages.length + 1
-
-        }
-
-    })
-
-
-
-
-    // console.log(MyOwnedCommunity.data)
-    // console.log(AllCommunity.data)
-
-    if (!MyOwnedCommunity.data || !AllCommunity.data) {
-        return <Loading />
+    if (MyOwnedCommunity.isLoading) {
+        return <Loading></Loading>
     }
-    if (MyOwnedCommunity.isLoading || AllCommunity.isLoading) {
-        return <Loading></Loading>;
+    if (MyOwnedCommunity.isError) {
+        return <h1>Error Occurs!</h1>
     }
-    if (MyOwnedCommunity.isError || AllCommunity.isError) {
-        return <div>Error</div>
+    if (!MyOwnedCommunity.data) {
+        return <h1>Empty</h1>
     }
 
+    return (
+        <div className='bg-slate-200 shadow-lg hidden lg:block p-6  fixed  w-[400px] s'>
+            <div className='flex items-center mb-6'>
+                <div className='w-14 mr-2'>
+                    <img
+                        src={user?.profilePicture}
+                        alt='User'
+                        className='rounded-full w-12 h-12 shadow-md'
+                    />
+                </div>
+                <div>
+                    <Link to='/main/profileUser' ><h3 className='text-3xl'>{user?.firstName} {user?.lastName}</h3></Link>
+                </div>
+            </div>
+            <Link to="/main/createcommunity" className='m-2 flex items-center mb-10'>
+                <div className='w-7 mr-4'>
+                    <FaPlusCircle className='text-3xl w-7 text-blue-600'></FaPlusCircle>
+                </div>
+                <div>
+                    <h3 className='text-xl text-blue-600'>Create your own community</h3>
+                </div>
+            </Link>
+            <div>
+                <div>
+                    <h1 className='text-lg text-slate-500 text-left'>My Community</h1>
+                    <hr className='h-[4px] bg-slate-300 shadow-lg'></hr>
+                </div>
+
+                <div className="overflow-y-scroll h-screen  " id='scrollableDiv'>
+                    <InfiniteScroll
+                        dataLength={MyOwnedCommunity?.data?.pages?.length}
+                        next={() => MyOwnedCommunity?.fetchNextPage()}
+                        hasMore={MyOwnedCommunity?.hasNextPage}
+                        scrollableTarget="scrollableDiv"
+
+
+
+                    >
+                        <div className=" mb-20 pb-48">
+
+                            {MyOwnedCommunity?.data &&
+                                MyOwnedCommunity?.data?.pages?.map((page, id) => {
+                                    return page?.data?.map((community, id) => {
+
+                                        return <MyCommunity community={community} key={id} />
+
+
+                                    })
+                                })}
+                        </div>
+                    </InfiniteScroll>
+
+
+
+
+                </div>
+
+            </div>
+        </div>)
+}
+
+
+
+const Community = () => {
 
 
 
@@ -129,118 +226,16 @@ const Community = () => {
 
 
     return (
-        <div className=' bg-slate-300 fixed w-full'>
-
-            <div className='bg-slate-200 shadow-lg hidden lg:block p-6  fixed  w-[400px] s'>
-                <div className='flex items-center mb-6'>
-                    <div className='w-14 mr-2'>
-                        <img
-                            src={user?.profilePicture}
-                            alt='User'
-                            className='rounded-full w-12 h-12 shadow-md'
-                        />
-                    </div>
-                    <div>
-                        <Link to='/main/profileUser' ><h3 className='text-3xl'>{user?.firstName} {user?.lastName}</h3></Link>
-                    </div>
-                </div>
-                <Link to="/main/createcommunity" className='m-2 flex items-center mb-10'>
-                    <div className='w-7 mr-4'>
-                        <FaPlusCircle className='text-3xl w-7 text-blue-600'></FaPlusCircle>
-                    </div>
-                    <div>
-                        <h3 className='text-xl text-blue-600'>Create your own community</h3>
-                    </div>
-                </Link>
-                <div>
-                    <div>
-                        <h1 className='text-lg text-slate-500 text-left'>My Community</h1>
-                        <hr className='h-[4px] bg-slate-300 shadow-lg'></hr>
-                    </div>
-
-                    <div id="scrollableDiv2" className='overflow-y-scroll h-screen'>
-                        <InfiniteScroll
-                            dataLength={MyOwnedCommunity?.data?.pages?.length}
-                            next={() => MyOwnedCommunity?.fetchNextPage()}
-                            hasMore={MyOwnedCommunity?.hasNextPage}
-                            loader={<Loading />}
-                            scrollableTarget="scrollableDiv2"
-
-                        >
-
-                            {MyOwnedCommunity?.data &&
-                                MyOwnedCommunity?.data?.pages.map((page, id) => {
-                                    return page.data.map((community, id) => {
-
-                                        return <MyCommunity community={community} key={id} />
-
-
-                                    })
-                                })}
-
-                        </InfiniteScroll>
-
-
-
-
-                    </div>
-
-                </div>
-            </div>
-            <div className='flex justify-center  ml-0 lg:ml-[400px] '>
+        <>
+            <MyCommunitySidebar />
+            <div className='flex justify-center  ml-0 lg:ml-[400px] bg-slate-300 '>
                 <div className="w-4/5">
-                    <div className="flex gap-3 w-full justify-center items-center">
-                        <div className=' my-6 z-49 relative mr-5 lg:mr-0 w-full'>
-                            <form action=''>
-                                <FcSearch className='absolute search'> </FcSearch>
-                                <input
-                                    type='text'
-                                    placeholder='Search your community'
-                                    onFocus={placeholderToggle}
-                                    onBlur={placeholder}
-                                    className={`in input input-bordered w-full  placeholder:p-[-1px] ${active ? "placeholder:block" : "placeholder:invisible"} `}
-                                />
-                            </form>
-                        </div>
-
-                        <div className='block lg:invisible'>
-                            <div className='w-7 mr-4'>
-                                <FaPlusCircle className='text-3xl w-7 text-blue-600'></FaPlusCircle>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div id="scrollableDiv1" className='overflow-y-scroll h-screen'>
-                        <InfiniteScroll
-                            dataLength={AllCommunity.data.pages.length}
-                            next={() => AllCommunity?.fetchNextPage()}
-                            hasMore={AllCommunity?.hasNextPage}
-                            scrollableTarget="scrollableDiv1"
-                        >
-                            <div className='grid gap-[34px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto px-6 my-5 pb-48'>
-                                {AllCommunity?.data &&
-                                    AllCommunity?.data?.pages.map((page, id) => {
-                                        return page.data.map((community, id) => {
-                                            if (community.isMember === false) {
-                                                return <SuggestedCommunities community={community} key={id} />
-
-                                            }
-
-                                        })
-                                    })}
-                            </div>
-                        </InfiniteScroll>
-
-
-
-
-
-                    </div>
+                    <SuggestedCommunitySearch />
+                    <SuggestedCommunity />
                 </div>
 
             </div>
-        </div >
+        </>
     );
 };
 

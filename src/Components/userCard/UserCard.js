@@ -12,6 +12,7 @@ import { MdOutlinePersonAddAlt1, MdPersonAddAlt1 } from 'react-icons/md';
 import { CgProfile } from 'react-icons/cg';
 import CommunityMember from '../../Pages/Community/MyCommunitySingle/CommunityMember';
 import { AuthContext } from '../../Context/AuthProvider';
+import { SearchContext } from '../../Context/SearchContext';
 
 
 const UserCardItem = ({ user, sportId }) => {
@@ -30,19 +31,23 @@ const UserCardItem = ({ user, sportId }) => {
                 }
             });
             const data = await res.json();
-            console.log(data.sport)
+            //console.log(data.sport)
             return {
                 data: data.sport
             }
         }
 
     })
-    if (!data || isLoading) {
+    if (isLoading) {
         return <Loading />
     }
     if (isError) {
         return <h1>Error Occurs</h1>
     }
+    if (!data) {
+        return <Loading />
+    }
+
 
 
     return (
@@ -75,23 +80,25 @@ const UserCardItem = ({ user, sportId }) => {
 
 const UserCard = () => {
     const params = useParams();
-
+    const { sportUserSearch, gender, location, ageGt, ageLt } = useContext(SearchContext)
+    //console.log(sportUserSearch, gender, location, ageGt, ageLt)
     // console.log("params:", params.id)
     const fetchSportsFollower = async ({ pageParam = 1 }) => {
+        //console.log("pageParam:", pageParam)
         // const queryParam = "?page=" + page + "&limit=" + limit;
         // const url = apiPath + queryParam
 
-        const url = `${API_URL}/api/v1/sport/sports/users/${params.id}?page=${pageParam}&limit=${10}`
-        console.log("url", url)
+        const url = `${API_URL}/api/v1/sport/sports/users/${params.id}?page=${pageParam}&limit=${10}&sportUserSearch=${sportUserSearch}&gender=${gender}&location=${location}&ageGt=${ageGt}&ageLt=${ageLt}`
+        //console.log("url", url)
         const res = await fetch(url, {
             method: 'GET',
             headers: {
-                authorization: `bearer ${localStorage.getItem('token')}`
+                "content-type": "application/json",
+                "authorization": `bearer ${localStorage.getItem('token')}`
             }
         });
         // console.log(res)
         const data = await res.json();
-
         return {
             data: data.sports
         };
@@ -109,52 +116,51 @@ const UserCard = () => {
         status,
         isError
     } = useInfiniteQuery({
-        queryKey: ['sportsFollower', params.id],
+        queryKey: ['sportsFollower', params?.id, sportUserSearch, gender, location, ageGt, ageLt],
         queryFn: fetchSportsFollower,
         getNextPageParam: (lastPage, pages) => {
-            console.log("lastPage:", lastPage)
-            console.log("pages:", pages)
-            if (lastPage.data.length < 1) {
+            // console.log("lastPage:", lastPage)
+            // console.log("pages:", pages)
+            if (lastPage?.data?.length < 1) {
                 return undefined
             }
-            return pages?.length + 1
+            return pages.length + 1
 
         }
     })
-
-    if (!data || isLoading) {
+    if (isLoading) {
         return <Loading />
     }
     if (isError) {
         return <div> Something went wrong!</div>
     }
+    if (!data) {
+        return <Loading />
+    }
+
 
 
 
     return (
         <>
-            <div className="h-screen w-full overflow-auto lg:overflow-hidden lg:hover:overflow-auto" id="scrollableDiv">
+            <div >
                 <InfiniteScroll
                     next={() => fetchNextPage()}
-                    scrollableTarget="scrollableDiv"
                     hasMore={hasNextPage}
-
-                    // data?.pages?.reduce((acc, page) => acc + page.data.length, 0) || 0
-                    // dataLength={data.pages.length === 0 ? 0 : data.pages.reduce((acc, page) => acc + page.data.length, 0) || 0}
-                    dataLength={data.pages.length}
+                    dataLength={data?.pages?.length}
                 >
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-48 lg:mb-56 mt-16 mx-0 lg:mx-28 h-[350px]">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-48 lg:mb-56 mt-16  lg:mx-28">
                         {
                             data &&
-                            data.pages.map((page) => {
+                            data?.pages?.map((page) => {
                                 return (
-                                    page.data.map((sport, index) => {
+                                    page?.data?.map((sport, index) => {
                                         return (
                                             <UserCardItem
                                                 key={index}
-                                                user={sport.user}
-                                                sportId={sport.sportId}
+                                                user={sport?.user}
+                                                sportId={sport?.sportId}
 
                                             />
                                         )
@@ -169,11 +175,7 @@ const UserCard = () => {
 
                     </div>
                 </InfiniteScroll>
-                {
-                    data.pages.length === 1 && data.pages[0].data.length === 0
-                    &&
-                    <h1 className="text-2xl font-bold text-gray-500 text-center">No user currently follow this sport</h1>
-                }
+
             </div >
 
         </>

@@ -34,6 +34,8 @@ const SportChoice = () => {
     return (
         <div>
             <div className='text-3xl font-bold text-center my-16'>{sport.name} Page</div>
+            <Filter />
+            <div className='divide-x-2 divide-black-100 divide-dashed' />
             <UserCard />
         </div >
 
