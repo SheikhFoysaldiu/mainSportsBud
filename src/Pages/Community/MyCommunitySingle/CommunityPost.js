@@ -153,10 +153,13 @@ const CommunityPost = ({ post }) => {
         return data;
     };
 
+    // Check is Liked Post
     const IsLikedPost = useQuery({
         queryKey: ["likedPost", id],
         queryFn: checkIsLikedPost,
     });
+
+
 
     const checkIsDisklikedPost = async () => {
         const res = await fetch(`${API_URL}/api/v1/post/isDisliked/${id}`, {
@@ -171,12 +174,12 @@ const CommunityPost = ({ post }) => {
         setDislike(data.isDisliked);
         return data;
     };
-
+    // Check is Disliked Post
     const IsDisLikedPost = useQuery({
         queryKey: ["dislikedPost", id],
         queryFn: checkIsDisklikedPost,
     });
-
+    // Give Dislike
     const handleDislike = async () => {
         try {
             setLoading(true);
@@ -200,7 +203,7 @@ const CommunityPost = ({ post }) => {
             setLoading(false);
         }
     };
-
+    // Give Like
     const handleLike = async () => {
         try {
             setLoading(true);
@@ -225,6 +228,7 @@ const CommunityPost = ({ post }) => {
             setLoading(false);
         }
     };
+    // Like Remove
     const handleLikeRemove = async () => {
         try {
             setLoading(true);
@@ -248,6 +252,7 @@ const CommunityPost = ({ post }) => {
             console.log(error);
         }
     };
+    // Dislike Remove
     const handleDislikeRemove = async () => {
         try {
             setLoading(true);
@@ -271,6 +276,8 @@ const CommunityPost = ({ post }) => {
             console.log(error);
         }
     };
+
+
     const fetchAllComments = async ({ pageParam = 1 }) => {
         const res = await fetch(`${API_URL}/api/v1/post/comments/${id}?page=${pageParam}&limit=${10}`, {
             method: 'GET',
@@ -286,7 +293,7 @@ const CommunityPost = ({ post }) => {
         }
     }
 
-
+    // Fetch all comments
     const AllComment = useInfiniteQuery({
         queryKey: ["comments", id],
         queryFn: fetchAllComments,
@@ -316,9 +323,7 @@ const CommunityPost = ({ post }) => {
     if (IsLikedPost.isError || IsDisLikedPost.isError || AllComment.isError) {
         return <h1>Something went wrong</h1>;
     }
-    console.log("AllComment", AllComment.data);
 
-    console.log(cmnt);
     return (
         <div
             className={`bg-white rounded-lg shadow-xl lg:mx-20 pb-5 mt-5 pt-5 ${remove ? "hidden" : "block"
@@ -339,6 +344,7 @@ const CommunityPost = ({ post }) => {
                         </div>
                         <div className="mx-0 my-0">
                             <span className="text-xs my-0 ml-0">
+                                {/* 1 hours ago, just Now */}
                                 <ReactTimeAgo
                                     date={createdAt}
                                     locale="en-US"
@@ -353,6 +359,7 @@ const CommunityPost = ({ post }) => {
                         <button className="btn btn-ghost btn-circle">
                             <div className="dropdown dropdown-end">
                                 <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                                    {/* 3 dot Icons */}
                                     <BsThreeDots></BsThreeDots>
                                 </label>
                                 <ul
@@ -374,6 +381,7 @@ const CommunityPost = ({ post }) => {
                                             className="flex items-center"
                                         >
                                             <p>
+                                                {/* Edit Icons */}
                                                 <FaRegEdit className="text-lg"></FaRegEdit>
                                             </p>
                                             <p>Edit Post</p>
@@ -601,11 +609,12 @@ const CommunityPost = ({ post }) => {
                     )}
                 </div>
             </div>
-            {modalShow === true && (
+            {
+                modalShow === true &&
                 <CommunityPostModalUpdate
                     show={setModalShow}
                 ></CommunityPostModalUpdate>
-            )}
+            }
             <Toaster />
         </div>
     );

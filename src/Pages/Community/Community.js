@@ -18,10 +18,6 @@ import SuggestedCommunitySearch from "../../Components/Community/SuggestedCommun
 const SuggestedCommunity = () => {
     const { user } = useContext(AuthContext);
     const { suggestCommunitySearch } = useContext(SearchContext)
-    //console.log("**USER**", user);
-
-
-
 
     const fetchAllCommunity = async ({ pageParam = 1 }) => {
         const url = `${API_URL}/api/v1/community/communitiesList?page=${pageParam}&limit=${10}&suggestCommunitySearch=${suggestCommunitySearch}`

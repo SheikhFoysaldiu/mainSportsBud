@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Button, Drawer } from "antd";
 import { MenuOutlined, SettingOutlined } from "@ant-design/icons";
-import AgeSlider from "../InputSlider/AgeSlider";
+
 import LocationSelect from "../Select/LocationSelect";
 import GenderSelection from "../Select/GenderSelection";
 import { useForm } from "react-hook-form";
@@ -86,7 +86,7 @@ const Filter = () => {
             {open && (
                 <form
                     onSubmit={handleSubmit(onSubmit)}
-                    className='text-center absolute w-full  z-50 '
+                    className='text-center absolute w-full  z-50 ' id='filterForm'
                 >
                     <div className='bg-gray-200 border-2 border-gray-800 mt-3 mx-8'>
                         <div className='solid col-9 mx-auto'>
@@ -104,8 +104,8 @@ const Filter = () => {
                                                 <option selected value=''>
                                                     All
                                                 </option>
-                                                <option value='male'>Male</option>
-                                                <option value='female'>Female</option>
+                                                <option value='Male'>Male</option>
+                                                <option value='Female'>Female</option>
                                             </select>
                                         </div>
                                     </article>

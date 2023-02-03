@@ -6,7 +6,7 @@ import { API_URL } from '../../API/config';
 import CommunityMember from '../../Pages/Community/MyCommunitySingle/CommunityMember';
 import Loading from '../../Shared/Loading/Loading';
 
-const CommunityMemebersTab = () => {
+const CommunityMemebersTab = ({ members }) => {
     const params = useParams()
     const fetchCommunityMember = async ({ pageParam = 1 }) => {
         const url = `${API_URL}/api/v1/community/members/${params.id}?page=${pageParam}&limit=${10}`
@@ -53,7 +53,7 @@ const CommunityMemebersTab = () => {
     return (
         <div className="tab-pane fade h-auto" id="tabs-profile3" role="tabpanel" aria-labelledby="tabs-profile-tab3">
             <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 py-8 mt-5  text-center'>
-                <h1 className='text-xl font-bold'>All Members</h1>
+                <h1 className='text-xl font-bold'>All Members ({members.length}) </h1>
             </div>
 
             <div className=' bg-white rounded-lg shadow-xl mx-0 lg:mx-20 py-8 mt-5'>
