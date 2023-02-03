@@ -110,7 +110,7 @@ const MyCommunitySingle = () => {
     }
 
 
-    const { id: cId, image: cImage, name: cName, description: cDes, owner: cOwner } = CommunityInfo.data
+    const { id: cId, image: cImage, name: cName, description: cDes, owner: cOwner, members: cMembers } = CommunityInfo.data
 
 
     return (
@@ -125,7 +125,7 @@ const MyCommunitySingle = () => {
                     </div>
                     <div className='my-4 mx-4 flex justify-between items-center'>
                         <div>
-                            <div className="avatar-group -space-x-6">
+                            {/* <div className="avatar-group -space-x-6">
                                 <Link className="avatar">
                                     <div className="w-10 lg:w-12">
                                         <img src="https://placeimg.com/192/192/people" alt="" />
@@ -146,7 +146,7 @@ const MyCommunitySingle = () => {
                                         <span>+99</span>
                                     </div>
                                 </Link>
-                            </div>
+                            </div> */}
                         </div>
                         <div className='hidden lg:block'>
                             <div className='flex items-center'>
@@ -295,7 +295,7 @@ const MyCommunitySingle = () => {
 
                         </div>
 
-                        <CommunityMemebersTab />
+                        <CommunityMemebersTab members={cMembers} />
 
                         <div className="tab-pane fade" id="tabs-messages3" role="tabpanel" aria-labelledby="tabs-profile-tab3">
                             <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 pb-5 mt-5 pt-5 text-center'>

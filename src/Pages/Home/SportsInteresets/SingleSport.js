@@ -24,7 +24,7 @@ const SingleSport = ({ sport }) => {
                 <div className="card-body">
                     <Link to={`/main/sportchoice/${id}`} >
                         <h2 className="card-title">{name}</h2>
-                        <p>{description}</p>
+                        <p >{description?.length > 150 ? description.substr(0, 150) + "..." : description}</p>
                     </Link>
                     <div className="card-actions justify-end">
                         <Button userId={user?.id} sportId={id} />

@@ -196,7 +196,7 @@ function FriendRequestDropDown(props) {
                     next={() => fetchNextPage()}
 
                     hasMore={hasNextPage}
-                    loader={<h4>Loading...</h4>}
+
                     // data?.pages?.reduce((acc, page) => acc + page.data.length, 0) || 0
                     // dataLength={data.pages.length === 0 ? 0 : data.pages.reduce((acc, page) => acc + page.data.length, 0) || 0}
                     dataLength={data.pages.length}
