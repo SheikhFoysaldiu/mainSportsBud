@@ -1,11 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+
 import MessageRightBottom from './MessageRightBottom'
 import MessageRightItem from './MessageRightItem'
 
 function MessegeRightHeader() {
     return (
-        <div className="flex flex-col h-full w-full bg-white px-4 py-6">
+        <div className="flex flex-col h-full ml-0 lg:ml-[384px] bg-white px-4 py-6">
+            
             <div className="flex flex-row items-center py-4 px-6 rounded-2xl shadow">
                 <div className="flex items-center justify-center h-10 w-10 rounded-full bg-pink-500 text-pink-100">
                     T
