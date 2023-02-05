@@ -71,7 +71,7 @@ const settings = {
     ],
 };
 
-const CommunityPost = ({ post }) => {
+const CommunityPost = ({ post, refetch }) => {
     const {
         register,
         handleSubmit,
@@ -98,14 +98,17 @@ const CommunityPost = ({ post }) => {
 
     const { post: selectedPost } = useSelector((state) => state.post);
 
+
     useEffect(() => {
-        setCmnt(comments.slice(0, p));
+        setCmnt(comments.slice(0, p)); // 0 to 1 
     }, [p]);
 
+    // Removing Post
     const handlePostRemove = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`${API_URL}/api/v1/post/deletePost/${id}`, {
+
+            const res = await fetch(`${API_URL}/api/v1/post/deletePost/${id}`, { // id is post id
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -125,21 +128,22 @@ const CommunityPost = ({ post }) => {
         }
     };
 
-    const handleComment = () => {
+
+    const handleComment = () => { // comment button
         setComment(!comment);
     };
 
-    const handlePostComment = (data, e) => {
+    const handlePostComment = (data, e) => { // comment submit
         console.log(data.usercomment);
         setCommentCount(commentCount + 1);
         e.target.reset();
     };
 
-    const commentShow = () => {
+    const commentShow = () => { // comment show
         setP(comments.length);
     };
 
-    const checkIsLikedPost = async () => {
+    const checkIsLikedPost = async () => { // check is liked post
         const res = await fetch(`${API_URL}/api/v1/post/isLiked/${id}`, {
             method: "GET",
             headers: {
@@ -161,7 +165,7 @@ const CommunityPost = ({ post }) => {
 
 
 
-    const checkIsDisklikedPost = async () => {
+    const checkIsDisklikedPost = async () => { // check is disliked post
         const res = await fetch(`${API_URL}/api/v1/post/isDisliked/${id}`, {
             method: "GET",
             headers: {
@@ -170,7 +174,6 @@ const CommunityPost = ({ post }) => {
             },
         });
         const data = await res.json();
-        // console.log("ISDISLIKED", data.isDisliked)
         setDislike(data.isDisliked);
         return data;
     };
@@ -323,6 +326,7 @@ const CommunityPost = ({ post }) => {
     if (IsLikedPost.isError || IsDisLikedPost.isError || AllComment.isError) {
         return <h1>Something went wrong</h1>;
     }
+    console.log("Modal", modalShow)
 
     return (
         <div
@@ -419,7 +423,7 @@ const CommunityPost = ({ post }) => {
                 </Slider>
             </div>
             <div className="px-10 lg:px-20 my-8">
-                <div className="grid grid-cols-3 gap-2 lg:gap-5 my-4">
+                <div className="grid grid-cols-2 gap-2 lg:gap-5 my-4">
                     <div className="flex items-center ml-[42%]">
                         <p className="mr-1 lg:mr-2 text-sm lg:text-lg">
                             <AiOutlineDislike></AiOutlineDislike>
@@ -432,15 +436,15 @@ const CommunityPost = ({ post }) => {
                         </p>
                         <p className="text-sm lg:text-lg">{likeCount}</p>
                     </div>
-                    <div className="flex items-center ml-[42%]">
+                    {/* <div className="flex items-center ml-[42%]">
                         <p className="mr-1 lg:mr-2 text-sm lg:text-lg">
                             <FaRegCommentAlt></FaRegCommentAlt>
                         </p>
                         <p className="text-sm lg:text-lg">{commentCount}</p>
-                    </div>
+                    </div> */}
                 </div>
                 <hr className="h-[1px] bg-slate-300 shadow-lg"></hr>
-                <div className="grid grid-cols-3 gap-2 lg:gap-5 my-4">
+                <div className="grid grid-cols-2 gap-2 lg:gap-5 my-4">
                     {dislike ? (
                         <button
                             disabled={loading}
@@ -487,7 +491,7 @@ const CommunityPost = ({ post }) => {
                             <p className="text-sm lg:text-lg text-slate-600">Like</p>
                         </button>
                     )}
-                    <button
+                    {/* <button
                         onClick={handleComment}
                         className="flex items-center btn btn-ghost normal-case py-2 px-0 lg:px-2"
                     >
@@ -495,10 +499,10 @@ const CommunityPost = ({ post }) => {
                             <FaRegCommentAlt></FaRegCommentAlt>
                         </p>
                         <p className="text-sm lg:text-lg text-slate-600">Comment</p>
-                    </button>
+                    </button> */}
                 </div>
                 <hr className="h-[1px] bg-slate-300 shadow-lg"></hr>
-                <div className={`my-8 ${comment ? "block" : "hidden"}`}>
+                {/* <div className={`my-8 ${comment ? "block" : "hidden"}`}>
                     <form
                         onSubmit={handleSubmit(handlePostComment)}
                         className="flex items-center"
@@ -517,8 +521,8 @@ const CommunityPost = ({ post }) => {
                             />
                         </div>
                     </form>
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                     <div
                         className={` ${p > 1 ? "h-full" : "h-full"}`}
                         id="scrollableDiv1"
@@ -606,8 +610,8 @@ const CommunityPost = ({ post }) => {
                         >
                             view More
                         </button>
-                    )}
-                </div>
+                    )} 
+                </div>*/}
             </div>
             {
                 modalShow === true &&
@@ -615,7 +619,7 @@ const CommunityPost = ({ post }) => {
                     show={setModalShow}
                 ></CommunityPostModalUpdate>
             }
-            <Toaster />
+
         </div>
     );
 };

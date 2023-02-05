@@ -4,16 +4,16 @@ import { SearchContext } from '../../../Context/SearchContext';
 import './SportSearch.css'
 
 const SportSearch = () => {
-    const { setSearch, search } = useContext(SearchContext)
+    const { setSearch, search } = useContext(SearchContext) // Getting the search state and the setSearch function from the SearchContext
 
-    const [active, setActive] = React.useState(true);
+    const [active, setActive] = React.useState(true); // This state is used to toggle the placeholder
 
-    const placeholderToggle = () => {
-        setActive(false);
+    const placeholderToggle = () => {    // This function is used to toggle the placeholder
+        setActive(false);            // When the input is focused, the placeholder is visible
     };
 
-    const placeholder = () => {
-        setActive(true);
+    const placeholder = () => {        // This function is used to toggle the placeholder
+        setActive(true);         // When the input is not focused, the placeholder is invisible
     };
     return (
         <div className='w-full px-8 lg:px-0'>

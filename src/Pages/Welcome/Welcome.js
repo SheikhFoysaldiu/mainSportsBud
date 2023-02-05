@@ -4,7 +4,7 @@ import "./Welcome.css";
 import { useNavigate } from "react-router-dom";
 
 const Welcome = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // This is a hook from react-router-dom
   return (
     <>
       <button

@@ -10,11 +10,11 @@ import { async } from '@firebase/util';
 import { API_URL } from '../../../API/config';
 
 const UserSetting = () => {
-    const { user } = useContext(AuthContext)
-    const [loading, setLoading] = useState(false)
-    const { register, handleSubmit, formState: { errors } } = useForm(
+    const { user } = useContext(AuthContext) // current user
+    const [loading, setLoading] = useState(false) // loading state
+    const { register, handleSubmit, formState: { errors } } = useForm( // react-hook-form
         {
-            defaultValues: {
+            defaultValues: { // default values
                 firstName: user.firstName,
                 lastName: user.lastName,
                 profilePicture: user.profilePicture,
@@ -24,12 +24,12 @@ const UserSetting = () => {
         }
 
     );
-    const [uploadImage, setUploadImage] = useState(user.coverPicture)
-    const [imgFile, setImageFile] = useState(null)
-    const [profileuploadImage, setProfileUploadImage] = useState(user.profilePicture)
-    const [profileimgFile, setProfileImageFile] = useState(null)
+    const [uploadImage, setUploadImage] = useState(user.coverPicture) // cover picture
+    const [imgFile, setImageFile] = useState(null) // cover picture file
+    const [profileuploadImage, setProfileUploadImage] = useState(user.profilePicture) // profile picture
+    const [profileimgFile, setProfileImageFile] = useState(null) // profile picture file
 
-    const previewImage = (event) => {
+    const previewImage = (event) => { // Image preview
         const imageFiles = event.target.files;
         const fileSize = event.target.files[0].size / 1024 / 1024;
         const fileType = event.target.files[0].type
@@ -49,7 +49,7 @@ const UserSetting = () => {
             });
             return;
         }
-
+        // checking file type
         if (fileType !== 'image/jpeg' && fileType !== 'image/jpg' && fileType !== 'image/png') {
             setUploadImage(null)
             toast.success('File type must be jpg, jpeg or png', {
@@ -74,7 +74,7 @@ const UserSetting = () => {
         }
     }
 
-    const profileImage = (event) => {
+    const profileImage = (event) => { // Image preview
         const imageFiles = event.target.files;
         const fileSize = event.target.files[0].size / 1024 / 1024;
         const fileType = event.target.files[0].type
@@ -93,7 +93,7 @@ const UserSetting = () => {
             });
             return;
         }
-
+        // checking file type
         if (fileType !== 'image/jpeg' && fileType !== 'image/jpg' && fileType !== 'image/png') {
             setProfileUploadImage(null)
             toast.success('File type must be jpg, jpeg or png', {
@@ -118,7 +118,7 @@ const UserSetting = () => {
         }
     }
 
-    const handleUserSetting = async (data) => {
+    const handleUserSetting = async (data) => {//getting data from form
         const formData = new FormData();
 
         formData.append("firstName", data.firstName)
@@ -306,7 +306,7 @@ const UserSetting = () => {
 
                                 </div>
                                 <div>
-                                    {/* <h1 className='my-3'>Set a cover photo</h1>
+                                    <h1 className='my-3'>Set a cover photo</h1>
                                     <div class="image-preview-container">
                                         <div class="preview">
                                             <img src={uploadImage} alt="upload" className={`${uploadImage ? 'block' : 'hidden'}`} id="preview-selected-image" />
@@ -314,7 +314,7 @@ const UserSetting = () => {
                                         <label>Upload Image
                                             <input type="file" id="file-upload" accept="image/png , image/jpeg, image/webp" onChange={previewImage} />
                                         </label>
-                                    </div> */}
+                                    </div>
                                 </div>
                                 <div className='flex items-center justify-center my-5'>
                                     <label><input className="btn bg-primary hover:bg-blue-700 mr-3" value="Save" type="submit" /></label>

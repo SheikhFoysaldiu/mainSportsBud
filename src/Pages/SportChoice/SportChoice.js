@@ -9,13 +9,12 @@ import { useQuery } from '@tanstack/react-query';
 import Loading from '../../Shared/Loading/Loading';
 
 const SportChoice = () => {
-    const params = useParams();
-    console.log(params.id)
+    const params = useParams(); // Getting the id of the community from the url
     const [sport, setSport] = useState();
     const { data, refetch, isLoading, isError } = useQuery({
-        queryKey: ['sportById', params.id],
+        queryKey: ['sportById', params?.id],
         queryFn: async () => {
-            const res = await fetch(`${API_URL}/api/v1/sport/sports/${params.id}`, {
+            const res = await fetch(`${API_URL}/api/v1/sport/sports/${params.id}`, { // Getting the sport by id
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

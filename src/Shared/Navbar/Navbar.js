@@ -49,29 +49,29 @@ export default function PrimarySearchAppBar() {
   const [isOpen, setIsopen] = React.useState(false);
   const [sidebar, setSidebar] = React.useState(false);
   const { user } = React.useContext(AuthContext)
-  const showSidebar = () => {
+  const showSidebar = () => { //function to show sidebar
 
 
     setSidebar(!sidebar)
   };
-  const handleLogOut = () => {
+  const handleLogOut = () => { //function to logout
     logOut()
       .then(() => { })
       .catch(err => console.log(err))
   }
 
-  const handleProfileMenuOpen = (event) => {
+  const handleProfileMenuOpen = (event) => { //function to open profile menu
     setAnchorEl(event.currentTarget);
   };
 
 
 
-  const handleMenuClose = () => {
+  const handleMenuClose = () => { //function to close profile menu
     setAnchorEl(null);
 
   };
 
-  const handletoggle = () => {
+  const handletoggle = () => { //function to open search bar
     setActive(true)
   }
 
@@ -79,7 +79,7 @@ export default function PrimarySearchAppBar() {
 
 
 
-  const menuId = 'primary-search-account-menu';
+  const menuId = 'primary-search-account-menu'; //menu id
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}

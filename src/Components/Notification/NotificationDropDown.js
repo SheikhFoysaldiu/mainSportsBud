@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import profilePic from '../../Asset/person/profile.png'
 import NotificationData from '../../Asset/Dummy/Notification'
 const NotificationItem = ({ item }) => {
-    const { name, message, time } = item
+    const { name, message, time } = item // destructuring
     return (
         <div className="divide-y divide-gray-100 dark:divide-gray-700">
             <Link to="#" className="flex py-3  hover:bg-gray-100 dark:hover:bg-gray-700">
