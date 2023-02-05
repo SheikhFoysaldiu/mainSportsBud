@@ -27,7 +27,16 @@ const AuthProvider = ({ children }) => {
         }),
       });
     }
-  }, [user, user?.profilePicture]);
+
+    if (
+      user &&
+      (location.pathname === "/login" ||
+        location.pathname === "/sign-up" ||
+        location.pathname === "/")
+    ) {
+      router("/main");
+    }
+  }, [user, user?.profilePicture, location.pathname, router]);
 
   const createUser = async (data) => {
     setLoading(true);
@@ -46,8 +55,15 @@ const AuthProvider = ({ children }) => {
       });
       const res = await user.json();
       console.log(res);
+      if (res.message) {
+        alert.error(res.message);
+
+        setLoading(false);
+        return;
+      }
+      localStorage.setItem("token", res.token);
       setToken(res.token);
-      localStorage.setItem("token", token);
+
       await getCurrentUser(res.token);
 
       if (user) {
@@ -83,8 +99,8 @@ const AuthProvider = ({ children }) => {
       });
       const res = await user.json();
       console.log(res);
-      setToken(res.token);
       localStorage.setItem("token", res.token);
+      setToken(res.token);
       await getCurrentUser(res.token);
 
       if (user) {
@@ -139,11 +155,12 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    localStorage.getItem("token") && setToken(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
+
     if (token) {
       getCurrentUser(token);
     }
-  }, [router.pathname, token, localStorage.getItem("token")]);
+  }, [location.pathname, localStorage.getItem("token")]);
 
   const authInfo = {
     user,

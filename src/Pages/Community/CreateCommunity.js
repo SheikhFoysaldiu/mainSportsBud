@@ -12,6 +12,7 @@ import { API_URL } from "../../API/config";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useContext } from "react";
 import { AuthContext } from "../../Context/AuthProvider";
+import { useAlert } from "react-alert";
 
 function CreateCommunity() {
   const {
@@ -29,9 +30,11 @@ function CreateCommunity() {
   const [data1, setData1] = useState({});
   const [name, setName] = useState("");
   const [des, setDes] = useState("");
+  const [loading, setLoading] = useState(false);
   const [select, setSelect] = useState(""); // select sports
   const [sports, setSports] = useState([]); // sports list
   const { user } = useContext(AuthContext); // current user
+  const alert = useAlert();
 
   useEffect(() => {
     if (addedFriendData.length >= 3) {
@@ -58,15 +61,16 @@ function CreateCommunity() {
     setSelect(e.target.value);
   };
 
-  const fetchFriends = async ({ pageParam = 1 }) => { // fetch friends list
-    const url = `${API_URL}/api/v1/user/friendslist?page=${pageParam}&limit=${10}&userId=${user.id
-      }`;
-    console.log("url:", url);
+  const fetchFriends = async ({ pageParam = 1 }) => {
+    // fetch friends list
+    const url = `${API_URL}/api/v1/user/friendslist?page=${pageParam}&limit=${10}&userId=${
+      user.id
+    }`;
     const res = await fetch(url, {
       method: "GET",
       headers: {
-        'Content-Type': 'application/json',
-        "authorization": `bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+        authorization: `bearer ${localStorage.getItem("token")}`,
       },
     });
     const data = await res.json();
@@ -76,7 +80,8 @@ function CreateCommunity() {
     };
   };
 
-  const AddToFriend = useInfiniteQuery({ // fetch friends list 
+  const AddToFriend = useInfiniteQuery({
+    // fetch friends list
     queryKey: ["myfriendList", user.id],
     queryFn: fetchFriends,
     getNextPageParam: (lastPage, pages) => {
@@ -87,12 +92,13 @@ function CreateCommunity() {
     },
   });
 
-  const getSports = async () => { // fetch sports list
+  const getSports = async () => {
+    // fetch sports list
     const res = await fetch(`${API_URL}/api/v1/sport/sports`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("token"),
+        Authorization: "Bearer " + localStorage.getItem("token"),
       },
     });
 
@@ -107,7 +113,8 @@ function CreateCommunity() {
     getSports();
   }, []);
 
-  const previewImage = (event) => { // Preview image before upload
+  const previewImage = (event) => {
+    // Preview image before upload
     const imageFiles = event.target.files;
     const fileSize = event.target.files[0].size / 1024 / 1024;
     const fileType = event.target.files[0].type;
@@ -128,11 +135,13 @@ function CreateCommunity() {
       return;
     }
 
-    if ( // check file type
+    if (
+      // check file type
       fileType !== "image/jpeg" &&
       fileType !== "image/jpg" &&
       fileType !== "image/png"
-    ) { // if file type is not jpg, jpeg or png then set UploadImage to null
+    ) {
+      // if file type is not jpg, jpeg or png then set UploadImage to null
       setUploadImage(null);
       toast.success("File type must be jpg, jpeg or png", {
         style: {
@@ -149,39 +158,56 @@ function CreateCommunity() {
     }
     setImageFile(imageFiles[0]); // else set imageFile to imageFiles[0]
     const imageFilesLength = imageFiles.length; // set imageFilesLength to imageFiles.length
-    if (imageFilesLength > 0) { // if imageFilesLength is greater than 0 then set UploadImage to URL.createObjectURL(imageFiles[0])
+    if (imageFilesLength > 0) {
+      // if imageFilesLength is greater than 0 then set UploadImage to URL.createObjectURL(imageFiles[0])
       const imageSrc = URL.createObjectURL(imageFiles[0]);
       setUploadImage(imageSrc);
     }
   };
 
-  const comData = (data) => {
-    setData1(data);
-  };
-
-  const handleCommunity = (data1) => {
+  const handleCommunity = (data) => {
+    setLoading(true);
+    const memebers = addedFriendData.map((item) => item.id);
+    console.log(memebers);
     const proceed = window.confirm(`Are you sure you want to create community`);
     if (proceed) {
       const formData = new FormData();
       if (imgFile) {
         formData.append("image", imgFile);
       }
-      formData.append("communityName", data1.communityName);
-      formData.append("description", data1.description);
-      formData.append("sportSelect", data1.sportSelect);
-      // console.log("Console", formData);
+      formData.append("name", data.communityName);
+      formData.append("description", data.description);
+      formData.append("sportId", data.sportSelect);
+      formData.append("members", memebers);
 
-      // console.log("OOOOK", data1.communityName, data1.description, data1.sportSelect, addedFriendData);
+      fetch(`${API_URL}/api/v1/community/createCommunity`, {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.log(err);
+
+          alert.error("Something went wrong");
+        });
     }
   };
   if (!AddToFriend.data) {
-    return <Loading />
+    return <Loading />;
   }
   if (AddToFriend.isLoading) {
-    return <Loading />
+    return <Loading />;
   }
   if (AddToFriend.isError) {
-    return <h1>Something went Wrong!</h1>
+    return <h1>Something went Wrong!</h1>;
   }
 
   return (
@@ -190,7 +216,7 @@ function CreateCommunity() {
         <div className="text-lg lg:text-2xl text-center mt-20 font-bold">
           Create your Community
         </div>
-        <form onSubmit={handleSubmit(comData)}>
+        <form onSubmit={handleSubmit(handleCommunity)}>
           <input
             type="text"
             {...register("communityRule", {
@@ -352,16 +378,18 @@ function CreateCommunity() {
                               </thead>
                               <tbody className="text-sm divide-y divide-gray-100">
                                 {AddToFriend.data &&
-                                  AddToFriend.data.pages.map((page) => (
-                                    page.data.map((friend) => (<CreateCommunityFriendList
-                                      key={friend.id}
-                                      friend={friend}
-                                      addedFriendData={addedFriendData}
-                                      setAddedFriendData={setAddedFriendData}
-                                      countFriends={countFriends}
-                                      setCountFriends={setCountFriends}
-                                    ></CreateCommunityFriendList>))
-                                  ))}
+                                  AddToFriend.data.pages.map((page) =>
+                                    page.data.map((friend) => (
+                                      <CreateCommunityFriendList
+                                        key={friend.id}
+                                        friend={friend}
+                                        addedFriendData={addedFriendData}
+                                        setAddedFriendData={setAddedFriendData}
+                                        countFriends={countFriends}
+                                        setCountFriends={setCountFriends}
+                                      ></CreateCommunityFriendList>
+                                    ))
+                                  )}
                               </tbody>
                             </table>
                           </InfiniteScroll>
@@ -371,22 +399,25 @@ function CreateCommunity() {
                   </div>
 
                   <p
-                    className={`mt-2 text-sm text-gray-500 ${countFriends === 0 ? "block" : "hidden"
-                      }`}
+                    className={`mt-2 text-sm text-gray-500 ${
+                      countFriends === 0 ? "block" : "hidden"
+                    }`}
                   >
                     Add at least three of your friends
                   </p>
 
                   <p
-                    className={`mt-2 text-sm text-gray-500 ${countFriends === 1 ? "block" : "hidden"
-                      }`}
+                    className={`mt-2 text-sm text-gray-500 ${
+                      countFriends === 1 ? "block" : "hidden"
+                    }`}
                   >
                     You have added {countFriends} friend
                   </p>
 
                   <p
-                    className={`mt-2 text-sm text-gray-500 ${countFriends > 1 ? "block" : "hidden"
-                      }`}
+                    className={`mt-2 text-sm text-gray-500 ${
+                      countFriends > 1 ? "block" : "hidden"
+                    }`}
                   >
                     You have added {countFriends} friends
                   </p>
@@ -424,9 +455,8 @@ function CreateCommunity() {
             <div className="bg-gray-50 px-10 py-8 sm:px-8 text-center">
               <input
                 type="submit"
-                onClick={() => handleCommunity(data1)}
                 className="btn btn-outline btn-primary my-3 w-1/3 text-xl rounded-full text-black-600"
-                disabled={isTrue}
+                disabled={false}
                 Value="Create Community"
               />
             </div>
