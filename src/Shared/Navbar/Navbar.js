@@ -49,29 +49,29 @@ export default function PrimarySearchAppBar() {
   const [isOpen, setIsopen] = React.useState(false);
   const [sidebar, setSidebar] = React.useState(false);
   const { user } = React.useContext(AuthContext)
-  const showSidebar = () => {
+  const showSidebar = () => { //function to show sidebar
 
 
     setSidebar(!sidebar)
   };
-  const handleLogOut = () => {
+  const handleLogOut = () => { //function to logout
     logOut()
       .then(() => { })
       .catch(err => console.log(err))
   }
 
-  const handleProfileMenuOpen = (event) => {
+  const handleProfileMenuOpen = (event) => { //function to open profile menu
     setAnchorEl(event.currentTarget);
   };
 
 
 
-  const handleMenuClose = () => {
+  const handleMenuClose = () => { //function to close profile menu
     setAnchorEl(null);
 
   };
 
-  const handletoggle = () => {
+  const handletoggle = () => { //function to open search bar
     setActive(true)
   }
 
@@ -79,7 +79,7 @@ export default function PrimarySearchAppBar() {
 
 
 
-  const menuId = 'primary-search-account-menu';
+  const menuId = 'primary-search-account-menu'; //menu id
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -118,7 +118,7 @@ export default function PrimarySearchAppBar() {
   return (
     <>
 
-      <div  className="navbar bg-base-100 shadow-md sticky top-0  w-full z-50">
+      <div className="navbar bg-base-100 shadow-md sticky top-0  w-full z-50">
         <div className="navbar-start w-[5%]">
           <div className="">
             <Link to="#" className="menu-bars1">
@@ -145,24 +145,24 @@ export default function PrimarySearchAppBar() {
                   Home
                 </Link>
               </li>
-              <li >
+              {/* <li >
                 <Link to='/' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start" onClick={showSidebar}>
                   <MdSportsBaseball className='mr-2' ></MdSportsBaseball>
                   Sport Choice
                 </Link>
-              </li>
+              </li> */}
               <li >
                 <Link to='/main/community' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start" onClick={showSidebar}>
                   <CgCommunity className='mr-2' ></CgCommunity>
                   Community
                 </Link>
               </li>
-              <li >
+              {/* <li >
                 <Link to='/main/feedback' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start" onClick={showSidebar}>
                   <MdOutlineFeedback className='mr-2' ></MdOutlineFeedback>
                   Feedback
                 </Link>
-              </li>
+              </li> */}
 
             </ul>
           </nav>

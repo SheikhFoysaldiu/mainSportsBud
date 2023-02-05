@@ -79,17 +79,10 @@ const router = createBrowserRouter([
         element: <CreateCommunity></CreateCommunity>
       },
       {
-        path: '/main/mycommunitysingle/:id',
-        element: <MyCommunitySingle></MyCommunitySingle>
-      },
-      {
         path: "/main/feedback",
         element: <Feedback></Feedback>,
       },
-      {
-        path: "/main/404",
-        element: <PageNotFound></PageNotFound>,
-      },
+
       {
         path: "/main/setting/:id",
         element: <Setting></Setting>
@@ -97,7 +90,11 @@ const router = createBrowserRouter([
       {
         path: "/main/usersetting",
         element: <UserSetting></UserSetting>
-      }
+      },
+      {
+        path: "*",
+        element: <PageNotFound></PageNotFound>,
+      },
     ],
   },
 

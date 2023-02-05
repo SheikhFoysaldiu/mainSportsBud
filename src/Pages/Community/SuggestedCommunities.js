@@ -6,10 +6,10 @@ import Loading from '../../Shared/Loading/Loading';
 
 const SuggestedCommunities = ({ community }) => {
 
-    const { name, image, sportId, id, description } = community;
+    const { name, image, sportId, id, description } = community; // distructuring the community object from Community.js From Page "../Community/Community.js"
     const [loading, setLoading] = React.useState(undefined)
-    const navigate = useNavigate()
-    const handleJoin = async () => {
+    const navigate = useNavigate() // Used to redirect to another page
+    const handleJoin = async () => { // Used to join the community
         setLoading(true)
         try {
             const res = await fetch(`${API_URL}/api/v1/community/joinCommunity/${id}`,
@@ -22,7 +22,7 @@ const SuggestedCommunities = ({ community }) => {
                 }
             )
             setLoading(false)
-            navigate(`/main/mycommunitysingle/${id}`)
+            navigate(`/main/community/${id}`, { replace: true }) // Redirecting to the community page
         }
         catch (error) {
             setLoading(false)
@@ -30,7 +30,7 @@ const SuggestedCommunities = ({ community }) => {
         }
     }
 
-    const { data, refetch, isLoading, isError } = useQuery({
+    const { data, refetch, isLoading, isError } = useQuery({ // Used to fetch the sport name of the community
         queryKey: ['community', id],
         queryFn: async () => {
             const res = await fetch(`${API_URL}/api/v1/sport/sports/${sportId}`, {

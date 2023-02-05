@@ -18,24 +18,21 @@ function CreateCommunity() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  const [uploadImage, setUploadImage] = useState(null);
-  const [imgFile, setImageFile] = useState(null);
-  const [friends, setFriends] = useState([]);
-  const friendParams = useParams();
-  const [countFriends, setCountFriends] = useState(0);
-  const [addedFriendData, setAddedFriendData] = useState([]);
-  const [isTrue, setIsTrue] = useState(true);
+  } = useForm(); // initialise the hook
+  const [uploadImage, setUploadImage] = useState(null); // image upload
+  const [imgFile, setImageFile] = useState(null); // image upload
+  const [friends, setFriends] = useState([]); // friends list
+  const friendParams = useParams(); // friends list
+  const [countFriends, setCountFriends] = useState(0); // count friends which is selected to add in community
+  const [addedFriendData, setAddedFriendData] = useState([]); // added friends data which is selected to add in community
+  const [isTrue, setIsTrue] = useState(true); // button disable
   const [data1, setData1] = useState({});
   const [name, setName] = useState("");
   const [des, setDes] = useState("");
-  const [select, setSelect] = useState("");
-  const [sports, setSports] = useState([]);
-  const { user } = useContext(AuthContext);
+  const [select, setSelect] = useState(""); // select sports
+  const [sports, setSports] = useState([]); // sports list
+  const { user } = useContext(AuthContext); // current user
 
-  console.log("name:", name);
-  console.log("des:", des);
-  console.log("select:", select);
   useEffect(() => {
     if (addedFriendData.length >= 3) {
       if (name !== "" && des.length >= 20 && select !== "") {
@@ -61,55 +58,41 @@ function CreateCommunity() {
     setSelect(e.target.value);
   };
 
-  const fetchFriends = async ({ pageParam = 1 }) => {
-    // const queryParam = "?page=" + page + "&limit=" + limit;
-    // const url = apiPath + queryParam
-
-    const url = `${API_URL}/api/v1/user/friendslist?page=${pageParam}&limit=${10}&userId=${
-      user.id
-    }`;
+  const fetchFriends = async ({ pageParam = 1 }) => { // fetch friends list
+    const url = `${API_URL}/api/v1/user/friendslist?page=${pageParam}&limit=${10}&userId=${user.id
+      }`;
     console.log("url:", url);
     const res = await fetch(url, {
       method: "GET",
       headers: {
-        authorization: `bearer ${localStorage.getItem("token")}`,
+        'Content-Type': 'application/json',
+        "authorization": `bearer ${localStorage.getItem("token")}`,
       },
     });
     const data = await res.json();
-    console.log("Friends data:", data);
 
     return {
       data: data.friends,
     };
   };
 
-  const {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-    isFetchingNextPage,
-    status,
-  } = useInfiniteQuery({
+  const AddToFriend = useInfiniteQuery({ // fetch friends list 
     queryKey: ["myfriendList", user.id],
     queryFn: fetchFriends,
     getNextPageParam: (lastPage, pages) => {
-      console.log("lastPage:", lastPage);
-      console.log("pages:", pages);
-      if (lastPage.data.length < 10) {
+      if (lastPage.data.length < 1) {
         return undefined;
       }
       return pages.length + 1;
     },
   });
 
-  const getSports = async () => {
+  const getSports = async () => { // fetch sports list
     const res = await fetch(`${API_URL}/api/v1/sport/sports`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("token"),
+        "Authorization": "Bearer " + localStorage.getItem("token"),
       },
     });
 
@@ -124,7 +107,7 @@ function CreateCommunity() {
     getSports();
   }, []);
 
-  const previewImage = (event) => {
+  const previewImage = (event) => { // Preview image before upload
     const imageFiles = event.target.files;
     const fileSize = event.target.files[0].size / 1024 / 1024;
     const fileType = event.target.files[0].type;
@@ -145,11 +128,11 @@ function CreateCommunity() {
       return;
     }
 
-    if (
+    if ( // check file type
       fileType !== "image/jpeg" &&
       fileType !== "image/jpg" &&
       fileType !== "image/png"
-    ) {
+    ) { // if file type is not jpg, jpeg or png then set UploadImage to null
       setUploadImage(null);
       toast.success("File type must be jpg, jpeg or png", {
         style: {
@@ -164,37 +147,43 @@ function CreateCommunity() {
       });
       return;
     }
-    setImageFile(imageFiles[0]);
-    const imageFilesLength = imageFiles.length;
-    if (imageFilesLength > 0) {
+    setImageFile(imageFiles[0]); // else set imageFile to imageFiles[0]
+    const imageFilesLength = imageFiles.length; // set imageFilesLength to imageFiles.length
+    if (imageFilesLength > 0) { // if imageFilesLength is greater than 0 then set UploadImage to URL.createObjectURL(imageFiles[0])
       const imageSrc = URL.createObjectURL(imageFiles[0]);
       setUploadImage(imageSrc);
     }
   };
 
   const comData = (data) => {
-    console.log(data);
     setData1(data);
-
-    // console.log("submitted dsata", data1);
   };
 
   const handleCommunity = (data1) => {
     const proceed = window.confirm(`Are you sure you want to create community`);
     if (proceed) {
+      const formData = new FormData();
       if (imgFile) {
-        const formData = new FormData();
         formData.append("image", imgFile);
-        formData.append("communityName", data1.communityName);
-        formData.append("description", data1.description);
-        formData.append("sportSelect", data1.sportSelect);
-        console.log(formData);
       }
-      console.log(data1.communityName, data1.description, data1.sportSelect);
+      formData.append("communityName", data1.communityName);
+      formData.append("description", data1.description);
+      formData.append("sportSelect", data1.sportSelect);
+      // console.log("Console", formData);
+
+      // console.log("OOOOK", data1.communityName, data1.description, data1.sportSelect, addedFriendData);
     }
   };
+  if (!AddToFriend.data) {
+    return <Loading />
+  }
+  if (AddToFriend.isLoading) {
+    return <Loading />
+  }
+  if (AddToFriend.isError) {
+    return <h1>Something went Wrong!</h1>
+  }
 
-  //    console.log(data1)
   return (
     <>
       <div className="my-16">
@@ -335,8 +324,9 @@ function CreateCommunity() {
                           id="scrollableDiv"
                         >
                           <InfiniteScroll
-                            dataLength={friends.length}
-                            loader={<Loading></Loading>}
+                            dataLength={AddToFriend.data?.pages.length}
+                            next={() => AddToFriend.fetchNextPage()}
+                            hasMore={AddToFriend.hasNextPage}
                             scrollableTarget="scrollableDiv"
                           >
                             <table className="table-auto w-full">
@@ -361,16 +351,16 @@ function CreateCommunity() {
                                 </tr>
                               </thead>
                               <tbody className="text-sm divide-y divide-gray-100">
-                                {friends.length &&
-                                  friends.map((friend) => (
-                                    <CreateCommunityFriendList
+                                {AddToFriend.data &&
+                                  AddToFriend.data.pages.map((page) => (
+                                    page.data.map((friend) => (<CreateCommunityFriendList
                                       key={friend.id}
                                       friend={friend}
                                       addedFriendData={addedFriendData}
                                       setAddedFriendData={setAddedFriendData}
                                       countFriends={countFriends}
                                       setCountFriends={setCountFriends}
-                                    ></CreateCommunityFriendList>
+                                    ></CreateCommunityFriendList>))
                                   ))}
                               </tbody>
                             </table>
@@ -381,25 +371,22 @@ function CreateCommunity() {
                   </div>
 
                   <p
-                    className={`mt-2 text-sm text-gray-500 ${
-                      countFriends === 0 ? "block" : "hidden"
-                    }`}
+                    className={`mt-2 text-sm text-gray-500 ${countFriends === 0 ? "block" : "hidden"
+                      }`}
                   >
                     Add at least three of your friends
                   </p>
 
                   <p
-                    className={`mt-2 text-sm text-gray-500 ${
-                      countFriends === 1 ? "block" : "hidden"
-                    }`}
+                    className={`mt-2 text-sm text-gray-500 ${countFriends === 1 ? "block" : "hidden"
+                      }`}
                   >
                     You have added {countFriends} friend
                   </p>
 
                   <p
-                    className={`mt-2 text-sm text-gray-500 ${
-                      countFriends > 1 ? "block" : "hidden"
-                    }`}
+                    className={`mt-2 text-sm text-gray-500 ${countFriends > 1 ? "block" : "hidden"
+                      }`}
                   >
                     You have added {countFriends} friends
                   </p>

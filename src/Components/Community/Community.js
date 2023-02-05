@@ -32,7 +32,7 @@ function Community({ userId }) {
     }
 
 
-
+    // get my community
     const {
         data,
         fetchNextPage,
@@ -43,9 +43,9 @@ function Community({ userId }) {
         queryKey: ['myCommunities', userId, communitySearch],
         queryFn: fetchMyCommunity,
         getNextPageParam: (lastPage, pages) => {
-            console.log("lastPage:", lastPage)
-            console.log("pages:", pages)
-            if (lastPage.data.length < 10) {
+            // console.log("lastPage:", lastPage)
+            // console.log("pages:", pages)
+            if (lastPage.data.length < 1) {
                 return undefined
             }
             return pages.length + 1
@@ -58,6 +58,9 @@ function Community({ userId }) {
     }
     if (isError) {
         return <h1>Error Occurs!</h1>
+    }
+    if (!data) {
+        return <Loading></Loading>
     }
 
 
@@ -82,13 +85,12 @@ function Community({ userId }) {
                 </div>
 
 
-                <div id="scrollableDiv" className='overflow-y-scroll h-[450px]'>
+                <div>
+                    {/* Show only 10 community each time */}
                     <InfiniteScroll
                         dataLength={data?.pages.length}
                         next={() => fetchNextPage()}
                         hasMore={hasNextPage}
-                        loader={<h4>Loading...</h4>}
-
                     >
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mx-4">
@@ -96,6 +98,7 @@ function Community({ userId }) {
                             {data &&
                                 data.pages.map((page, id) => {
                                     return page.data.map((community, id) => {
+                                        // Show only 10 community each time
                                         return <MyCommunity community={community.community} key={id} />
                                     })
                                 })}

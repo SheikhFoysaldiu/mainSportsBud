@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './CommunityPostModal.css'
 import { useForm } from 'react-hook-form';
+import { AuthContext } from '../../../Context/AuthProvider';
+import { API_URL } from '../../../API/config';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 
-const CommunityPost = () => {
-    
-    const { register, handleSubmit, formState: { errors } } = useForm();
+const CommunityPost = ({ refetch }) => {
+    const { user } = useContext(AuthContext)
+    const params = useParams()
+    const [loading, setLoading] = useState(false)
+    const { register, setValue, handleSubmit, formState: { errors } } = useForm();
     const [active, setActive] = useState(true);
     const [isPhoto, setIsPhoto] = useState(true);
     var [selectedImages, setSelectedImages] = useState([]);
     var [imageName, setImageName] = useState([]);
     var [imgFile, setImgFile] = useState([]);
-    
+
     const onSelectFile = (event) => {
         const selectedFiles = event.target.files;
         const selectedFilesArray = Array.from(selectedFiles);
@@ -29,26 +35,26 @@ const CommunityPost = () => {
             return file;
         });
 
-        setSelectedImages((previousImages) =>{ 
+        setSelectedImages((previousImages) => {
             return previousImages.concat(imagesArray)
-            
+
         });
         setImageName((previousImages) => {
             return previousImages.concat(imagesArray2)
-           
+
         });
         setImgFile((previousImages) => {
             return previousImages.concat(imagesArray3)
-            
+
         });
 
         // FOR BUG IN CHROME
         event.target.value = "";
-       
+
 
     };
 
-    function deleteHandler(image) {
+    function deleteHandler(image) { //deleting images from selectedImages array
         setSelectedImages(selectedImages.filter((e) => e !== image));
         URL.revokeObjectURL(image);
     }
@@ -66,21 +72,71 @@ const CommunityPost = () => {
     const photoHandler = (q) => {
         setIsPhoto(q);
     }
+    const resetValue = () => {
+        setSelectedImages([]);
+        setImageName([]);
+        setImgFile([]);
+        setValue("name", "");
 
-    const handlePost = (data,e) => {
+
+
+
+
+    }
+
+    const handlePost = async (data, e) => {
+        if (data.name === '' && selectedImages.length === 0) {
+            toast.error('Please write something or add an image', {
+                style: {
+                    borderRadius: '10px',
+                    background: '#333',
+                    color: '#fff',
+                },
+            })
+            return;
+
+        }
+
         console.log(data.name);
         console.log(selectedImages)
         const formData = new FormData();
         imgFile.forEach((file, i) => {
-            formData.append(`file-${i}`, file, file.name);
+            formData.append("image", file, file.name);
         });
-        console.log(formData);
-        
-        e.target.reset();
-        selectedImages.length=0;
-        imgFile.length =0;
+        formData.append("content", data.name);
+        setLoading(true)
+        try {
+
+            const res = await fetch(`${API_URL}/api/v1/post/createPost?communityId=${params.id}`, {
+                method: "POST",
+                headers: {
+                    'Authorization': `bearer ${localStorage.getItem('token')}`
+                },
+                body: formData
+            })
+            const x = await res.json()
+            setLoading(false);
+            refetch()
+            e.target.reset();
+            selectedImages.length = 0;
+            imgFile.length = 0;
+            resetValue();
+            (document.getElementById("my-modal")).checked = false;
+
+        }
+        catch (error) {
+            console.log(error)
+            setLoading(false)
+            e.target.reset();
+            selectedImages.length = 0;
+            imgFile.length = 0;
+            (document.getElementById("my-modal")).checked = false;
+
+        }
+
+
     }
-   
+
     return (
         <div>
             <input type="checkbox" id="my-modal" className="modal-toggle" />
@@ -90,7 +146,7 @@ const CommunityPost = () => {
                         <div className='flex items-center'>
                             <div className="w-14 mr-4">
 
-                                <img src="https://placeimg.com/80/80/people" alt='User' className='rounded-full shadow-md' />
+                                <img src={user.profilePicture} alt='User' className='rounded-full shadow-md' />
 
                             </div>
                             <div>
@@ -164,10 +220,10 @@ const CommunityPost = () => {
 
                         </div>
                         <div className="modal-action flex items-center">
-                           
-                            
-                                <label><input className="btn btn-accent mr-3" value="Post" type="submit" /></label>
-                            
+
+
+                            <label><input className="btn btn-accent mr-3" value="Post" type="submit" /></label>
+
                             <label htmlFor="my-modal" className="btn" onClick={() => blinkHandler2(true)}>Cancel</label>
                         </div>
                     </form>

@@ -1,53 +1,69 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { BiEdit } from "react-icons/bi";
 import { MdOutlineLocalOffer } from "react-icons/md";
 import './UserSetting.css';
 import { AiFillCamera } from "react-icons/ai";
 import toast, { Toaster } from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
+import { AuthContext } from '../../../Context/AuthProvider';
+import { async } from '@firebase/util';
+import { API_URL } from '../../../API/config';
 
 const UserSetting = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const [uploadImage, setUploadImage] = useState(null)
-    const [imgFile, setImageFile] = useState(null)
-    const [profileuploadImage, setProfileUploadImage] = useState(null)
-    const [profileimgFile, setProfileImageFile] = useState(null)
+    const { user } = useContext(AuthContext) // current user
+    const [loading, setLoading] = useState(false) // loading state
+    const { register, handleSubmit, formState: { errors } } = useForm( // react-hook-form
+        {
+            defaultValues: { // default values
+                firstName: user.firstName,
+                lastName: user.lastName,
+                profilePicture: user.profilePicture,
+                coverPicture: user.coverPicture,
+                location: user.location
+            }
+        }
 
-    const previewImage = (event) => {
+    );
+    const [uploadImage, setUploadImage] = useState(user.coverPicture) // cover picture
+    const [imgFile, setImageFile] = useState(null) // cover picture file
+    const [profileuploadImage, setProfileUploadImage] = useState(user.profilePicture) // profile picture
+    const [profileimgFile, setProfileImageFile] = useState(null) // profile picture file
+
+    const previewImage = (event) => { // Image preview
         const imageFiles = event.target.files;
-        const fileSize = event.target.files[0].size/1024/1024;
+        const fileSize = event.target.files[0].size / 1024 / 1024;
         const fileType = event.target.files[0].type
         console.log(fileType)
-        if(fileSize>2){
+        if (fileSize > 2) {
             setUploadImage(null)
             toast.success('File size greater than 2mb', {
                 style: {
-                  border: '1px solid blue',
-                  padding: '16px',
-                  color: 'black',
+                    border: '1px solid blue',
+                    padding: '16px',
+                    color: 'black',
                 },
                 iconTheme: {
-                  primary: 'blue',
-                  secondary: 'yellow',
+                    primary: 'blue',
+                    secondary: 'yellow',
                 },
-              });
-              return;
+            });
+            return;
         }
-
-        if(fileType !== 'image/jpeg' && fileType !== 'image/jpg' && fileType !== 'image/png'){
+        // checking file type
+        if (fileType !== 'image/jpeg' && fileType !== 'image/jpg' && fileType !== 'image/png') {
             setUploadImage(null)
             toast.success('File type must be jpg, jpeg or png', {
                 style: {
-                  border: '1px solid blue',
-                  padding: '16px',
-                  color: 'black',
+                    border: '1px solid blue',
+                    padding: '16px',
+                    color: 'black',
                 },
                 iconTheme: {
-                  primary: 'blue',
-                  secondary: 'yellow',
+                    primary: 'blue',
+                    secondary: 'yellow',
                 },
-              });
-              return;
+            });
+            return;
         }
         setImageFile(imageFiles[0])
         const imageFilesLength = imageFiles.length;
@@ -58,41 +74,40 @@ const UserSetting = () => {
         }
     }
 
-    const profileImage = (event) => {
+    const profileImage = (event) => { // Image preview
         const imageFiles = event.target.files;
-        const fileSize = event.target.files[0].size/1024/1024;
+        const fileSize = event.target.files[0].size / 1024 / 1024;
         const fileType = event.target.files[0].type
-        console.log(fileType)
-        if(fileSize>2){
+        if (fileSize > 2) {
             setProfileUploadImage(null)
             toast.success('File size greater than 2mb', {
                 style: {
-                  border: '1px solid blue',
-                  padding: '16px',
-                  color: 'black',
+                    border: '1px solid blue',
+                    padding: '16px',
+                    color: 'black',
                 },
                 iconTheme: {
-                  primary: 'blue',
-                  secondary: 'yellow',
+                    primary: 'blue',
+                    secondary: 'yellow',
                 },
-              });
-              return;
+            });
+            return;
         }
-
-        if(fileType !== 'image/jpeg' && fileType !== 'image/jpg' && fileType !== 'image/png'){
+        // checking file type
+        if (fileType !== 'image/jpeg' && fileType !== 'image/jpg' && fileType !== 'image/png') {
             setProfileUploadImage(null)
             toast.success('File type must be jpg, jpeg or png', {
                 style: {
-                  border: '1px solid blue',
-                  padding: '16px',
-                  color: 'black',
+                    border: '1px solid blue',
+                    padding: '16px',
+                    color: 'black',
                 },
                 iconTheme: {
-                  primary: 'blue',
-                  secondary: 'yellow',
+                    primary: 'blue',
+                    secondary: 'yellow',
                 },
-              });
-              return;
+            });
+            return;
         }
         setProfileImageFile(imageFiles[0])
         const imageFilesLength = imageFiles.length;
@@ -103,17 +118,38 @@ const UserSetting = () => {
         }
     }
 
-    const handleUserSetting = (data) =>{
-        const userUpdateData = {
-            fname: data.fname,
-            lname: data.lname,
-            birthDate: data.birthDate,
-            address: data.address
+    const handleUserSetting = async (data) => {//getting data from form
+        const formData = new FormData();
+
+        formData.append("firstName", data.firstName)
+        formData.append("lastName", data.lastName)
+        formData.append("location", data.location)
+        setLoading(true)
+
+        try {
+            const response = await fetch(`${API_URL}/api/v1/user/updateUser`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                },
+                body: formData
+            })
+            const data = await response.json()
+            console.log(data)
+            setLoading(false)
+
+
+
+
+        }
+        catch (error) {
+            setLoading(false)
+            console.log(error)
         }
 
-        console.log(userUpdateData);
+
     }
-    
+
     return (
         <div className='w-full'>
             <div className=' bg-white shadow-lg px-5 py-3 h-full fixed  w-[300px] hidden lg:block'>
@@ -226,12 +262,12 @@ const UserSetting = () => {
                                         </h1>
                                         <div class="avatar-upload">
                                             <div class="avatar-edit">
-                                                <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" onChange={profileImage}/>
+                                                <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" onChange={profileImage} />
                                                 <label for="imageUpload" className='relative'><AiFillCamera className='absolute top-[5px] left-[5px] text-2xl'></AiFillCamera></label>
                                             </div>
                                             <div class="avatar-preview">
-                                                <div id="imagePreview" style={{ backgroundImage: profileuploadImage? `url(${profileuploadImage})` : `url('/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg')` }}>
-                                                
+                                                <div id="imagePreview" style={{ backgroundImage: profileuploadImage ? `url(${profileuploadImage})` : `url('/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg')` }}>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -241,26 +277,33 @@ const UserSetting = () => {
                                     <div className='flex gap-3'>
                                         <div className="w-full">
                                             <label htmlFor="">Change your first name</label>
-                                            <input type="text" {...register("fname")} placeholder="Type here" className="input input-bordered input-secondary w-full my-3" />
+                                            <input type="text" {...register("firstName")} defaultValue={user.firstName} placeholder="Type here" className="input input-bordered input-secondary w-full my-3" />
                                         </div>
                                         <div className="w-full">
                                             <label htmlFor="">Change your last name</label>
-                                            <input type="text" {...register("lname")} placeholder="Type here" className="input input-bordered input-secondary w-full my-3" />
+                                            <input type="text" {...register("lastName")} defaultValue={user.lastName} placeholder="Type here" className="input input-bordered input-secondary w-full my-3" />
                                         </div>
-                                        
+
                                     </div>
                                     <div className='flex gap-3'>
-                                    <div className='w-full'>
-                                            <label htmlFor="">Change birth date</label>
-                                            <input type="date" {...register("birthDate")} placeholder="Type here" className="input input-bordered input-secondary w-full my-3" />
-
+                                        <div className='w-full'>
+                                            <input type="password" {...register("newPassword")} placeholder="Password" className="input input-bordered input-secondary w-full my-3" />
+                                            {errors.password && <p className='text-red-500'>{errors.password.message}</p>}
                                         </div>
                                         <div className='w-full'>
-                                        <label htmlFor="">Change your address</label>
-                                        <input type="text" {...register("address")} placeholder="Type here" className="input input-bordered input-secondary w-full my-3" />
+                                            <input type="password" {...register("confirmPassword")} placeholder="Confirm Password" className="input input-bordered input-secondary w-full my-3" />
+                                            {errors.confirmpassword && <p className='text-red-500'>{errors.confirmpassword.message}</p>}
+                                        </div>
+
                                     </div>
+                                    <div className='flex gap-3'>
+
+                                        <div className='w-full'>
+                                            <label htmlFor="">Change your address</label>
+                                            <input type="text" {...register("location")} defaultValue={user.location} placeholder="Type here" className="input input-bordered input-secondary w-full my-3" />
+                                        </div>
                                     </div>
-                                   
+
                                 </div>
                                 <div>
                                     <h1 className='my-3'>Set a cover photo</h1>
@@ -269,7 +312,7 @@ const UserSetting = () => {
                                             <img src={uploadImage} alt="upload" className={`${uploadImage ? 'block' : 'hidden'}`} id="preview-selected-image" />
                                         </div>
                                         <label>Upload Image
-                                            <input type="file" id="file-upload" accept="image/png , image/jpeg, image/webp" onChange={previewImage}/>
+                                            <input type="file" id="file-upload" accept="image/png , image/jpeg, image/webp" onChange={previewImage} />
                                         </label>
                                     </div>
                                 </div>
@@ -285,7 +328,7 @@ const UserSetting = () => {
                     </div>
                 </div>
             </div>
-            <Toaster  />
+            <Toaster />
         </div>
     );
 };

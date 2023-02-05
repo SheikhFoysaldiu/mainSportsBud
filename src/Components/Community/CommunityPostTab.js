@@ -12,6 +12,7 @@ import Loading from '../../Shared/Loading/Loading';
 import CommunityPostModal from '../../Shared/Modal/CommunityPost/CommunityPostModal'
 
 const CommunityPostTab = () => {
+    // getting current user
     const { user } = useContext(AuthContext)
 
     const params = useParams()
@@ -30,6 +31,7 @@ const CommunityPostTab = () => {
             data: data.posts
         }
     }
+    // Get Community Post 10 items per page
     const CommunityPostData = useInfiniteQuery({
         queryKey: ['communityPost', params?.id],
         queryFn: fetchCommunityPost,
@@ -65,12 +67,13 @@ const CommunityPostTab = () => {
                 </div>
                 <div className='w-1/2 cursor-pointer'>
                     <label htmlFor="my-modal" className="w-full btn btn-outline">Create your post</label>
-
-                    <CommunityPostModal />
+                    {/* Create Post Modal */}
+                    <CommunityPostModal refetch={CommunityPostData.refetch} />
 
 
                 </div>
             </div>
+            {/* Get 10 Post From a Community */}
             <InfiniteScroll
                 dataLength={CommunityPostData?.data?.pages?.length}
                 next={() => CommunityPostData?.fetchNextPage()}
@@ -86,7 +89,8 @@ const CommunityPostTab = () => {
                     CommunityPostData?.data &&
                     CommunityPostData?.data?.pages?.map((page, id) => {
                         return page.data.map((post, id) => {
-                            return <CommunityPost post={post} key={id} />
+                            //Single Post Component
+                            return <CommunityPost refetch={CommunityPostData.refetch} post={post} key={id} />
                         })
                     })
                 }

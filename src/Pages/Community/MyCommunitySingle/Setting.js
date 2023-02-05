@@ -12,13 +12,13 @@ import { API_URL } from '../../../API/config';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 const Setting = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const [uploadImage, setUploadImage] = useState(null)
-    const [imgFile, setImageFile] = useState(null)
-    const [members, setMembers] = useState([])
-    const params = useParams()
-    const previewImage = (event) => {
+    const { register, handleSubmit, formState: { errors } } = useForm(); // initialize the hook form
+    const [uploadImage, setUploadImage] = useState(null) // image preview
+    const [imgFile, setImageFile] = useState(null) // image file
+    const [members, setMembers] = useState([]) // members
+    const params = useParams() // get params from url
 
+    const previewImage = (event) => { // preview image
         const imageFiles = event.target.files;
         console.log(imageFiles[0])
         setImageFile(imageFiles[0])
@@ -31,7 +31,7 @@ const Setting = () => {
 
     };
 
-    const fetchCommunityInfo = async () => {
+    const fetchCommunityInfo = async () => { // fetch community info by id
         const url = `${API_URL}/api/v1/community/communities/${params.id}`
         const res = await fetch(url, {
             method: 'GET',
@@ -41,12 +41,11 @@ const Setting = () => {
             }
         });
         const data = await res.json();
-        console.log(data)
         return data.community
 
     }
 
-    const CommunityInfo = useQuery({
+    const CommunityInfo = useQuery({ // use query to fetch community info
         queryKey: ['communitySettingsInfo', params.id],
         queryFn: fetchCommunityInfo
     })
@@ -59,7 +58,7 @@ const Setting = () => {
 
 
 
-    const fetchCommunityMember = async ({ pageParam = 1 }) => {
+    const fetchCommunityMember = async ({ pageParam = 1 }) => { // fetch community members
         const url = `${API_URL}/api/v1/community/members/${params.id}?page=${pageParam}&limit=${10}`
         const res = await fetch(url, {
             method: 'GET',
@@ -69,18 +68,15 @@ const Setting = () => {
             }
         });
         const data = await res.json();
-        console.log(data)
         return {
             data: data.members ? data.members : []
         }
     }
 
-    const CommunityMembers = useInfiniteQuery({
+    const CommunityMembers = useInfiniteQuery({ // use query to fetch community members at max 10 per page at scroll
         queryKey: ['communitySettingsMembers', params?.id],
         queryFn: fetchCommunityMember,
         getNextPageParam: (lastPage, pages) => {
-            console.log("lastPage:", lastPage)
-            console.log("pages:", pages)
             if (lastPage.data.length < 1) {
                 return undefined
             }
@@ -106,8 +102,7 @@ const Setting = () => {
         return <h1>Error Occurs</h1>
     }
 
-    const handleSetting = (data) => {
-
+    const handleSetting = (data) => { // handle setting form submit
         if (imgFile) {
             const formData = new FormData();
             formData.append('image', imgFile)
@@ -115,7 +110,7 @@ const Setting = () => {
         }
 
     }
-    const { image: cImage, name: cName, description: cDes } = CommunityInfo.data
+    const { image: cImage, name: cName, description: cDes } = CommunityInfo.data // community info destructuring
 
     return (
         <div className='w-full'>
@@ -260,19 +255,19 @@ const Setting = () => {
                             </form>
                         </div>
                     </div>
-                    <div class="tab-pane fade h-[450px]" id="tabs-memberSetting" role="tabpanel" aria-labelledby="tabs-profile-tabVertical">
+                    <div class="tab-pane fade" id="tabs-memberSetting" role="tabpanel" aria-labelledby="tabs-profile-tabVertical">
 
                         <InfiniteScroll
                             dataLength={CommunityMembers?.data?.pages?.length}
                             next={() => CommunityMembers?.fetchNextPage()}
                             hasMore={CommunityMembers?.hasNextPage}
-                            scrollableTarget="scrollableDiv"
+
                         >
 
                             <div className='p-0 lg:p-5 grid grid-cols-1 lg:grid-cols-2 gap-x-0 gap-y-5 lg:gap-x-32 mt-5'>
                                 {CommunityMembers?.data &&
                                     CommunityMembers?.data?.pages?.map((page, id) => {
-                                        return page?.data?.members?.map((member, id) => {
+                                        return page?.data?.map((member, id) => {
                                             return <MemberSetting member={member} key={id} />
                                         })
                                     })}

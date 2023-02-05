@@ -6,10 +6,8 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../Context/AuthProvider';
 
 const CommunityMember = ({ member }) => {
-    console.log(member)
-    const { user } = member
-    const { user: currentUser } = useContext(AuthContext);
-    console.log(user)
+    const { user } = member // member is the object that is passed from CommunityMembersTab Component
+    const { user: currentUser } = useContext(AuthContext); // this is the current user
     return (
         <Link to={`/main/profileUser/${currentUser?.id !== user.id ? user.id : ""}`}>
             <div className='flex justify-between '>

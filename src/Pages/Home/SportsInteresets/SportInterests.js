@@ -13,12 +13,13 @@ const SportInterests = () => {
   const fetchSports = async ({ pageParam = 1 }) => {
     // const queryParam = "?page=" + page + "&limit=" + limit;
     // const url = apiPath + queryParam
-    console.log(pageParam)
+
 
     const res = await fetch(`${API_URL}/api/v1/sport/sports?page=${pageParam}&limit=${10}&searchQuery=${search}`, {
       method: 'GET',
       headers: {
-        authorization: `bearer ${localStorage.getItem('token')}`
+        'Content-Type': 'application/json',
+        'authorization': `bearer ${localStorage.getItem('token')}`
       }
     });
     const data = await res.json();
@@ -39,25 +40,26 @@ const SportInterests = () => {
     isFetching,
     isFetchingNextPage,
     status,
-  } = useInfiniteQuery({
+    isLoading,
+  } = useInfiniteQuery({ // gettting sports at max 10 per page
     queryKey: ['sports', search],
     queryFn: fetchSports,
     getNextPageParam: (lastPage, pages) => {
-      console.log("lastPage:", lastPage)
-      console.log("pages:", pages)
-      if (lastPage.data?.length < 10) {
+      if (lastPage.data?.length < 1) {
         return undefined
       }
-      return pages?.length + 1
+      return pages.length + 1
 
     }
   })
 
 
-  if (!data) {
-    return (
-      <Loading />
-    )
+  if (!data || isLoading) {
+    return <Loading />
+
+  }
+  if (error) {
+    return <h1>Something went wrong!</h1>
   }
 
   if (data.pages[0].data.length === 0 && data.pages.length == 1) {
@@ -73,8 +75,6 @@ const SportInterests = () => {
         next={() => fetchNextPage()}
         scrollableTarget="scrollableDiv"
         hasMore={hasNextPage}
-        loader={<h4>Loading...</h4>}
-
       >
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 mb-48 lg:mb-56 mt-16 mx-0 lg:mx-28">

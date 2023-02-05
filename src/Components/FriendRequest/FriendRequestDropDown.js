@@ -109,10 +109,12 @@ const FriendRequest = ({ request, refetch }) => {
 
 function FriendRequestDropDown(props) {
     const { setFriendRequestDrowpDown } = props
-    const { user } = useContext(AuthContext)
+    const { user } = useContext(AuthContext) // user is the current user
     const handleOption = () => {
-        setFriendRequestDrowpDown(prev => !prev)
+        setFriendRequestDrowpDown(prev => !prev) // set the state of the dropdown to false
     }
+
+
     const fetchFriendRequest = async ({ pageParam = 1 }) => {
         const url = `${API_URL}/api/v1/user/friendrequestsRecieved?page=${pageParam}&limit=${10}`
         console.log("url", url)
@@ -122,7 +124,6 @@ function FriendRequestDropDown(props) {
                 authorization: `bearer ${localStorage.getItem('token')}`
             }
         });
-        // console.log(res)
         const data = await res.json();
         console.log("data", data)
 
@@ -132,7 +133,7 @@ function FriendRequestDropDown(props) {
     }
 
 
-    const {
+    const { //
         data,
         fetchNextPage,
         hasNextPage,
@@ -141,9 +142,7 @@ function FriendRequestDropDown(props) {
         isFetchingNextPage,
         isError,
         refetch,
-
-
-    } = useInfiniteQuery({
+    } = useInfiniteQuery({ // useInfiniteQuery is used to fetch data from the server
         queryKey: ['friendRequest', user.id],
         queryFn: fetchFriendRequest,
         getNextPageParam: (lastPage, pages) => {
@@ -159,18 +158,16 @@ function FriendRequestDropDown(props) {
         refetchIntervalInBackground: true
     })
 
-    if (!data) {
+    if (!data) { // if there is no data
         return <Loading />
     }
-    if (isLoading) {
+    if (isLoading) { // if the data is loading
         return <Loading />
     }
-    if (isError) {
+    if (isError) { // if there is an error
         return <h1>Something went wrong!</h1>
     }
 
-
-    // Distructure data
 
 
     return (
@@ -196,7 +193,7 @@ function FriendRequestDropDown(props) {
                     next={() => fetchNextPage()}
 
                     hasMore={hasNextPage}
-                    loader={<h4>Loading...</h4>}
+
                     // data?.pages?.reduce((acc, page) => acc + page.data.length, 0) || 0
                     // dataLength={data.pages.length === 0 ? 0 : data.pages.reduce((acc, page) => acc + page.data.length, 0) || 0}
                     dataLength={data.pages.length}
