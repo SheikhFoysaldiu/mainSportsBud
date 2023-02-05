@@ -19,62 +19,13 @@ import { SearchContext } from "../../Context/SearchContext";
 import { AiFillCamera } from "react-icons/ai";
 
 const ProfileUser = () => {
-    const [settings, setSettings] = React.useState(false);
+
     const { setCommunitySearch, communitySearch, friendsSearch, setFriendsSearch } = useContext(SearchContext)
     const { user } = useContext(AuthContext)
     console.log(user)
-    const [uploadImage, setUploadImage] = useState(user.coverPicture)
-    const [imgFile, setImageFile] = useState(null)
-    const [profileuploadImage, setProfileUploadImage] = useState(user.profilePicture)
-    const [profileimgFile, setProfileImageFile] = useState(null)
-
 
     if (!user) {
         return <Loading></Loading>;
-    }
-    const previewImage = (event) => {
-        const imageFiles = event.target.files;
-        const fileSize = event.target.files[0].size / 1024 / 1024;
-        const fileType = event.target.files[0].type
-        console.log(fileType)
-        if (fileSize > 2) {
-            setUploadImage(null)
-            toast.success('File size greater than 2mb', {
-                style: {
-                    border: '1px solid blue',
-                    padding: '16px',
-                    color: 'black',
-                },
-                iconTheme: {
-                    primary: 'blue',
-                    secondary: 'yellow',
-                },
-            });
-            return;
-        }
-
-        if (fileType !== 'image/jpeg' && fileType !== 'image/jpg' && fileType !== 'image/png') {
-            setUploadImage(null)
-            toast.success('File type must be jpg, jpeg or png', {
-                style: {
-                    border: '1px solid blue',
-                    padding: '16px',
-                    color: 'black',
-                },
-                iconTheme: {
-                    primary: 'blue',
-                    secondary: 'yellow',
-                },
-            });
-            return;
-        }
-        setImageFile(imageFiles[0])
-        const imageFilesLength = imageFiles.length;
-        if (imageFilesLength > 0) {
-            const imageSrc = URL.createObjectURL(imageFiles[0]);
-            setUploadImage(imageSrc)
-
-        }
     }
 
 

@@ -32,7 +32,7 @@ function Community({ userId }) {
     }
 
 
-
+    // get my community
     const {
         data,
         fetchNextPage,
@@ -45,7 +45,7 @@ function Community({ userId }) {
         getNextPageParam: (lastPage, pages) => {
             // console.log("lastPage:", lastPage)
             // console.log("pages:", pages)
-            if (lastPage.data.length < 10) {
+            if (lastPage.data.length < 1) {
                 return undefined
             }
             return pages.length + 1
@@ -86,6 +86,7 @@ function Community({ userId }) {
 
 
                 <div>
+                    {/* Show only 10 community each time */}
                     <InfiniteScroll
                         dataLength={data?.pages.length}
                         next={() => fetchNextPage()}
@@ -97,6 +98,7 @@ function Community({ userId }) {
                             {data &&
                                 data.pages.map((page, id) => {
                                     return page.data.map((community, id) => {
+                                        // Show only 10 community each time
                                         return <MyCommunity community={community.community} key={id} />
                                     })
                                 })}

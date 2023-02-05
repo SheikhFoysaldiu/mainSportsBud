@@ -1,42 +1,34 @@
 import React, { useContext, useState } from "react";
-import { Button, Drawer } from "antd";
-import { MenuOutlined, SettingOutlined } from "@ant-design/icons";
 
-import LocationSelect from "../Select/LocationSelect";
-import GenderSelection from "../Select/GenderSelection";
-import { useForm } from "react-hook-form";
-import SportSearch from "../../Pages/Home/SportSearch/SportSearch";
 import { FcSearch } from "react-icons/fc";
 import { SearchContext } from "../../Context/SearchContext";
 import { AiOutlineFilter, AiOutlineSearch } from "react-icons/ai";
-import { FaLocationArrow } from "react-icons/fa";
+import { useForm } from "react-hook-form";
 
 const Filter = () => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false); // For loading button
+
     const {
-        gender,
         setGender,
-        location,
         setLocation,
-        ageGt,
         setAgeGt,
-        ageLt,
         sportUserSearch,
         setSportUserSearch,
         setAgeLt,
-    } = useContext(SearchContext);
-    const [open, setOpen] = useState(false);
+    } = useContext(SearchContext); // Getting search context
+
+    const [open, setOpen] = useState(false); // For filter modal
     const handleToggle = () => {
-        setOpen(!open);
+        setOpen(!open); // Toggle filter modal
     };
-    const [active, setActive] = React.useState(true);
+    const [active, setActive] = React.useState(true); // For search input placeholder
 
     const placeholderToggle = () => {
-        setActive(false);
+        setActive(false); // Deactivate placeholder
     };
 
     const placeholder = () => {
-        setActive(true);
+        setActive(true); // Activate placeholder
     };
     const {
         register,
@@ -49,14 +41,11 @@ const Filter = () => {
         setAgeGt(data.ageGt);
         setAgeLt(data.ageLt);
         setOpen(false);
-        document.getElementById("filterForm").reset();
-
-    };
-    console.log();
+        document.getElementById("filterForm").reset(); // Reset filter form
+    }
 
     return (
         <>
-
             <div className='col-12 flex  align-middle justify-center items-center'>
                 <button
                     onClick={handleToggle}
@@ -65,7 +54,7 @@ const Filter = () => {
                 >
                     <AiOutlineFilter /> Filters
                 </button>
-                <div className="w-1/2 lg:w-1/3 mt-12 mb-10 lg:mb-12 z-49 relative">
+                <div className='w-1/2 lg:w-1/3 mt-12 mb-10 lg:mb-12 z-49 relative'>
                     <FcSearch className='absolute search'> </FcSearch>
                     <input
                         value={sportUserSearch}
@@ -80,13 +69,13 @@ const Filter = () => {
                             } `}
                     />
                 </div>
-
             </div>
 
             {open && (
                 <form
                     onSubmit={handleSubmit(onSubmit)}
-                    className='text-center absolute w-full  z-50 ' id='filterForm'
+                    className='text-center absolute w-full  z-50 '
+                    id='filterForm'
                 >
                     <div className='bg-gray-200 border-2 border-gray-800 mt-3 mx-8'>
                         <div className='solid col-9 mx-auto'>
@@ -124,8 +113,6 @@ const Filter = () => {
                                                 type='text'
                                                 className='border-2 text-sm rounded-full'
                                                 placeholder='Location'
-
-
                                             />
                                         </div>
                                     </article>
@@ -172,7 +159,6 @@ const Filter = () => {
                     </div>
                 </form>
             )}
-
         </>
     );
 };

@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom';
 import Loading from '../../Shared/Loading/Loading';
 
 const MyCommunity = ({ community }) => {
-    // console.log(community)
-    const { name, description, id, image, category } = community;
 
+    const { name, description, id, image, category } = community; // distructuring the community object from Community.js component, path "../../Components/Community/Community.js"
     if (!community) {
         return <Loading />
     }

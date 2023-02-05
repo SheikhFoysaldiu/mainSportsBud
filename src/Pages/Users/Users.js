@@ -15,18 +15,18 @@ import { SearchContext } from '../../Context/SearchContext';
 
 
 const Users = () => {
-    const params = useParams();
-    const [friend, setFriend] = React.useState(undefined);
-    const [isFriendReceived, setIsFriendReceived] = React.useState(undefined);
+    const params = useParams(); // Get the id from the url
+    const [friend, setFriend] = React.useState(undefined); // Check if the user is friend or not
+    const [isFriendReceived, setIsFriendReceived] = React.useState(undefined); // Check if the user has sent friend request or not
     const [loading, setLoading] = React.useState(false);
-    const [wait, setWait] = React.useState(undefined);
-    const { user } = useContext(AuthContext)
+    const [wait, setWait] = React.useState(undefined); // Check if the user has sent friend request or not
+    const { user } = useContext(AuthContext) // Get the user
     const { setCommunitySearch, communitySearch, friendsSearch, setFriendsSearch } = useContext(SearchContext)
-    // Get the user
-    const { data, isLoading, error } = useQuery({
+
+    const { data, isLoading, error } = useQuery({ // Get the a user by id
         queryKey: ['findAUser', params?.id],
         queryFn: async () => {
-            const res = await fetch(`${API_URL}/api/v1/user/finduser/${params.id}`, {
+            const res = await fetch(`${API_URL}/api/v1/user/finduser/${params.id}`, { // 
                 method: 'GET',
                 headers: {
                     "Content-Type": "application/json",
@@ -40,7 +40,7 @@ const Users = () => {
 
 
 
-    const handleCanelFriendRequest = async () => {
+    const handleCanelFriendRequest = async () => { // Cancel the friend request
         setLoading(true)
         try {
             const url = `${API_URL}/api/v1/user/cancelFriendRequest/${params.id}`
@@ -69,7 +69,7 @@ const Users = () => {
 
 
 
-    const handleSendFriendRequest = async () => {
+    const handleSendFriendRequest = async () => { // Send the friend request
         setLoading(true)
         try {
             const res = await fetch(`${API_URL}/api/v1/user/sendFriendRequest/${params.id}`, {
@@ -93,7 +93,7 @@ const Users = () => {
 
     }
 
-    const handleUnfriend = async () => {
+    const handleUnfriend = async () => { // Unfriend the user
         setLoading(true)
         try {
             const res = await fetch(`${API_URL}/api/v1/user/deleteFriend/${params.id}`, {
@@ -116,7 +116,7 @@ const Users = () => {
         }
 
     }
-    const handleAcceptFriendRequest = async () => {
+    const handleAcceptFriendRequest = async () => { // Accept the friend request
         setLoading(true)
         try {
             const url = `${API_URL}/api/v1/user/acceptFriendRequest/${params.id}`
@@ -157,7 +157,7 @@ const Users = () => {
         }
     })
 
-    const IsFriendReqReceived = useQuery({
+    const IsFriendReqReceived = useQuery({ // Check if the user has received request or not
         queryKey: ['findFriendReqReceived', params?.id],
         queryFn: async () => {
             const res = await fetch(`${API_URL}/api/v1/user/isFriendReqReceived/${params.id}`, {
@@ -175,7 +175,7 @@ const Users = () => {
     })
 
 
-    const IsFriendReqSend = useQuery({
+    const IsFriendReqSend = useQuery({ // Check if the user has sent friend request or not
         queryKey: ['findFriendReqSend', params?.id],
         queryFn: async () => {
 

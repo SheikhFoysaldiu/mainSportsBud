@@ -6,7 +6,6 @@ import { resetSelectPost } from "../../../Redux/reducer/post/post.reduder";
 const CommunityPostModalUpdate = ({ show }) => {
   const { post } = useSelector((state) => state.post);
   const { id, author, content, images } = post;
-  console.log("BIGDATA", post);
   const {
     register,
     handleSubmit,
@@ -125,9 +124,8 @@ const CommunityPostModalUpdate = ({ show }) => {
                 <i className={`${active ? "block" : "invisible"}`}></i>
               </div>
               <div
-                className={`flex flex-col justify-center ${
-                  isPhoto ? "block" : "invisible"
-                }`}
+                className={`flex flex-col justify-center ${isPhoto ? "block" : "invisible"
+                  }`}
               >
                 <label className="input-field-label">
                   + Add Images
@@ -187,9 +185,8 @@ const CommunityPostModalUpdate = ({ show }) => {
                 </div>
                 <button
                   onClick={() => photoHandler(false)}
-                  className={`btn bg-red-600 hover:bg-red-700 w-1/5 mx-auto ${
-                    selectedImages.length === 0 ? "block" : "invisible"
-                  }`}
+                  className={`btn bg-red-600 hover:bg-red-700 w-1/5 mx-auto ${selectedImages.length === 0 ? "block" : "invisible"
+                    }`}
                 >
                   Remove
                 </button>

@@ -5,9 +5,9 @@ import toast, { Toaster } from 'react-hot-toast';
 import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const { createUser } = useContext(AuthContext);
-  const [signUpError, setSignUPError] = useState('');
+  const { register, handleSubmit, formState: { errors } } = useForm(); // react-hook-form
+  const { createUser } = useContext(AuthContext); // this is the function from AuthProvider
+  const [signUpError, setSignUPError] = useState(''); // this is the error state
   const navigate = useNavigate();
 
   const handleSignUp = (data) => {
@@ -24,8 +24,8 @@ const Signup = () => {
 
       })
       .catch(error => {
-        console.log(error)
-        setSignUPError(error.message)
+        console.log(error) // this will log the error
+        setSignUPError(error.message) // this will set the error state
       });
   }
 

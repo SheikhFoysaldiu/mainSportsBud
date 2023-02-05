@@ -7,19 +7,19 @@ import { AuthContext } from '../../Context/AuthProvider.js'
 import Loading from '../../Shared/Loading/Loading.js'
 import MyCommunitySingle from './MyCommunitySingle/MyCommunitySingle.js'
 function CommunityInfo() {
-    const params = useParams()
-    const navigate = useNavigate();
-    const { user } = useContext(AuthContext)
-    const [loading, setLoading] = useState(undefined)
-    const [hasAccess, setHasAccess] = useState(false)
+    const params = useParams() // Getting the id of the community from the url
+    const navigate = useNavigate(); // Used to redirect to another page
+    const { user } = useContext(AuthContext) // Getting the user info from the context
+    const [loading, setLoading] = useState(undefined) // Used to show loading
+    const [hasAccess, setHasAccess] = useState(false) // Used to check if user has access to the community
 
 
-    const [IsAreadyMemeber, GetCommunityInfo] = useQueries({
+    const [IsAreadyMemeber, GetCommunityInfo] = useQueries({ // useQueries is used to fetch multiple queries at once
         queries: [
             {
                 queryKey: ['isAreadyMemeberCommunity', params?.id],
                 queryFn: async () => {
-                    const url = `${API_URL}/api/v1/community/isAlreadyMemeber/${params.id}`
+                    const url = `${API_URL}/api/v1/community/isAlreadyMemeber/${params.id}` // Checking if user is already a member of the community
                     const res = await fetch(url, {
                         method: 'GET',
                         headers: {
@@ -37,7 +37,7 @@ function CommunityInfo() {
             {
                 queryKey: ['getCommunityInfo', params?.id],
                 queryFn: async () => {
-                    const url = `${API_URL}/api/v1/community/communities/${params.id}`
+                    const url = `${API_URL}/api/v1/community/communities/${params.id}` // Getting community info
                     const res = await fetch(url, {
                         method: 'GET',
                         headers: {
@@ -61,7 +61,7 @@ function CommunityInfo() {
     const handleJoin = async () => {
         setLoading(true)
         try {
-            const res = await fetch(`${API_URL}/api/v1/community/joinCommunity/${params.id}`,
+            const res = await fetch(`${API_URL}/api/v1/community/joinCommunity/${params.id}`, // Joining the community
                 {
                     method: 'POST',
                     headers: {
@@ -78,9 +78,9 @@ function CommunityInfo() {
             console.log(error)
         }
     }
+    // Checking if user is already a member of the community
     useEffect(() => {
         if (IsAreadyMemeber?.data?.data) {
-            // console.log("Found", IsAreadyMemeber.data.data)
             setHasAccess(true)
         }
     }, [IsAreadyMemeber?.data?.data, hasAccess]);
@@ -103,8 +103,8 @@ function CommunityInfo() {
         return <MyCommunitySingle />
     }
 
-    // console.log(GetCommunityInfo.data.data)
-    const { name: cName, image: cImage, description: cDescription, members: cMember, owner: cOwner, sport: cSport } = GetCommunityInfo.data.data
+
+    const { name: cName, image: cImage, description: cDescription, members: cMember, owner: cOwner, sport: cSport } = GetCommunityInfo.data.data // Destructuring the data
     return (
         <>
             {/* Header Section */}

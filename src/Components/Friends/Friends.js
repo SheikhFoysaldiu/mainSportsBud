@@ -15,10 +15,10 @@ import Loading from '../../Shared/Loading/Loading';
 import { getAge } from '../../Shared/Utitily/Utility';
 
 const FriendItem = ({ item }) => {
-    const params = useParams();
-    const { user } = useContext(AuthContext)
-    const { id, firstName, lastName, location, coverPicture, profilePicture, sports, dob } = item.friend
-    console.log("Item", item.friend)
+    const params = useParams(); // get params from url
+    const { user } = useContext(AuthContext) // get user from context
+    const { id, firstName, lastName, location, coverPicture, profilePicture, sports, dob } = item.friend // get friend from item and distructured
+    console.log("Item", item.friend) // get user from context
 
 
     return (

@@ -23,7 +23,7 @@ const CommunityMemebersTab = ({ members }) => {
             data: data.members ? data.members : []
         }
     }
-
+    // get community members each time 10 members
     const CommunityMembers = useInfiniteQuery({
         queryKey: ['communityMembers', params?.id],
         queryFn: fetchCommunityMember,
@@ -53,18 +53,18 @@ const CommunityMemebersTab = ({ members }) => {
     return (
         <div className="tab-pane fade h-auto" id="tabs-profile3" role="tabpanel" aria-labelledby="tabs-profile-tab3">
             <div className='bg-white rounded-lg shadow-xl mx-0 lg:mx-20 py-8 mt-5  text-center'>
+                {/* All Members */}
                 <h1 className='text-xl font-bold'>All Members ({members.length}) </h1>
             </div>
 
             <div className=' bg-white rounded-lg shadow-xl mx-0 lg:mx-20 py-8 mt-5'>
+                {/* Each Scroll get 10 element */}
                 <InfiniteScroll
                     dataLength={CommunityMembers.data?.pages.length}
                     next={() => CommunityMembers.fetchNextPage()}
                     hasMore={CommunityMembers.hasNextPage}
-
-
                 >
-
+                    {/* Community Members */}
                     <div className='grid grid-cols-1 lg:grid-cols-2 justify-around px-3 lg:px-5 gap-4 lg:gap-8 '>
 
                         {

@@ -15,7 +15,7 @@ function About({ user }) {
     const [edit, setEdit] = React.useState(false);
     const { user: CurrentUser } = useContext(AuthContext)
 
-    const { data, isLoading, error } = useQuery({
+    const { data, isLoading, isError } = useQuery({
         queryKey: ["findSportInterestUser", id],
         queryFn: async () => {
             const url = `${API_URL}/api/v1/sport/sports/interest/${id}`
@@ -26,7 +26,6 @@ function About({ user }) {
                 }
             });
             const data = await res.json();
-
             return {
                 data: data.interest
             }
@@ -37,7 +36,12 @@ function About({ user }) {
     if (isLoading) {
         return <Loading />
     }
-    console.log(data)
+    if (isError) {
+        return <h1>Something went Wrong!</h1>
+    }
+    if (!data) {
+        return <h1>Empty</h1>
+    }
 
     return (
 

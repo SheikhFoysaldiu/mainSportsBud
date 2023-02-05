@@ -10,9 +10,10 @@ import { AuthContext } from '../../../Context/AuthProvider';
 
 
 const SingleSport = ({ sport }) => {
+    //getting sports from SportsInterests component and destructuring it
     const { id, name, images, users, description } = sport;
-    const { user } = useContext(AuthContext)
-    // console.log(user)
+    const { user } = useContext(AuthContext) //getting Current user from AuthContext
+
 
 
     return (

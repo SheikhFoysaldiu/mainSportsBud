@@ -54,7 +54,7 @@ const CommunityPost = ({ refetch }) => {
 
     };
 
-    function deleteHandler(image) {
+    function deleteHandler(image) { //deleting images from selectedImages array
         setSelectedImages(selectedImages.filter((e) => e !== image));
         URL.revokeObjectURL(image);
     }

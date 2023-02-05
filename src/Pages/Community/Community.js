@@ -99,11 +99,12 @@ const SuggestedCommunity = () => {
         </div>)
 }
 
+
 const MyCommunitySidebar = () => {
-    const { user } = useContext(AuthContext);
+    const { user } = useContext(AuthContext); // getting user from context
     const fetchMyCommunity = async ({ pageParam = 1 }) => {
         const url = `${API_URL}/api/v1/community/myCommunities?page=${pageParam}&limit=${10}&userId=${user.id}`
-        const res = await fetch(url, {
+        const res = await fetch(url, {  //getting my community which is the owned by mee at max 10 at a time
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -116,13 +117,11 @@ const MyCommunitySidebar = () => {
             data: data.communities
         }
     }
-    const MyOwnedCommunity = useInfiniteQuery({
+    const MyOwnedCommunity = useInfiniteQuery({ //using infinite query to get all my community
 
         queryKey: ['myOwnedCommunities', user?.id],
         queryFn: fetchMyCommunity,
         getNextPageParam: (lastPage, pages) => {
-            //console.log("lastPage:", lastPage)
-            //console.log("pages:", pages)
             if (lastPage?.data?.length < 10) {
                 return undefined
             }

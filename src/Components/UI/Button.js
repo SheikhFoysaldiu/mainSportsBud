@@ -1,14 +1,14 @@
-import { async } from '@firebase/util';
+
 import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react'
 import { API_URL } from '../../API/config';
 
 function Button(props) {
-    const { userId, sportId, } = props;
-    const [follow, setFollow] = React.useState(undefined);
+    const { userId, sportId, } = props; // sportId is the id of the sport && userId is the id of the user
+    const [follow, setFollow] = React.useState(undefined); // follow is the state of the button
 
 
-    const { data, isLoading, error } = useQuery({
+    const { data, isLoading, error } = useQuery({ // this is the query to check if the user is following the sport or not
         queryKey: ['follow', sportId],
         queryFn: async () => {
             const res = await fetch(`${API_URL}/api/v1/sport/isFollowing?sportId=${sportId}`, {
@@ -29,7 +29,7 @@ function Button(props) {
 
     const handleFollow = async () => {
         setLoading(true)
-
+        // this is the query to follow the sport
         try {
             const res = await fetch(`${API_URL}/api/v1/sport/sportFollow`,
                 {
@@ -57,7 +57,7 @@ function Button(props) {
     const handleUnfollow = async () => {
         setLoading(true)
         try {
-            const res = await fetch(`${API_URL}/api/v1/sport/sportUnfollow/${sportId}`,
+            const res = await fetch(`${API_URL}/api/v1/sport/sportUnfollow/${sportId}`, // this is the query to unfollow the sport
                 {
                     method: 'DELETE',
                     headers: {

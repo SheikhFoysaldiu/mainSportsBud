@@ -4,8 +4,8 @@ import { AiOutlineCheck } from "react-icons/ai";
 
 
 function CreateCommunityFriendList({ friend, addedFriendData, setAddedFriendData, countFriends, setCountFriends }) {
-    const [addedFriend, setAddedFriend] = useState(false);
-    const { id, firstName, lastName, img, sports } = friend.friend
+    const [addedFriend, setAddedFriend] = useState(false); // addedFriend is a state to show check icon when a friend is added to the community
+    const { id, firstName, lastName, img, sports } = friend.friend // friend is a prop that is passed from the parent component
 
     return (
 
