@@ -1,17 +1,33 @@
 import React, { createContext, useEffect, useState } from "react";
 import app from "../firebase/firebase.config";
 import { getProfile, login, register } from "../API/auth/auth";
-import { useLocation } from "react-router-dom";
-import { API_URL } from "../API/config"
+import { useLocation, useNavigate } from "react-router-dom";
+import { API_URL } from "../API/config";
+import gravatarUrl from "gravatar-url";
+import { useAlert } from "react-alert";
 
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const router = useLocation();
+  const router = useNavigate();
+  const location = useLocation();
   const [skip = 0, setSkip] = useState(0);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const alert = useAlert();
+
+  useEffect(() => {
+    if (user && !user?.profilePicture) {
+      setUser({
+        ...user,
+        profilePicture: gravatarUrl(user.email, {
+          size: 200,
+          default: "retro",
+        }),
+      });
+    }
+  }, [user, user?.profilePicture]);
 
   const createUser = async (data) => {
     setLoading(true);
@@ -29,12 +45,24 @@ const AuthProvider = ({ children }) => {
         }),
       });
       const res = await user.json();
-      // console.log(res);
+      console.log(res);
       setToken(res.token);
-      localStorage.setItem("token", res.token);
+      localStorage.setItem("token", token);
+      await getCurrentUser(res.token);
+
+      if (user) {
+        router("/main", { replace: true });
+      }
       setLoading(false);
+
+      if (res.error) {
+        alert.error(res.error.message);
+        setLoading(false);
+        return res.error;
+      }
     } catch (error) {
       console.log(error);
+      alert.error("Something went wrong");
       setLoading(false);
       return error;
     }
@@ -54,12 +82,19 @@ const AuthProvider = ({ children }) => {
         }),
       });
       const res = await user.json();
-      console.log(res)
+      console.log(res);
       setToken(res.token);
       localStorage.setItem("token", res.token);
+      await getCurrentUser(res.token);
+
+      if (user) {
+        router("/main", { replace: true });
+      }
+
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      alert.error(error.message);
+
       setLoading(false);
       return error;
     }
@@ -71,6 +106,7 @@ const AuthProvider = ({ children }) => {
     setToken(null);
     localStorage.removeItem("token");
     setLoading(false);
+    router("/login", { replace: true });
   };
 
   const getCurrentUser = async (token) => {
@@ -93,6 +129,9 @@ const AuthProvider = ({ children }) => {
       // console.log("current user", res.user);
     } catch (error) {
       console.log(error);
+
+      alert.error("Sesson Expired");
+
       setLoading(false);
 
       return error;
@@ -105,7 +144,6 @@ const AuthProvider = ({ children }) => {
       getCurrentUser(token);
     }
   }, [router.pathname, token, localStorage.getItem("token")]);
-
 
   const authInfo = {
     user,

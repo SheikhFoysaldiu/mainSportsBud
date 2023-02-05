@@ -12,17 +12,32 @@ import en from "javascript-time-ago/locale/en.json";
 import ru from "javascript-time-ago/locale/ru.json";
 import { Provider } from "react-redux";
 import { store } from "./Redux/store";
+import { Toaster } from "react-hot-toast";
+import { transitions, positions, Provider as AlertProvider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
+
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
 
+const options = {
+  // you can also just use 'bottom center'
+  position: positions.BOTTOM_CENTER,
+  timeout: 5000,
+  offset: "30px",
+  // you can also just use 'scale'
+  transition: transitions.FADE,
+};
 const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <AlertProvider template={AlertTemplate} {...options}>
+        <Provider store={store}>
+          <Toaster />
+          <App />
+        </Provider>
+      </AlertProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </React.StrictMode>
