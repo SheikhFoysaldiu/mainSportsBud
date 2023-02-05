@@ -18,7 +18,7 @@ const CommunityMemebersTab = ({ members }) => {
             }
         });
         const data = await res.json();
-        console.log("DATAL", data)
+        // console.log("DATAL", data)
         return {
             data: data.members ? data.members : []
         }
@@ -28,8 +28,8 @@ const CommunityMemebersTab = ({ members }) => {
         queryKey: ['communityMembers', params?.id],
         queryFn: fetchCommunityMember,
         getNextPageParam: (lastPage, pages) => {
-            console.log("lastPage:", lastPage)
-            console.log("pages:", pages)
+            // console.log("lastPage:", lastPage)
+            // console.log("pages:", pages)
             if (lastPage.data.length < 1) {
                 return undefined
             }
@@ -48,7 +48,7 @@ const CommunityMemebersTab = ({ members }) => {
         return <h1>Error Occurs</h1>
     }
 
-
+    console.log(CommunityMembers)
 
     return (
         <div className="tab-pane fade h-auto" id="tabs-profile3" role="tabpanel" aria-labelledby="tabs-profile-tab3">

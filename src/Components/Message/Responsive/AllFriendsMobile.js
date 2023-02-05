@@ -19,7 +19,7 @@ const AllFriendsMobile = () => {
     }, [])
     console.log(activeMembers)
     return (
-        <div className='my-5'>
+        <div className='my-5 scrollable-component'>
             <InfiniteScroll
                 dataLength={activeMembers.length}
                 loader={<Loading></Loading>}

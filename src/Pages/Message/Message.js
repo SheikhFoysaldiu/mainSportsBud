@@ -5,7 +5,7 @@ import MessageRightBottom from '../../Components/Message/MessegeRightContainer/M
 import MessegeRightHeader from '../../Components/Message/MessegeRightContainer/MessegeRightHeader';
 import AllCommunityMobile from '../../Components/Message/Responsive/AllCommunityMobile';
 import AllFriendsMobile from '../../Components/Message/Responsive/AllFriendsMobile';
-import './Message.css'
+import './Message.module.css'
 
 const Message = () => {
     return (
@@ -19,7 +19,7 @@ const Message = () => {
                    
                 </div>
             </div>
-            <div className='overflow-x-hidden hover:overflow-x-auto ml-0 lg:ml-[384px] px-5 block lg:hidden scrollable-component'>
+            <div className='overflow-hidden  ml-0 lg:ml-[384px] px-5 block lg:hidden '>
                 <AllFriendsMobile></AllFriendsMobile>
                 <AllCommunityMobile></AllCommunityMobile>
             </div>

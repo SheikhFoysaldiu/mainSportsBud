@@ -54,6 +54,22 @@ export default function PrimarySearchAppBar() {
 
     setSidebar(!sidebar)
   };
+
+  const menuRef = React.useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setSidebar(false);
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, []);
+
   const handleLogOut = () => { //function to logout
     logOut()
       .then(() => { })
@@ -118,12 +134,12 @@ export default function PrimarySearchAppBar() {
   return (
     <>
 
-      <div className="navbar bg-base-100 shadow-md sticky top-0  w-full z-50">
+      <div className="navbar bg-base-100 shadow-md sticky top-0  w-full z-50" ref={menuRef} >
         <div className="navbar-start w-[5%]">
           <div className="">
             <Link to="#" className="menu-bars1">
 
-              <svg onClick={showSidebar} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-0 lg:ml-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
+              <svg onClick={()=>setSidebar(!sidebar)} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-0 lg:ml-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
 
             </Link>
           </div>
@@ -131,13 +147,21 @@ export default function PrimarySearchAppBar() {
           <nav className={`w-[100%] lg:w-[17%] ${sidebar ? "nav-menu active bg-base-100" : "nav-menu bg-base-100"}`}>
 
             <ul className="nav-menu-items">
-              <li className="navbar-toggle flex items-center justify-center text-center shadow-md p-5" onClick={showSidebar}>
+              
+              <li className="navbar-toggle flex items-center justify-center text-center shadow-md p-5" onClick={()=>setSidebar(!sidebar)}>
                 <p className='text-black text-2xl lg:text-xl mx-5 lg:mx-5 font-bold my-auto '>Sportsbud</p>
                 <p className='my-auto bg-red-200-50 shadow-md rounded-full p-2'>
                   <AiIcons.AiOutlineClose className='text-black font-bold cursor-pointer text-2xl lg:text-xl' />
                 </p>
 
 
+              </li>
+              <li className='block lg:hidden mt-6 mx-3'>
+               
+
+                  <input type="text" placeholder='Search' className={` w-full border rounded-xl shadow-md`} />
+
+               
               </li>
               <li >
                 <Link to='/main' className="navbar-toggle1 text-center mt-6 text-2xl lg:text-xl font-semibold hover:bg-slate-300 p-3 mx-3 rounded-md hover:shadow-md bg-slate-200 shadow-md flex items-center justify-center lg:justify-start" onClick={showSidebar}>
@@ -176,7 +200,7 @@ export default function PrimarySearchAppBar() {
         </div>
         <div className="navbar-end flex">
 
-          <div className='flex items-center '>
+          <div className='hidden lg:flex items-center'>
 
             <input type="text" placeholder='Search' onClick={handletoggle} className={`w-20  ${active ? "border rounded-xl shadow-md w-32 lg:w-96" : "border-none"}`} />
 
