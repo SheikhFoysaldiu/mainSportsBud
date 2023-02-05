@@ -58,8 +58,8 @@ const router = createBrowserRouter([
         element: <ProfileUser></ProfileUser>,
       },
       {
-        path: '/main/profileuser/:id',
-        element: <Users></Users>
+        path: "/main/profileuser/:id",
+        element: <Users></Users>,
       },
       {
         path: "/main/profilefilter",
@@ -75,8 +75,8 @@ const router = createBrowserRouter([
         element: <CommunityInfo></CommunityInfo>,
       },
       {
-        path: '/main/createcommunity',
-        element: <CreateCommunity></CreateCommunity>
+        path: "/main/createcommunity",
+        element: <CreateCommunity></CreateCommunity>,
       },
       {
         path: "/main/feedback",
@@ -85,11 +85,11 @@ const router = createBrowserRouter([
 
       {
         path: "/main/setting/:id",
-        element: <Setting></Setting>
+        element: <Setting></Setting>,
       },
       {
         path: "/main/usersetting",
-        element: <UserSetting></UserSetting>
+        element: <UserSetting></UserSetting>,
       },
       {
         path: "*",

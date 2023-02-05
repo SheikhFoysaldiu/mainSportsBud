@@ -1,33 +1,33 @@
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../../Context/AuthProvider";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { useAlert } from "react-alert";
 
 const Signup = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm(); // react-hook-form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm(); // react-hook-form
   const { createUser } = useContext(AuthContext); // this is the function from AuthProvider
-  const [signUpError, setSignUPError] = useState(''); // this is the error state
+  const [signUpError, setSignUPError] = useState(""); // this is the error state
   const navigate = useNavigate();
+  const alert = useAlert();
+  const handleSignUp = async (data) => {
+    const dob = new Date(data.dob);
 
-  const handleSignUp = (data) => {
-    setSignUPError('');
-    // console.log(data)
-    createUser(data)
-      .then(result => {
-        console.log(result)
-        // const user = result.user;
-        // console.log(user);
-        toast('User Created Successfully.');
-        navigate('/main')
-        // saveUser(data.name, data.email);
+    // Check if 18 years old
 
-      })
-      .catch(error => {
-        console.log(error) // this will log the error
-        setSignUPError(error.message) // this will set the error state
-      });
-  }
+    if (dob.getFullYear() + 18 > new Date().getFullYear()) {
+      alert.error("You must be 18 years old to sign up");
+      return;
+    }
+
+    setSignUPError("");
+    await createUser(data);
+  };
 
   return (
     <div className="block p-6 rounded-lg shadow-lg bg-white max-w-md">
@@ -35,8 +35,9 @@ const Signup = () => {
         <div className="grid grid-cols-2 gap-4">
           <div className="form-group mb-6">
             <input
-              type="text" {...register("fname", {
-                required: "First name is Required"
+              type="text"
+              {...register("fname", {
+                required: "First name is Required",
               })}
               className="
           block
@@ -57,12 +58,15 @@ const Signup = () => {
               aria-describedby="emailHelp123"
               placeholder="First name"
             />
-            {errors.fname && <p className='text-red-500'>{errors.fname.message}</p>}
+            {errors.fname && (
+              <p className="text-red-500">{errors.fname.message}</p>
+            )}
           </div>
           <div className="form-group mb-6">
             <input
-              type="text" {...register("lname", {
-                required: "Last name is Required"
+              type="text"
+              {...register("lname", {
+                required: "Last name is Required",
               })}
               className="
           block
@@ -83,13 +87,16 @@ const Signup = () => {
               aria-describedby="emailHelp124"
               placeholder="Last name"
             />
-            {errors.lname && <p className='text-red-500'>{errors.lname.message}</p>}
+            {errors.lname && (
+              <p className="text-red-500">{errors.lname.message}</p>
+            )}
           </div>
         </div>
         <div className="form-group mb-6">
           <input
-            type="email" {...register("email", {
-              required: "Email is Required"
+            type="email"
+            {...register("email", {
+              required: "Email is Required",
             })}
             className="block
         w-full
@@ -108,12 +115,15 @@ const Signup = () => {
             id="exampleInput125"
             placeholder="Email address"
           />
-          {errors.email && <p className='text-red-500'>{errors.email.message}</p>}
+          {errors.email && (
+            <p className="text-red-500">{errors.email.message}</p>
+          )}
         </div>
         <div className="form-group mb-6">
           <input
-            type="password"  {...register("password", {
-              required: "Password is Required"
+            type="password"
+            {...register("password", {
+              required: "Password is Required",
             })}
             className="block
         w-full
@@ -132,13 +142,16 @@ const Signup = () => {
             id="exampleInput126"
             placeholder="Password"
           />
-          {errors.password && <p className='text-red-500'>{errors.password.message}</p>}
+          {errors.password && (
+            <p className="text-red-500">{errors.password.message}</p>
+          )}
         </div>
 
         <div className="form-group mb-6">
           <input
-            type="password" {...register("confirmpassword", {
-              required: "Confirm password is Required"
+            type="password"
+            {...register("confirmpassword", {
+              required: "Confirm password is Required",
             })}
             className="block
         w-full
@@ -157,7 +170,9 @@ const Signup = () => {
             id="confirmPassword"
             placeholder="Confirm Password"
           />
-          {errors.confirmpassword && <p className='text-red-500'>{errors.confirmpassword.message}</p>}
+          {errors.confirmpassword && (
+            <p className="text-red-500">{errors.confirmpassword.message}</p>
+          )}
         </div>
 
         <div className="flex items-center justify-center">
@@ -167,10 +182,11 @@ const Signup = () => {
           >
             <span className="text-gray-700 text-base">Date of Birth</span>
             <input
-              type="date" {...register("dob", {
-                required: "Select a date"
+              type="date"
+              {...register("dob", {
+                required: "Select a date",
               })}
-              placeholder='dd/mm/yy'
+              placeholder="dd/mm/yy"
               className="block w-full px-3
                py-1.5
                text-base
@@ -183,23 +199,25 @@ const Signup = () => {
                ease-in-out
                m-0
                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-
             />
-            {errors.date && <p className='text-red-500'>{errors.date.message}</p>}
-
-
+            {errors.date && (
+              <p className="text-red-500">{errors.date.message}</p>
+            )}
           </div>
         </div>
 
         <div className="form-group form-check text-center mb-6">
           <input
-            type="checkbox" {...register("value", {
-              required: true
+            type="checkbox"
+            {...register("value", {
+              required: true,
             })}
             className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain mr-2 cursor-pointer"
             id="exampleCheck25"
           />
-          {errors.value && <p className='text-red-500'>{errors.value.message}</p>}
+          {errors.value && (
+            <p className="text-red-500">{errors.value.message}</p>
+          )}
           <label
             className="form-check-label inline-block text-gray-800"
             for="exampleCheck25"
@@ -208,7 +226,9 @@ const Signup = () => {
           </label>
         </div>
         <input
-          type="submit" value="Sign up"
+          type="submit"
+          value="Sign up"
+          onSubmit={handleSubmit(handleSignUp)}
           className="
       w-full
       px-6
@@ -229,7 +249,6 @@ const Signup = () => {
       ease-in-out"
         />
 
-
         <p className="text-gray-800 mt-6 text-center">
           Already Have an account
           <Link
@@ -239,7 +258,7 @@ const Signup = () => {
             Login
           </Link>
         </p>
-        {signUpError && <p className='text-red-600'>{signUpError}</p>}
+        {signUpError && <p className="text-red-600">{signUpError}</p>}
       </form>
       <Toaster />
     </div>

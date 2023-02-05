@@ -14,17 +14,9 @@ const Login = () => {
   const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (data) => {
+  const handleLogin = async (data) => {
     setLoginError("");
-    signIn(data.email, data.password)
-      .then((result) => {
-        console.log(result)
-        navigate("/main")
-      })
-      .catch((error) => {
-        console.log(error.message);
-        setLoginError(error.message);
-      });
+    await signIn(data.email, data.password);
   };
   return (
     <div className="block p-6 rounded-lg shadow-lg bg-white max-w-sm">
